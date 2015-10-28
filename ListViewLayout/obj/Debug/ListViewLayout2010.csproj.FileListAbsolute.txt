@@ -1,0 +1,5 @@
+C:\Users\someuser\Desktop\ListViewLayout\bin\Debug\Itenso.Windows.Controls.ListViewLayout.dll
+C:\Users\someuser\Desktop\ListViewLayout\bin\Debug\Itenso.Windows.Controls.ListViewLayout.pdb
+C:\Users\someuser\Desktop\ListViewLayout\obj\Debug\ListViewLayout2010.csprojResolveAssemblyReference.cache
+C:\Users\someuser\Desktop\ListViewLayout\obj\Debug\Itenso.Windows.Controls.ListViewLayout.dll
+C:\Users\someuser\Desktop\ListViewLayout\obj\Debug\Itenso.Windows.Controls.ListViewLayout.pdb

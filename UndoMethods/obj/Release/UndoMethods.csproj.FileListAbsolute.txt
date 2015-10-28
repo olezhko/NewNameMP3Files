@@ -1,0 +1,4 @@
+E:\ДокументыОлега\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\bin\Release\UndoMethods.dll
+E:\ДокументыОлега\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\bin\Release\UndoMethods.pdb
+E:\ДокументыОлега\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Release\UndoMethods.dll
+E:\ДокументыОлега\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Release\UndoMethods.pdb
