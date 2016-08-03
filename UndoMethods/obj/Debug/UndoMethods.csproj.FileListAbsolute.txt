@@ -9,6 +9,6 @@ D:\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.dll
 D:\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.pdb
 D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\bin\Debug\UndoMethods.dll
 D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\bin\Debug\UndoMethods.pdb
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.csprojResolveAssemblyReference.cache
 D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.dll
 D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.pdb
+D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\UndoMethods\obj\Debug\UndoMethods.csprojResolveAssemblyReference.cache

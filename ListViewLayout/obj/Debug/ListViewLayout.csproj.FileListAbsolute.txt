@@ -1,5 +1,0 @@
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\ListViewLayout\obj\Debug\ListViewLayout.csprojResolveAssemblyReference.cache
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\ListViewLayout\bin\Debug\ListViewLayout.dll
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\ListViewLayout\bin\Debug\ListViewLayout.pdb
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\ListViewLayout\obj\Debug\ListViewLayout.dll
-D:\Documents\Dropbox\Home\Projects\NewNameMP3Files\ListViewLayout\obj\Debug\ListViewLayout.pdb
