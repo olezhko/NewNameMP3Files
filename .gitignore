@@ -41,3 +41,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.nn3h
+NewNameMP3Files/obj/x64/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+*.resources
+*.tlog
