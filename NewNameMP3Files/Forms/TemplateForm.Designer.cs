@@ -38,12 +38,19 @@
             this.labelPerfomer = new System.Windows.Forms.Label();
             this.labelAlbum = new System.Windows.Forms.Label();
             this.labelNumber = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label6 = new System.Windows.Forms.Label();
@@ -51,13 +58,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -166,6 +166,56 @@
             this.labelNumber.TabIndex = 16;
             this.labelNumber.Text = "07";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label15.Location = new System.Drawing.Point(141, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(58, 17);
+            this.label15.TabIndex = 21;
+            this.label15.Text = "Number";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label16.Location = new System.Drawing.Point(141, 23);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(35, 17);
+            this.label16.TabIndex = 22;
+            this.label16.Text = "Title";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label17.Location = new System.Drawing.Point(141, 46);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(38, 17);
+            this.label17.TabIndex = 23;
+            this.label17.Text = "Year";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label18.Location = new System.Drawing.Point(141, 69);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(66, 17);
+            this.label18.TabIndex = 24;
+            this.label18.Text = "Perfomer";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label19.Location = new System.Drawing.Point(141, 92);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(47, 17);
+            this.label19.TabIndex = 25;
+            this.label19.Text = "Album";
+            // 
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -185,7 +235,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(466, 23);
             this.textBox2.TabIndex = 24;
-            this.textBox2.Text = "/(p)/(y) (a)/(n) - (t)";
+            this.textBox2.Text = "\\(p)\\(y) (a)\\(n) - (t)";
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label8
@@ -242,6 +292,26 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(472, 153);
             this.tableLayoutPanel2.TabIndex = 29;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label13.Location = new System.Drawing.Point(3, 125);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(466, 28);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Example: ../Ancient/2001 Proxima Centauri/07 - Satan\'s Children";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label14.Location = new System.Drawing.Point(3, 50);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(466, 25);
+            this.label14.TabIndex = 28;
+            this.label14.Text = "Example: 07 - Satan\'s Children";
             // 
             // groupBox2
             // 
@@ -323,76 +393,6 @@
             this.label12.Size = new System.Drawing.Size(89, 17);
             this.label12.TabIndex = 16;
             this.label12.Text = "(n) - Number";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label13.Location = new System.Drawing.Point(3, 125);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(466, 28);
-            this.label13.TabIndex = 27;
-            this.label13.Text = "Example: ../Ancient/2001 Proxima Centauri/07 - Satan\'s Children";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label14.Location = new System.Drawing.Point(3, 50);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(466, 25);
-            this.label14.TabIndex = 28;
-            this.label14.Text = "Example: 07 - Satan\'s Children";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(141, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(58, 17);
-            this.label15.TabIndex = 21;
-            this.label15.Text = "Number";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label16.Location = new System.Drawing.Point(141, 23);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(35, 17);
-            this.label16.TabIndex = 22;
-            this.label16.Text = "Title";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label17.Location = new System.Drawing.Point(141, 46);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(38, 17);
-            this.label17.TabIndex = 23;
-            this.label17.Text = "Year";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label18.Location = new System.Drawing.Point(141, 69);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(66, 17);
-            this.label18.TabIndex = 24;
-            this.label18.Text = "Perfomer";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label19.Location = new System.Drawing.Point(141, 92);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(47, 17);
-            this.label19.TabIndex = 25;
-            this.label19.Text = "Album";
             // 
             // TemplateForm
             // 

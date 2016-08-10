@@ -434,47 +434,50 @@ namespace NewNameMP3Files
 
         private void organizeFilesToDirectoriesByTagsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //string expression = _template.expressionDirectory;
-            //if (expression[0] != '/')
-            //    MessageBox.Show("Template is invalid. First symbol should be /.");
+            var expression = _template.expressionDirectory;
 
-            //List<string> files = null;
-            //try
-            //{
-            //    files = GetListCheckedFiles();
-            //    if (!files.Any())
-            //    {
-            //        MessageBox.Show("Mp3 Files not checked!", "Please Attention");
-            //        return;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.ToString(), "Attention");
-            //    return;
-            //}
+            var files = GetListCheckedFiles();
+            if (files == null || !files.Any())
+            {
+                return;
+            }
 
-            //foreach (string file in files)
-            //{
-            //    var mp3File = TagLib.File.Create(file);
-            //    TagsToUpper(mp3File);
-            //    string tempName = userNameSettings(expression, mp3File.Tag);
+            foreach (string file in files)
+            {
+                var mp3File = TagLib.File.Create(file);
+                var tempName = StaticMethods.GetNewNameByTemplate(expression, mp3File.Tag);
 
-            //    string[] directories = tempName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-            //    string dir1 = workDirectory + "\\" + directories[0];
-            //    string dir2 = workDirectory + "\\" + directories[0] + "\\" + directories[1];
-            //    DirectoryInfo inf1 = Directory.CreateDirectory(dir1);
-            //    DirectoryInfo inf2 = Directory.CreateDirectory(dir2);
+                string folder = Path.GetDirectoryName(file);
+                var finalPath = String.Format("{0}{1}{2}", folder, tempName, Path.GetExtension(file));
 
-            //    string folder = file.Substring(0, file.LastIndexOf("\\", StringComparison.Ordinal));
-            //    folder = folder.Substring(0, folder.LastIndexOf("\\", StringComparison.Ordinal));
-            //    string finalPath = folder + tempName + ".mp3";
-            //    System.IO.File.Move(file, finalPath);
-            //    _history.WriteLine("File Renamed. From:" + file + " To " + finalPath);
-            //}
-            //WorkDoneMessage();
+                var i = 1;
+                while (File.Exists(finalPath))
+                {
+                    if (finalPath.Equals(file, StringComparison.Ordinal))
+                    {
+                        break;
+                    }
+                    finalPath = String.Format("{0}{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
+                    i++;
+                }
+
+                try
+                {
+                    var fileInfo = new FileInfo(finalPath);
+                    if (fileInfo.Directory != null) 
+                        fileInfo.Directory.Create();
+                    File.Move(file, finalPath);
+                    _history.WriteLine("File Renamed. From " + file + " To " + finalPath);
+                }
+                catch (IOException ex)
+                {
+                    _history.WriteLine(ex);
+                }
+            }
+
+            MessageBox.Show("Done");
         }
-
+         
         private void renameCheckedFilesByTemplateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var files = GetListCheckedFiles();
@@ -493,14 +496,16 @@ namespace NewNameMP3Files
                     if (percent == 100)
                     {
                         refreshToolStripMenuItem_Click(sender, EventArgs.Empty);
+                        MessageBox.Show("Done");
                     }
                 }));
             };
 
             var expression = _template.expressionFiles;
             Task.Factory.StartNew(() => RenameAction(expression,files));
-        }
 
+            //UndoRedoManager.Instance().Push(expression,files => RenameAction(expression, files), files, "Rename Files");
+        }
 
         private event EventHandler<int> NewFileRenamed;
         private void RenameAction(string expression, List<string> filesPathList)

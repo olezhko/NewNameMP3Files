@@ -42,6 +42,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.nn3h
-NewNameMP3Files/obj/x64/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+NewNameMP3Files/obj/
 *.resources
 *.tlog
+*.config
+NewNameMP3Files/bin/
+*.pdb
