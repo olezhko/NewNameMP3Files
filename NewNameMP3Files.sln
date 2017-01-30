@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A1AEEC63-9D9A-499D-BC75-FE5F3A4D5FB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewNameMP3Files.MVVM", "NewNameMP3Files.MVVM\NewNameMP3Files.MVVM.csproj", "{8E7EF19C-BAE4-484D-A204-A46597E071F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,18 @@ Global
 		{96F27934-2CE8-41E6-8BE5-F706E225BA0F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{96F27934-2CE8-41E6-8BE5-F706E225BA0F}.Release|x64.ActiveCfg = Release|Any CPU
 		{96F27934-2CE8-41E6-8BE5-F706E225BA0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|x64.ActiveCfg = Release|Any CPU
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,5 +70,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0BCB2BA3-C976-44E7-A89F-C2E89ACC120B} = {B17CC189-BF3E-4CCC-ACAD-060769CDEEC9}
 		{96F27934-2CE8-41E6-8BE5-F706E225BA0F} = {A1AEEC63-9D9A-499D-BC75-FE5F3A4D5FB3}
+		{8E7EF19C-BAE4-484D-A204-A46597E071F9} = {B17CC189-BF3E-4CCC-ACAD-060769CDEEC9}
 	EndGlobalSection
 EndGlobal

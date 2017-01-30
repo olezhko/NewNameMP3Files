@@ -61,7 +61,6 @@ namespace NewNameMP3Files
             this.templateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.easyPayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.webMoneyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yandexMoneyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userGuideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,6 +77,7 @@ namespace NewNameMP3Files
             this.deleteAllFromListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameCheckedFilesByTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FilesTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SongListContextMenuStrip.SuspendLayout();
@@ -287,31 +287,27 @@ namespace NewNameMP3Files
             // donateToolStripMenuItem
             // 
             this.donateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.easyPayToolStripMenuItem,
             this.webMoneyToolStripMenuItem,
-            this.yandexMoneyToolStripMenuItem});
+            this.yandexMoneyToolStripMenuItem,
+            this.dToolStripMenuItem});
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
             this.donateToolStripMenuItem.Size = new System.Drawing.Size(173, 24);
             this.donateToolStripMenuItem.Text = "Donate";
             this.donateToolStripMenuItem.Visible = false;
-            // 
-            // easyPayToolStripMenuItem
-            // 
-            this.easyPayToolStripMenuItem.Name = "easyPayToolStripMenuItem";
-            this.easyPayToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
-            this.easyPayToolStripMenuItem.Text = "EasyPay";
             // 
             // webMoneyToolStripMenuItem
             // 
             this.webMoneyToolStripMenuItem.Name = "webMoneyToolStripMenuItem";
             this.webMoneyToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
             this.webMoneyToolStripMenuItem.Text = "WebMoney";
+            this.webMoneyToolStripMenuItem.Click += new System.EventHandler(this.webMoneyToolStripMenuItem_Click);
             // 
             // yandexMoneyToolStripMenuItem
             // 
             this.yandexMoneyToolStripMenuItem.Name = "yandexMoneyToolStripMenuItem";
             this.yandexMoneyToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
             this.yandexMoneyToolStripMenuItem.Text = "YandexMoney";
+            this.yandexMoneyToolStripMenuItem.Click += new System.EventHandler(this.yandexMoneyToolStripMenuItem_Click);
             // 
             // userGuideToolStripMenuItem
             // 
@@ -427,6 +423,12 @@ namespace NewNameMP3Files
             this.FilesTableLayoutPanel.TabIndex = 3;
             this.FilesTableLayoutPanel.DragEnter += new System.Windows.Forms.DragEventHandler(this.FilesTableLayoutPanel_DragEnter);
             // 
+            // dToolStripMenuItem
+            // 
+            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.dToolStripMenuItem.Text = "D";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -473,7 +475,6 @@ namespace NewNameMP3Files
         private System.Windows.Forms.ToolStripMenuItem templateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem easyPayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem webMoneyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem yandexMoneyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userGuideToolStripMenuItem;
@@ -496,6 +497,7 @@ namespace NewNameMP3Files
         private System.Windows.Forms.ToolStripMenuItem renameCheckedFilesByTemplateToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel countRenamedFilesStatusStrip;
         private System.Windows.Forms.ToolStripProgressBar progressRenamedFilesStatusStrip;
+        private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
     }
 }
 

@@ -1,0 +1,84 @@
+﻿<Window x:Class="NewNameMP3Files.MVVM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        mc:Ignorable="d ignore"
+        x:Name="Window"
+        Height="471.642"
+        Width="734.328"
+        Title="NewNameMp3Files"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="151*"/>
+            <RowDefinition Height="23"/>
+        </Grid.RowDefinitions>
+        <Menu HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open _Files" Name="OpenFilesMenuItem" Command="{Binding OpenFilesCommand}"/>
+                <MenuItem Header="Open _Directory" Name="OpenDirectoryMenuItem" Command="{Binding OpenDirectoryCommand}"/>
+                <MenuItem Header="_Exit" Name="ExitApplictionMenuItem" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=Window}"/>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Header="Tempalate for Renaming" Name="RenameTempalateMenuItem"/>
+                <MenuItem Header="Change Language" Name="ChangeLanguageMenuItem"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Donate" Name="DonateMenuItem"/>
+                <MenuItem Header="About" Name="AboutMenuItem" Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible">
+            <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox Content="{Binding AuthorName}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Name="AuthorCheckBox"/>
+                            <ListView Name="SongsListView" ItemsSource="{Binding AlbumCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <CheckBox Margin="5,0,0,0" Content="{Binding AlbumName}" FontWeight="Bold" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" FontSize="14" Name="AlbumNameCheckBox" IsChecked="{Binding ElementName=AuthorCheckBox, Mode=OneWay,Path=IsChecked}"/>
+                                            <ListView ItemsSource="{Binding SongsCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <CheckBox Margin="15,0,0,0" Content="{Binding Name}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsChecked="{Binding ElementName=AlbumNameCheckBox, Mode=OneWay,Path=IsChecked}" />
+                                                        </WrapPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Drop">
+                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.DragCommand, ElementName=AuthorsListView}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+        </ScrollViewer>         <StatusBar Name="StatusBar" Grid.Row="2">
+            <StatusBarItem Name="CountRenamedFilesStatusStrip" Content="{Binding CountRenamedFiles}"></StatusBarItem>
+            <ProgressBar Name="ProgressRenamedFilesStatusStrip" Value="{Binding ProgressRenamedFiles}"></ProgressBar>
+        </StatusBar>
+    </Grid>
+</Window>

@@ -48,3 +48,4 @@ NewNameMP3Files/obj/
 *.config
 NewNameMP3Files/bin/
 *.pdb
+*.dll

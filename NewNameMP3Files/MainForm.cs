@@ -552,5 +552,15 @@ namespace NewNameMP3Files
         }
         #endregion
 
+        private void webMoneyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void yandexMoneyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
