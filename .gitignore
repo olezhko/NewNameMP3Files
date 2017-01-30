@@ -49,3 +49,11 @@ NewNameMP3Files/obj/
 NewNameMP3Files/bin/
 *.pdb
 *.dll
+NewNameMP3Files.MVVM/bin/
+*.pdb
+*.dll
+NewNameMP3Files.MVVM/obj/
+*.resources
+*.tlog
+*.config
+packages/
