@@ -132,7 +132,7 @@ namespace NewNameMP3Files.MVVM.Model
         /// </summary>
         public static void WorkDoneMessage()
         {
-            MessageBox.Show(Resources.Work_Done_, Resources.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //MessageBox.Show(Resources.Work_Done_, Resources.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>

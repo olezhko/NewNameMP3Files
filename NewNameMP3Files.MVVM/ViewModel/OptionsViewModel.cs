@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -15,65 +11,69 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public OptionsViewModel()
         {
             AcceptCommand = new RelayCommand(AcceptMethod);
-
-
-            expressionFiles = textBox1.Text;
-            expressionDirectory = textBox2.Text;
-            toolTip1.SetToolTip(textBox2, "In this field you enter a path from working directory.\nThis display how will be organized you working directory.\n'/' -> next dir");
-            toolTip1.SetToolTip(label9, "In this field you enter a path from working directory.\nThis display how will be organized you working directory.");
+            ExampleTemplateForFiles_TextChangedCommand = new RelayCommand(ExampleTemplateForFiles_TextChangedMethod);
+            ExampleTemplateForDirectory_TextChangedCommand = new RelayCommand(ExampleTemplateForDirectory_TextChangedMethod);
+            ExampleTemplateForFiles = "Example: 07 - Satan's Children";
+            ExampleTemplateForDirectory = "Example: ../Ancient/2001 Proxima Centauri/07 - Satan's Children";
+            expressionFiles = TemplateForFiles;
+            expressionDirectory = TemplateForDirectory;
         }
 
         private void AcceptMethod()
         {
-            expressionFiles = textBox1.Text;
-            expressionDirectory = textBox2.Text;
-            Close();
+            expressionFiles = TemplateForFiles;
+            expressionDirectory = TemplateForDirectory;
+            //Close();
         }
-        //label14
-        private void textBox1_TextChanged(object sender, EventArgs e)
+
+        private void ExampleTemplateForFiles_TextChangedMethod()
         {
-            label14.Text = "Example: " + UserNameSettings(textBox1.Text);
+            ExampleTemplateForFiles = "Example: " + UserNameSettings(TemplateForFiles);
         }
-        //13
-        private void textBox2_TextChanged(object sender, EventArgs e)
+
+        private void ExampleTemplateForDirectory_TextChangedMethod()
         {
-            label13.Text = "Example: " + UserNameSettings(textBox2.Text);
+            ExampleTemplateForDirectory = "Example: " + UserNameSettings(TemplateForDirectory);
         }
 
         private string UserNameSettings(string name)
         {
             if (name.Contains("(a)"))
             {
-                string a = labelAlbum.Text;
+                string a = "Proxima Centauri";
                 name = name.Replace("(a)", a);
             }
             if (name.Contains("(y)"))
             {
-                name = name.Replace("(y)", labelYear.Text);
+                name = name.Replace("(y)", "2001");
             }
             if (name.Contains("(t)"))
             {
-                string t = labelTitle.Text;
+                string t = "Satan's Children";
                 name = name.Replace("(t)", t);
             }
             if (name.Contains("(n)"))
             {
-                string n = labelNumber.Text;
+                string n = "07";
                 name = name.Replace("(n)", n);
             }
             if (name.Contains("(p)"))
             {
-                string p = labelPerfomer.Text;
+                string p = "Ancient";
                 name = name.Replace("(p)", p);
             }
             return name;
         }
 
 
+        public string TemplateForFiles { get; set; }
+        public string TemplateForDirectory { get; set; }
+        public string ExampleTemplateForFiles { get; set; }
+        public string ExampleTemplateForDirectory { get; set; }
 
+        public RelayCommand AcceptCommand {get; private set; }
 
-        public RelayCommand AcceptCommand
-        {
-            get; private set; }
+        public RelayCommand ExampleTemplateForFiles_TextChangedCommand { get; private set; }
+        public RelayCommand ExampleTemplateForDirectory_TextChangedCommand { get; private set; }
     }
 }

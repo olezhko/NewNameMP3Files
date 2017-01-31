@@ -45,7 +45,6 @@ Temporary Items
 NewNameMP3Files/obj/
 *.resources
 *.tlog
-*.config
 NewNameMP3Files/bin/
 *.pdb
 *.dll

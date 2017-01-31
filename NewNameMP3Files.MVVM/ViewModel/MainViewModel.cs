@@ -39,6 +39,12 @@ namespace NewNameMP3Files.MVVM.ViewModel
             ExitCommand = new RelayCommand<Window>(ExitMethod);
             AboutCommand = new RelayCommand(AboutMethod);
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
+            OpenTemplateOptionWindow = new RelayCommand(OpenTemplateWindowMethod);
+        }
+
+        private void OpenTemplateWindowMethod()
+        {
+            
         }
 
         private void RenameAction()
@@ -61,7 +67,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 }
             };
 
-            var expression = _template.expressionFiles;
+            var expression = "(n) - (t)";
             Task.Factory.StartNew(() => RenameAction(expression, files));
         }
 
@@ -77,7 +83,6 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
             return files;
         }
-
 
         private event EventHandler<int> NewFileRenamed;
         private void RenameAction(string expression, List<string> filesPathList)
@@ -249,6 +254,9 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public RelayCommand RenameCheckedCommand
         {
             get; private set; }
+
+
+        public RelayCommand OpenTemplateOptionWindow { get; private set; }
         #endregion
     }
 }
