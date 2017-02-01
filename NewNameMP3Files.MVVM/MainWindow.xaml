@@ -11,6 +11,7 @@
         Height="471.642"
         Width="734.328"
         Title="NewNameMp3Files"
+        Icon="NewNameMP3Files.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid>
         <Grid.RowDefinitions>
