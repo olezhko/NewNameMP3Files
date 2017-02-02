@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -10,6 +11,8 @@ using Microsoft.Win32;
 using NewNameMP3Files.MVVM.Model;
 using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using NewNameMP3Files.MVVM.Skins;
 
 namespace NewNameMP3Files.MVVM.ViewModel
 {
@@ -40,11 +43,36 @@ namespace NewNameMP3Files.MVVM.ViewModel
             AboutCommand = new RelayCommand(AboutMethod);
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             OpenTemplateOptionWindow = new RelayCommand(OpenTemplateWindowMethod);
+            ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
+            _optionsWindow = new Options();
+        }
+
+        private void ChangeLanguageMethod(MenuItem obj)
+        {
+            if (obj != null)
+            {
+                CultureInfo lang = new CultureInfo(obj.Tag.ToString());
+                App.Language = lang;
+                obj.IsChecked = true;
+                if (_checkedLanguageLastMenuItem != null)
+                {
+                    _checkedLanguageLastMenuItem.IsChecked = false;
+                }
+                _checkedLanguageLastMenuItem = obj;
+            }
         }
 
         private void OpenTemplateWindowMethod()
         {
-            
+            var res = _optionsWindow.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
+                if (viewModel!=null)
+                {
+                    _renameExpression = viewModel.ExpressionFiles;
+                }
+            }
         }
 
         private void RenameAction()
@@ -67,8 +95,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 }
             };
 
-            var expression = "(n) - (t)";
-            Task.Factory.StartNew(() => RenameAction(expression, files));
+            Task.Factory.StartNew(() => RenameAction(_renameExpression, files));
         }
 
         private void RefreshMethod()
@@ -213,8 +240,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void OpenFilesMethod()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = true;
+            OpenFileDialog ofd = new OpenFileDialog {Multiselect = true};
             var res = ofd.ShowDialog();
             if (res.HasValue && res.Value)
             {
@@ -230,13 +256,17 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public ObservableCollection<Author> AuthorCollection { get; set; }
 
         public string CountRenamedFiles { get; set; }
-        public int ProgressRenamedFiles { get; set; }
         
+        public int ProgressRenamedFiles { get; set; }
+
+        public MenuItem LanguageMenuItem { get; set; }
+
         #endregion
 
         #region Private Properties
-        
-
+        private MenuItem _checkedLanguageLastMenuItem;
+        private Options _optionsWindow;
+        private string _renameExpression = "(n) - (t)";
         #endregion
 
         #region Commands
@@ -255,8 +285,9 @@ namespace NewNameMP3Files.MVVM.ViewModel
         {
             get; private set; }
 
-
         public RelayCommand OpenTemplateOptionWindow { get; private set; }
+
+        public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         #endregion
     }
 }

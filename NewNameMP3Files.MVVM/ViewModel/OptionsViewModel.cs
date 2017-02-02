@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -6,24 +7,25 @@ namespace NewNameMP3Files.MVVM.ViewModel
 {
     public class OptionsViewModel:ViewModelBase
     {
-        public string expressionFiles;
-        public string expressionDirectory;
+        public string ExpressionFiles;
+        public string ExpressionDirectory;
         public OptionsViewModel()
         {
-            AcceptCommand = new RelayCommand(AcceptMethod);
+            AcceptCommand = new RelayCommand<Window>(AcceptMethod);
             ExampleTemplateForFiles_TextChangedCommand = new RelayCommand(ExampleTemplateForFiles_TextChangedMethod);
             ExampleTemplateForDirectory_TextChangedCommand = new RelayCommand(ExampleTemplateForDirectory_TextChangedMethod);
             ExampleTemplateForFiles = "Example: 07 - Satan's Children";
             ExampleTemplateForDirectory = "Example: ../Ancient/2001 Proxima Centauri/07 - Satan's Children";
-            expressionFiles = TemplateForFiles;
-            expressionDirectory = TemplateForDirectory;
+            ExpressionFiles = TemplateForFiles;
+            ExpressionDirectory = TemplateForDirectory;
         }
 
-        private void AcceptMethod()
+        private void AcceptMethod(Window wnd)
         {
-            expressionFiles = TemplateForFiles;
-            expressionDirectory = TemplateForDirectory;
-            //Close();
+            ExpressionFiles = TemplateForFiles;
+            ExpressionDirectory = TemplateForDirectory;
+            wnd.DialogResult = true;
+            wnd.Hide();
         }
 
         private void ExampleTemplateForFiles_TextChangedMethod()
@@ -71,7 +73,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public string ExampleTemplateForFiles { get; set; }
         public string ExampleTemplateForDirectory { get; set; }
 
-        public RelayCommand AcceptCommand {get; private set; }
+        public RelayCommand<Window> AcceptCommand { get; private set; }
 
         public RelayCommand ExampleTemplateForFiles_TextChangedCommand { get; private set; }
         public RelayCommand ExampleTemplateForDirectory_TextChangedCommand { get; private set; }

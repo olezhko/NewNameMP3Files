@@ -27,7 +27,10 @@
             </MenuItem>
             <MenuItem Header="Options">
                 <MenuItem Header="Tempalate for Renaming" Name="RenameTempalateMenuItem" Command="{Binding OpenTemplateOptionWindow}"/>
-                <MenuItem Header="Change Language" Name="ChangeLanguageMenuItem"/>
+                <MenuItem Header="Change Language" Name="ChangeLanguageMenuItem">
+                    <MenuItem Header="{DynamicResource EnglishLanguage}" Tag="en-US" Name="EnglishMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                    <MenuItem Header="{DynamicResource RussianLanguage}" Tag="ru-RU" Name="RussianMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="Donate" Name="DonateMenuItem"/>

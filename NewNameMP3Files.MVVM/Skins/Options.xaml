@@ -4,6 +4,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         Title="Options" Height="229.877" Width="749.885"
+        x:Name="Window"
         DataContext="{Binding Options, Source={StaticResource Locator}}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -84,7 +85,7 @@
                 <Label Content="Album" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1" FontStyle="Italic"/>
             </Grid>
         </GroupBox>
-        <Button x:Name="AcceptButton" Content="Accept" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Padding="5" Height="30" Width="50" Command="{Binding AcceptCommand}"/>
+        <Button x:Name="AcceptButton" Content="Accept" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Padding="5" Height="30" Width="50" Command="{Binding AcceptCommand}" CommandParameter="{Binding ElementName=Window}"/>
 
     </Grid>
 </Window>
