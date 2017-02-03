@@ -4,4 +4,15 @@
     <v:String x:Key="Title">NewNameMP3Files</v:String>
     <v:String x:Key="EnglishLanguage">English</v:String>
     <v:String x:Key="RussianLanguage">Русский</v:String>
+    <v:String x:Key="FileMenu">File</v:String>
+    <v:String x:Key="OpenFilesMenu">Open Files</v:String>
+    <v:String x:Key="OpenDirectoryMenu">Open Directory</v:String>
+    <v:String x:Key="ChangeLanguageMenu">Language</v:String>
+    <v:String x:Key="TemplateForRenaming">Template for Renaming</v:String>
+    <v:String x:Key="OptionsMenu">Options</v:String>
+    <v:String x:Key="HelpMenu">Help</v:String>
+    <v:String x:Key="AboutMenu">About</v:String>
+    <v:String x:Key="DonateMenu">Donate</v:String>
+    <v:String x:Key="ExitMenu">Exit</v:String>
+    <v:String x:Key="SelectAllMenu">Select All</v:String>
 </ResourceDictionary>

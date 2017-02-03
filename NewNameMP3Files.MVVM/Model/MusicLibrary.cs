@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using NewNameMP3Files.MVVM.Annotations;
 
 namespace NewNameMP3Files.MVVM.Model
 {
@@ -45,17 +48,17 @@ namespace NewNameMP3Files.MVVM.Model
 
         internal void AddSong(TagLib.File file)
         {
-            var song = new Song();
-            song.Name = file.Tag.Track.ToString("D2") + " - " + file.Tag.Title;
+            var song = new Song(file);
             SongsCollection.Add(song);
         }
     }
 
-    public class Song
+    public class Song:INotifyPropertyChanged
     {
         public int AudioBitrate { get; set; }
         public uint Number { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
         public string Genre { get; set; }
@@ -70,6 +73,29 @@ namespace NewNameMP3Files.MVVM.Model
         {
             return (Name == obj.Name) && (AudioBitrate == obj.AudioBitrate) && (IsCurrentSong == obj.IsCurrentSong)
                 && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number);
+        }
+
+        public Song(TagLib.File file)
+        {
+            Title = file.Tag.Title;
+            Name = file.Tag.Track.ToString("D2") + " - " + file.Tag.Title;
+            Genre = file.Tag.FirstGenre;
+            Album = file.Tag.Album;
+            Artist = file.Tag.FirstPerformer;
+            Number = file.Tag.Track;
+            Year = file.Tag.Year;
+            Duration = file.Properties.Duration;
+            AudioBitrate = file.Properties.AudioBitrate;
+            Path = file.Name;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

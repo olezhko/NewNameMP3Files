@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:model="clr-namespace:NewNameMP3Files.MVVM.Model"
         mc:Ignorable="d ignore"
         x:Name="Window"
         Height="471.642"
@@ -13,6 +14,9 @@
         Title="NewNameMp3Files"
         Icon="NewNameMP3Files.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+<Window.Resources>
+        <model:BooleanAndConverter x:Key="booleanAndConverter" />
+</Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23"/>
@@ -20,33 +24,29 @@
             <RowDefinition Height="23"/>
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="Open _Files" Name="OpenFilesMenuItem" Command="{Binding OpenFilesCommand}"/>
-                <MenuItem Header="Open _Directory" Name="OpenDirectoryMenuItem" Command="{Binding OpenDirectoryCommand}"/>
-                <MenuItem Header="_Exit" Name="ExitApplictionMenuItem" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=Window}"/>
+            <MenuItem Header="{DynamicResource FileMenu}">
+                <MenuItem Header="{DynamicResource OpenFilesMenu}" Name="OpenFilesMenuItem" Command="{Binding OpenFilesCommand}"/>
+                <MenuItem Header="{DynamicResource OpenDirectoryMenu}" Name="OpenDirectoryMenuItem" Command="{Binding OpenDirectoryCommand}"/>
+                <MenuItem Header="{DynamicResource ExitMenu}" Name="ExitApplictionMenuItem" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=Window}"/>
             </MenuItem>
-            <MenuItem Header="Options">
-                <MenuItem Header="Tempalate for Renaming" Name="RenameTempalateMenuItem" Command="{Binding OpenTemplateOptionWindow}"/>
-                <MenuItem Header="Change Language" Name="ChangeLanguageMenuItem">
+            <MenuItem Header="{DynamicResource OptionsMenu}">
+                <MenuItem Header="{DynamicResource TemplateForRenaming}" Name="RenameTempalateMenuItem" Command="{Binding OpenTemplateOptionWindow}"/>
+                <MenuItem Header="{DynamicResource ChangeLanguageMenu}" Name="ChangeLanguageMenuItem">
                     <MenuItem Header="{DynamicResource EnglishLanguage}" Tag="en-US" Name="EnglishMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                     <MenuItem Header="{DynamicResource RussianLanguage}" Tag="ru-RU" Name="RussianMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Help">
-                <MenuItem Header="Donate" Name="DonateMenuItem"/>
-                <MenuItem Header="About" Name="AboutMenuItem" Command="{Binding AboutCommand}"/>
+            <MenuItem  Header="{DynamicResource HelpMenu}">
+                <MenuItem Header="{DynamicResource DonateMenu}" Name="DonateMenuItem"/>
+                <MenuItem Header="{DynamicResource AboutMenu}" Name="AboutMenuItem" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
         <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible">
             <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
+                        <MenuItem Header="{DynamicResource SelectAllMenu}" Command="{Binding SelectAllCommand}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemTemplate>
@@ -62,7 +62,7 @@
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <WrapPanel>
-                                                            <CheckBox Margin="15,0,0,0" Content="{Binding Name}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsChecked="{Binding ElementName=AlbumNameCheckBox, Mode=OneWay,Path=IsChecked}" />
+                                                            <CheckBox Margin="15,0,0,0" Content="{Binding Name}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                         </WrapPanel>
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>

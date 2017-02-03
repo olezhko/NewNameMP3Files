@@ -44,7 +44,16 @@ namespace NewNameMP3Files.MVVM.ViewModel
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             OpenTemplateOptionWindow = new RelayCommand(OpenTemplateWindowMethod);
             ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
+            SelectAllCommand = new RelayCommand(SelectAllMethod);
             _optionsWindow = new Options();
+        }
+
+        private void SelectAllMethod()
+        {
+            foreach (var song in from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection select song)
+            {
+                song.IsSelected = true;
+            }
         }
 
         private void ChangeLanguageMethod(MenuItem obj)
@@ -70,7 +79,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
                 if (viewModel!=null)
                 {
-                    _renameExpression = viewModel.ExpressionFiles;
+                    _renameExpression = viewModel.TemplateForFiles;
                 }
             }
         }
@@ -105,10 +114,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private List<string> GetListCheckedFiles()
         {
-            List<string> files = new List<string>();
-
-
-            return files;
+            return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
         }
 
         private event EventHandler<int> NewFileRenamed;
@@ -265,7 +271,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         #region Private Properties
         private MenuItem _checkedLanguageLastMenuItem;
-        private Options _optionsWindow;
+        private readonly Options _optionsWindow;
         private string _renameExpression = "(n) - (t)";
         #endregion
 
@@ -280,14 +286,13 @@ namespace NewNameMP3Files.MVVM.ViewModel
             get;
             private set;
         }
-
         public RelayCommand RenameCheckedCommand
         {
             get; private set; }
-
         public RelayCommand OpenTemplateOptionWindow { get; private set; }
-
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
+        public RelayCommand SelectAllCommand { get; private set; }
+
         #endregion
     }
 }

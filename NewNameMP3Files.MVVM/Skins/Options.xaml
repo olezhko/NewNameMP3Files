@@ -4,7 +4,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         Title="Options" Height="229.877" Width="749.885"
-        x:Name="Window"
+        x:Name="Window" Closing="Options_OnClosing"
         DataContext="{Binding Options, Source={StaticResource Locator}}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,21 +23,21 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Label Content="Template For Files" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold"/>
-            <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="1" TextWrapping="Wrap" Text="(n) - (t)" VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Name="TemplateForFilesTextBox">
+            <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="1" TextWrapping="Wrap" Text="{Binding TemplateForFiles}" VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Name="TemplateForFilesTextBox">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
-                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ExampleTemplateForFiles_TextChangedCommand, ElementName=TemplateForFilesTextBox}"/>
+                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ExampleTemplateForFilesTextChangedCommand, ElementName=TemplateForFilesTextBox}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
             <Label Content="{Binding ExampleTemplateForFiles}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Margin="10,0,0,0"/>
             <Line Fill="Black" Grid.Row="3" StrokeThickness="2" Stroke="Black" X2="373"/>
             <Label Content="Template For Directory (Use only &quot;Perfomer&quot;, &quot;Album&quot;, &quot;Year&quot;)" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" FontWeight="Bold"/>
-            <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="5" TextWrapping="Wrap" Text="\(p)\(y) (a)\(n) - (t)" VerticalAlignment="Top" Width="120" Name="TemplateForDirectoryTextBox"
+            <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="5" TextWrapping="Wrap" Text="{Binding TemplateForDirectory}" VerticalAlignment="Top" Width="120" Name="TemplateForDirectoryTextBox"
                      Margin="10,0,0,0" ToolTip="In this field you enter a path from working directory.\nThis display how will be organized you working directory.">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
-                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ExampleTemplateForDirectory_TextChangedCommand, ElementName=TemplateForDirectoryTextBox}"/>
+                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ExampleTemplateForDirectoryTextChangedCommand, ElementName=TemplateForDirectoryTextBox}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
@@ -73,10 +73,13 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Label Content="07" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2"/>
-                <Label Content="Satan's Children" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
-                <Label Content="2001" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2"/>
-                <Label Content="Ancient" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.ColumnSpan="2"/>
-                <Label Content="Proxima Centauri" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="4"/>
+                <Label Content="Satan's Children" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"
+                       Grid.Column="0" />
+                <Label Content="2001" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                <Label Content="Ancient" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.ColumnSpan="2"
+                       Grid.Column="0" />
+                <Label Content="Proxima Centauri" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="4"
+                       Grid.Column="0" />
 
                 <Label Content="Number" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1" FontStyle="Italic"/>
                 <Label Content="Title" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" FontStyle="Italic"/>

@@ -4,4 +4,16 @@
     <v:String x:Key="Title">NewNameMP3Files</v:String>
     <v:String x:Key="EnglishLanguage">English</v:String>
     <v:String x:Key="RussianLanguage">Русский</v:String>
+
+    <v:String x:Key="FileMenu">Файл</v:String>
+    <v:String x:Key="OpenFilesMenu">Открыть файлы</v:String>
+    <v:String x:Key="OpenDirectoryMenu">Открыть директорию</v:String>
+    <v:String x:Key="ChangeLanguageMenu">Язык</v:String>
+    <v:String x:Key="TemplateForRenaming">Шаблон для переименовывания</v:String>
+    <v:String x:Key="OptionsMenu">Опции</v:String>
+    <v:String x:Key="HelpMenu">Помощь</v:String>
+    <v:String x:Key="AboutMenu">О программе</v:String>
+    <v:String x:Key="DonateMenu">Пожертвовать</v:String>
+    <v:String x:Key="ExitMenu">Выход</v:String>
+    <v:String x:Key="SelectAllMenu">Выбрать все</v:String>
 </ResourceDictionary>

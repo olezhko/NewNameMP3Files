@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,11 @@ namespace NewNameMP3Files.MVVM.Skins
         public Options()
         {
             InitializeComponent();
+        }
+
+        private void Options_OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }
