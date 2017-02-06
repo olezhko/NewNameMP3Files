@@ -6,7 +6,6 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        xmlns:model="clr-namespace:NewNameMP3Files.MVVM.Model"
         mc:Ignorable="d ignore"
         x:Name="Window"
         Height="471.642"
@@ -14,14 +13,11 @@
         Title="NewNameMp3Files"
         Icon="NewNameMP3Files.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-<Window.Resources>
-        <model:BooleanAndConverter x:Key="booleanAndConverter" />
-</Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23"/>
             <RowDefinition Height="151*"/>
-            <RowDefinition Height="23"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top">
             <MenuItem Header="{DynamicResource FileMenu}">
@@ -47,6 +43,7 @@
                     <ContextMenu>
                         <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
                         <MenuItem Header="{DynamicResource SelectAllMenu}" Command="{Binding SelectAllCommand}" />
+                        <MenuItem Header="{DynamicResource DeSelectAllMenu}" Command="{Binding DeSelectAllCommand}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemTemplate>
@@ -82,8 +79,27 @@
             </ListView>
         </ScrollViewer>         
         <StatusBar Name="StatusBar" Grid.Row="2">
-            <StatusBarItem Name="CountRenamedFilesStatusStrip" Content="{Binding CountRenamedFiles}"></StatusBarItem>
-            <ProgressBar Name="ProgressRenamedFilesStatusStrip" Value="{Binding ProgressRenamedFiles}"></ProgressBar>
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <ProgressBar Name="ProgressRenamedFilesStatusStrip" Value="{Binding ProgressRenamedFiles}" Width="100" Height="14"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1">
+                <TextBlock Name="CountRenamedFilesStatusStrip" Text="{Binding CountRenamedFiles}" Width="50" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Name="CountCheckedFilesStatusStrip" Text="{Binding CountCheckedFiles}" Width="50" />
+            </StatusBarItem>        
         </StatusBar>
     </Grid>
 </Window>

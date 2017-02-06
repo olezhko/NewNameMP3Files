@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using NewNameMP3Files.MVVM.Model;
@@ -28,14 +27,14 @@ namespace NewNameMP3Files.MVVM.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : Notifier
     {
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
-            AuthorCollection = new ObservableCollection<Author>();
+            _authorCollection = new ObservableCollection<Author>();
             RenameCheckedCommand = new RelayCommand(RenameAction);
             OpenFilesCommand = new RelayCommand(OpenFilesMethod);
             OpenDirectoryCommand = new RelayCommand(OpenDirectoryMethod);
@@ -44,16 +43,20 @@ namespace NewNameMP3Files.MVVM.ViewModel
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             OpenTemplateOptionWindow = new RelayCommand(OpenTemplateWindowMethod);
             ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
-            SelectAllCommand = new RelayCommand(SelectAllMethod);
+            SelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(true));
+            DeSelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(false));
+            
             _optionsWindow = new Options();
         }
 
-        private void SelectAllMethod()
+        #region Methods
+        private void SelectAllMethod(bool state)
         {
             foreach (var song in from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection select song)
             {
-                song.IsSelected = true;
+                song.IsSelected = state;
             }
+            CountCheckedFiles = 15;
         }
 
         private void ChangeLanguageMethod(MenuItem obj)
@@ -77,7 +80,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             if (res.HasValue && res.Value)
             {
                 var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
-                if (viewModel!=null)
+                if (viewModel != null)
                 {
                     _renameExpression = viewModel.TemplateForFiles;
                 }
@@ -109,7 +112,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void RefreshMethod()
         {
-            
+
         }
 
         private List<string> GetListCheckedFiles()
@@ -241,12 +244,12 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void OpenDirectoryMethod()
         {
-            
+
         }
 
         private void OpenFilesMethod()
         {
-            OpenFileDialog ofd = new OpenFileDialog {Multiselect = true};
+            OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
             var res = ofd.ShowDialog();
             if (res.HasValue && res.Value)
             {
@@ -257,16 +260,40 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 }
             }
         }
+        #endregion
 
         #region Public Properties
-        public ObservableCollection<Author> AuthorCollection { get; set; }
 
-        public string CountRenamedFiles { get; set; }
-        
-        public int ProgressRenamedFiles { get; set; }
-
+        private ObservableCollection<Author> _authorCollection;
+        public ObservableCollection<Author> AuthorCollection
+        {
+            get { return _authorCollection; } 
+        }
         public MenuItem LanguageMenuItem { get; set; }
+        public string CountRenamedFiles { get; set; }
 
+        private int _progressRenamedFiles;
+        public int ProgressRenamedFiles
+        {
+            get { return _progressRenamedFiles; }
+            set
+            {
+                _progressRenamedFiles = value;
+                NotifyPropertyChanged("ProgressRenamedFiles");
+            }
+            
+        }
+
+        private int _countCheckedFiles;
+        public int CountCheckedFiles
+        {
+            get { return _countCheckedFiles; }
+            set
+            {
+                _countCheckedFiles = value;
+                NotifyPropertyChanged("CountCheckedFiles");
+            }
+        }
         #endregion
 
         #region Private Properties
@@ -291,8 +318,8 @@ namespace NewNameMP3Files.MVVM.ViewModel
             get; private set; }
         public RelayCommand OpenTemplateOptionWindow { get; private set; }
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
-        public RelayCommand SelectAllCommand { get; private set; }
-
+        public RelayCommand<bool> SelectAllCommand { get; private set; }
+        public RelayCommand<bool> DeSelectAllCommand { get; private set; }
         #endregion
     }
 }

@@ -16,4 +16,5 @@
     <v:String x:Key="DonateMenu">Пожертвовать</v:String>
     <v:String x:Key="ExitMenu">Выход</v:String>
     <v:String x:Key="SelectAllMenu">Выбрать все</v:String>
+    <v:String x:Key="DeSelectAllMenu">Снять метки</v:String>
 </ResourceDictionary>

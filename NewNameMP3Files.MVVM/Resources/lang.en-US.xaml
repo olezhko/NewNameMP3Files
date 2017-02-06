@@ -15,4 +15,5 @@
     <v:String x:Key="DonateMenu">Donate</v:String>
     <v:String x:Key="ExitMenu">Exit</v:String>
     <v:String x:Key="SelectAllMenu">Select All</v:String>
+    <v:String x:Key="DeSelectAllMenu">Deselect All</v:String>
 </ResourceDictionary>

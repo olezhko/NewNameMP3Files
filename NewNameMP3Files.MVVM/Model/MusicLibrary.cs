@@ -53,7 +53,7 @@ namespace NewNameMP3Files.MVVM.Model
         }
     }
 
-    public class Song:INotifyPropertyChanged
+    public class Song
     {
         public int AudioBitrate { get; set; }
         public uint Number { get; set; }
@@ -87,15 +87,6 @@ namespace NewNameMP3Files.MVVM.Model
             Duration = file.Properties.Duration;
             AudioBitrate = file.Properties.AudioBitrate;
             Path = file.Name;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
