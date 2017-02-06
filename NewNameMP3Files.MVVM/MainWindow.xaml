@@ -44,6 +44,7 @@
                         <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
                         <MenuItem Header="{DynamicResource SelectAllMenu}" Command="{Binding SelectAllCommand}" />
                         <MenuItem Header="{DynamicResource DeSelectAllMenu}" Command="{Binding DeSelectAllCommand}" />
+                        <MenuItem Header="{DynamicResource EditTags}" Command="{Binding EditTagsCommand}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemTemplate>

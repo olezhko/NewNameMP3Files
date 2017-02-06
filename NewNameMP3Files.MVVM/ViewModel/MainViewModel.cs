@@ -45,18 +45,22 @@ namespace NewNameMP3Files.MVVM.ViewModel
             ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
             SelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(true));
             DeSelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(false));
-            
+            EditTagsCommand = new RelayCommand<string>(EditTagsMethod);
             _optionsWindow = new Options();
         }
 
         #region Methods
+        private void EditTagsMethod(string obj)
+        {
+
+        }
+
         private void SelectAllMethod(bool state)
         {
             foreach (var song in from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection select song)
             {
                 song.IsSelected = state;
             }
-            CountCheckedFiles = 15;
         }
 
         private void ChangeLanguageMethod(MenuItem obj)
@@ -320,6 +324,8 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         public RelayCommand<bool> SelectAllCommand { get; private set; }
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
+
+        public RelayCommand<string> EditTagsCommand { get; private set; } 
         #endregion
     }
 }

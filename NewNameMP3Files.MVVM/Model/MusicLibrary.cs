@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using NewNameMP3Files.MVVM.Annotations;
 
 namespace NewNameMP3Files.MVVM.Model
@@ -53,7 +54,7 @@ namespace NewNameMP3Files.MVVM.Model
         }
     }
 
-    public class Song
+    public class Song:ViewModelBase
     {
         public int AudioBitrate { get; set; }
         public uint Number { get; set; }
@@ -66,7 +67,15 @@ namespace NewNameMP3Files.MVVM.Model
         public TimeSpan Duration { get; set; }
         public string Lyric { get; set; }
         public string Path { get; set; }
-        public bool IsSelected { get; set; }
+
+        private bool _IsSelected;
+
+        public bool IsSelected
+        {
+            get { return _IsSelected; }
+            set { _IsSelected = value; RaisePropertyChanged(()=>IsSelected); }
+            
+        }
         public bool IsCurrentSong { get; set; }
 
         public bool Equals(Song obj)
