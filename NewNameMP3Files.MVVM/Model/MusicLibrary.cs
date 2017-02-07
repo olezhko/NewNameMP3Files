@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using GalaSoft.MvvmLight;
-using NewNameMP3Files.MVVM.Annotations;
 
 namespace NewNameMP3Files.MVVM.Model
 {
-    class MusicLibrary
+    public class Author:ViewModelBase
     {
-    }
-
-    public class Author
-    {
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+        }
         public string AuthorName { get; set; }
 
         public ObservableCollection<Album> AlbumCollection { get; set; }
@@ -26,13 +25,25 @@ namespace NewNameMP3Files.MVVM.Model
 
         public void AddAlbum(Album album)
         {
+            album.PropertyChanged += album_PropertyChanged;
             AlbumCollection.Add(album);
+        }
+
+        void album_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            IsSelected = AlbumCollection.All(album => album.IsSelected);
         }
     }
 
-    public class Album
+    public class Album:ViewModelBase
     {
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+        }
+
         public string AlbumName { get; set; }
 
         public ObservableCollection<Song> SongsCollection { get; set; }
@@ -41,16 +52,27 @@ namespace NewNameMP3Files.MVVM.Model
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<Song>();
         }
-
         public void AddSong(Song song)
         {
+            song.PropertyChanged += song_PropertyChanged;
             SongsCollection.Add(song);
         }
 
         internal void AddSong(TagLib.File file)
         {
             var song = new Song(file);
+            song.PropertyChanged += song_PropertyChanged;
             SongsCollection.Add(song);
+        }
+
+        void song_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            IsSelected = SongsCollection.All(song => song.IsSelected);
+        }
+
+        public void RemoveSong(TagLib.File file)
+        {
+
         }
     }
 
@@ -68,26 +90,24 @@ namespace NewNameMP3Files.MVVM.Model
         public string Lyric { get; set; }
         public string Path { get; set; }
 
-        private bool _IsSelected;
+        private bool _isSelected;
 
         public bool IsSelected
         {
-            get { return _IsSelected; }
-            set { _IsSelected = value; RaisePropertyChanged(()=>IsSelected); }
-            
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged(()=>IsSelected); }
         }
         public bool IsCurrentSong { get; set; }
 
+
         public bool Equals(Song obj)
         {
-            return (Name == obj.Name) && (AudioBitrate == obj.AudioBitrate) && (IsCurrentSong == obj.IsCurrentSong)
-                && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number);
+            return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
         }
 
         public Song(TagLib.File file)
         {
             Title = file.Tag.Title;
-            Name = file.Tag.Track.ToString("D2") + " - " + file.Tag.Title;
             Genre = file.Tag.FirstGenre;
             Album = file.Tag.Album;
             Artist = file.Tag.FirstPerformer;
@@ -96,6 +116,7 @@ namespace NewNameMP3Files.MVVM.Model
             Duration = file.Properties.Duration;
             AudioBitrate = file.Properties.AudioBitrate;
             Path = file.Name;
+            Name = System.IO.Path.GetFileName(Path);
         }
     }
 }

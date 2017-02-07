@@ -44,18 +44,18 @@
                         <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
                         <MenuItem Header="{DynamicResource SelectAllMenu}" Command="{Binding SelectAllCommand}" />
                         <MenuItem Header="{DynamicResource DeSelectAllMenu}" Command="{Binding DeSelectAllCommand}" />
-                        <MenuItem Header="{DynamicResource EditTags}" Command="{Binding EditTagsCommand}" />
+                        <MenuItem Header="{DynamicResource EditTagsMenu}" Command="{Binding EditTagsCommand}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <CheckBox Content="{Binding AuthorName}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Name="AuthorCheckBox"/>
+                            <CheckBox Content="{Binding AuthorName}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Name="AuthorCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                             <ListView Name="SongsListView" ItemsSource="{Binding AlbumCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <CheckBox Margin="5,0,0,0" Content="{Binding AlbumName}" FontWeight="Bold" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" FontSize="14" Name="AlbumNameCheckBox" IsChecked="{Binding ElementName=AuthorCheckBox, Mode=OneWay,Path=IsChecked}"/>
+                                            <CheckBox Margin="5,0,0,0" Content="{Binding AlbumName}" FontWeight="Bold" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" FontSize="14" Name="AlbumNameCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                                             <ListView ItemsSource="{Binding SongsCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>

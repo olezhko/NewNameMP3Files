@@ -91,6 +91,16 @@ namespace NewNameMP3Files.MVVM.ViewModel
             }
         }
 
+        private void RefreshMethod()
+        {
+
+        }
+
+        private List<string> GetListCheckedFiles()
+        {
+            return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
+        }
+
         private void RenameAction()
         {
             List<string> files = GetListCheckedFiles();
@@ -111,21 +121,10 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 }
             };
 
-            Task.Factory.StartNew(() => RenameAction(_renameExpression, files));
+            Task.Factory.StartNew(() => RenameActionTask(_renameExpression, files));
         }
 
-        private void RefreshMethod()
-        {
-
-        }
-
-        private List<string> GetListCheckedFiles()
-        {
-            return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
-        }
-
-        private event EventHandler<int> NewFileRenamed;
-        private void RenameAction(string expression, List<string> filesPathList)
+        private void RenameActionTask(string expression, List<string> filesPathList)
         {
             int count = 0;
             foreach (var file in filesPathList)
@@ -219,7 +218,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
                     if (resAlbums == -1)
                     {
-                        author.AlbumCollection.Add(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
+                        author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
                         author.AlbumCollection.Last().AddSong(mp3File);
                     }
                 }
@@ -228,7 +227,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             if (res == -1)
             {
                 AuthorCollection.Add(new Author(mp3File.Tag.FirstPerformer));
-                AuthorCollection.Last().AlbumCollection.Add(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
+                AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
                 AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);
             }
         }
@@ -304,6 +303,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
         private MenuItem _checkedLanguageLastMenuItem;
         private readonly Options _optionsWindow;
         private string _renameExpression = "(n) - (t)";
+        private event EventHandler<int> NewFileRenamed;
         #endregion
 
         #region Commands
