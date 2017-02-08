@@ -21,6 +21,13 @@ namespace NewNameMP3Files.MVVM
                 return m_Languages;
             }
         }
+        static ResourceDictionary _resourceDictionary;
+
+        public static ResourceDictionary ResourceDictionary
+        {
+            get { return _resourceDictionary; }
+        }
+        
         static App()
         {
             DispatcherHelper.Initialize();
@@ -50,14 +57,15 @@ namespace NewNameMP3Files.MVVM
                 System.Threading.Thread.CurrentThread.CurrentUICulture = value;
 
                 //2. Создаём ResourceDictionary для новой культуры
-                ResourceDictionary dict = new ResourceDictionary();
+                //ResourceDictionary dict = new ResourceDictionary();
+                _resourceDictionary = new ResourceDictionary();
                 switch (value.Name)
                 {
                     case "ru-RU":
-                        dict.Source = new Uri(String.Format("Resources/lang.{0}.xaml", value.Name), UriKind.Relative);
+                        _resourceDictionary.Source = new Uri(String.Format("Resources/lang.{0}.xaml", value.Name), UriKind.Relative);
                         break;
                     default:
-                        dict.Source = new Uri("Resources/lang.xaml", UriKind.Relative);
+                        _resourceDictionary.Source = new Uri("Resources/lang.xaml", UriKind.Relative);
                         break;
                 }
 
@@ -69,11 +77,11 @@ namespace NewNameMP3Files.MVVM
                 {
                     int ind = Application.Current.Resources.MergedDictionaries.IndexOf(oldDict);
                     Application.Current.Resources.MergedDictionaries.Remove(oldDict);
-                    Application.Current.Resources.MergedDictionaries.Insert(ind, dict);
+                    Application.Current.Resources.MergedDictionaries.Insert(ind, _resourceDictionary);
                 }
                 else
                 {
-                    Application.Current.Resources.MergedDictionaries.Add(dict);
+                    Application.Current.Resources.MergedDictionaries.Add(_resourceDictionary);
                 }
 
                 //4. Вызываем евент для оповещения всех окон.
@@ -90,6 +98,11 @@ namespace NewNameMP3Files.MVVM
         {
             NewNameMP3Files.MVVM.Properties.Settings.Default.DefaultLanguage = Language;
             NewNameMP3Files.MVVM.Properties.Settings.Default.Save();
+        }
+
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            Language = NewNameMP3Files.MVVM.Properties.Settings.Default.DefaultLanguage;
         }
     }
 }

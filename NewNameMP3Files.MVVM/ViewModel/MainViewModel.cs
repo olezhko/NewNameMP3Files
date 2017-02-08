@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using NewNameMP3Files.MVVM.Model;
 using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using GalaSoft.MvvmLight;
 using NewNameMP3Files.MVVM.Skins;
 
 namespace NewNameMP3Files.MVVM.ViewModel
@@ -27,7 +29,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : Notifier
+    public class MainViewModel : ViewModelBase
     {
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -57,23 +59,26 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void RefreshMethod()
         {
-            AuthorCollection.Clear();
-            foreach (string item in renamingFilesList)
+            App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
             {
-                var file = new FileInfo(item);
-                if (file.Exists) // is it file
+                AuthorCollection.Clear();
+                foreach (var item in renamingFilesList)
                 {
-                    AddSongToList(item);
-                }
-                else
-                {
-                    var dir = new DirectoryInfo(item);
-                    if (dir.Exists)
+                    var file = new FileInfo(item);
+                    if (file.Exists) // is it file
                     {
-                        AddDirectoryToList(item);
+                        AddSongToList(item);
+                    }
+                    else
+                    {
+                        var dir = new DirectoryInfo(item);
+                        if (dir.Exists)
+                        {
+                            AddDirectoryToList(item);
+                        }
                     }
                 }
-            }
+            }); 
         }
 
         private void SelectAllMethod(bool state)
@@ -126,16 +131,16 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 return;
             }
 
+            renamingFilesList.Clear();
             NewFileRenamed += (send, args) =>
             {
-                renamingFilesList.Clear();
                 CountRenamedFiles = String.Format("{0}/{1}", args, files.Count);
                 int percent = args * 100 / files.Count;
                 ProgressRenamedFiles = percent;
                 if (percent == 100)
                 {
                     RefreshMethod();
-                    MessageBox.Show(resourceDictionary["DoneString"].ToString(), resourceDictionary["InformationString"].ToString());
+                    MessageBox.Show(App.ResourceDictionary["DoneString"].ToString(), App.ResourceDictionary["InformationString"].ToString());
                 }
             };
 
@@ -163,13 +168,12 @@ namespace NewNameMP3Files.MVVM.ViewModel
                     {
                         break;
                     }
-                    renamingFilesList.Add(finalPath);
                     finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
                     i++;
                 }
 
                 File.Move(file, finalPath);
-
+                renamingFilesList.Add(finalPath);
                 count++;
                 if (NewFileRenamed != null)
                 {
@@ -301,7 +305,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             set
             {
                 _progressRenamedFiles = value;
-                NotifyPropertyChanged("ProgressRenamedFiles");
+                RaisePropertyChanged(() => ProgressRenamedFiles);
             }
             
         }
@@ -313,7 +317,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             set
             {
                 _countCheckedFiles = value;
-                NotifyPropertyChanged("CountCheckedFiles");
+                RaisePropertyChanged(() => CountCheckedFiles);
             }
         }
         #endregion
@@ -323,7 +327,6 @@ namespace NewNameMP3Files.MVVM.ViewModel
         private readonly Options _optionsWindow;
         private string _renameExpression = "(n) - (t)";
         private event EventHandler<int> NewFileRenamed;
-        ResourceDictionary resourceDictionary = new ResourceDictionary();
         #endregion
 
         #region Commands

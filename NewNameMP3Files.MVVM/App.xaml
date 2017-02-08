@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:NewNameMP3Files.MVVM.ViewModel" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ShutdownMode="OnMainWindowClose"
-             xmlns:ignore="http://www.galasoft.ch/ignore" StartupUri="MainWindow.xaml" mc:Ignorable="d ignore" LoadCompleted="Application_LoadCompleted">
+             xmlns:ignore="http://www.galasoft.ch/ignore" StartupUri="MainWindow.xaml" mc:Ignorable="d ignore" LoadCompleted="Application_LoadCompleted" Startup="App_OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />

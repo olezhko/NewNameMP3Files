@@ -19,4 +19,5 @@
     <v:String x:Key="DoneString">Done</v:String>
     <v:String x:Key="AttentionString">Attention</v:String>
     <v:String x:Key="InformationString">Information</v:String>
+    <v:String x:Key="EditTagsMenu">Edit Tags</v:String>
 </ResourceDictionary>

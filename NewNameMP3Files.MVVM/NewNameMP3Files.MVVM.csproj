@@ -90,7 +90,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\MusicLibrary.cs" />
-    <Compile Include="Model\Notifier.cs" />
     <Compile Include="Model\StaticMethods.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Skins\Options.xaml.cs">
