@@ -4,7 +4,6 @@
     <v:String x:Key="Title">NewNameMP3Files</v:String>
     <v:String x:Key="EnglishLanguage">English</v:String>
     <v:String x:Key="RussianLanguage">Русский</v:String>
-
     <v:String x:Key="FileMenu">Файл</v:String>
     <v:String x:Key="OpenFilesMenu">Открыть файлы</v:String>
     <v:String x:Key="OpenDirectoryMenu">Открыть директорию</v:String>
@@ -17,4 +16,7 @@
     <v:String x:Key="ExitMenu">Выход</v:String>
     <v:String x:Key="SelectAllMenu">Выбрать все</v:String>
     <v:String x:Key="DeSelectAllMenu">Снять метки</v:String>
+    <v:String x:Key="DoneString">Завершено</v:String>
+    <v:String x:Key="AttentionString">Внимание</v:String>
+    <v:String x:Key="InformationString">Информация</v:String>
 </ResourceDictionary>

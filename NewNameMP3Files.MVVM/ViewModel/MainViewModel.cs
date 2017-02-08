@@ -55,6 +55,27 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         }
 
+        private void RefreshMethod()
+        {
+            AuthorCollection.Clear();
+            foreach (string item in renamingFilesList)
+            {
+                var file = new FileInfo(item);
+                if (file.Exists) // is it file
+                {
+                    AddSongToList(item);
+                }
+                else
+                {
+                    var dir = new DirectoryInfo(item);
+                    if (dir.Exists)
+                    {
+                        AddDirectoryToList(item);
+                    }
+                }
+            }
+        }
+
         private void SelectAllMethod(bool state)
         {
             foreach (var song in from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection select song)
@@ -91,16 +112,12 @@ namespace NewNameMP3Files.MVVM.ViewModel
             }
         }
 
-        private void RefreshMethod()
-        {
-
-        }
-
         private List<string> GetListCheckedFiles()
         {
             return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
         }
 
+        List<string> renamingFilesList = new List<string>();
         private void RenameAction()
         {
             List<string> files = GetListCheckedFiles();
@@ -111,13 +128,14 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
             NewFileRenamed += (send, args) =>
             {
+                renamingFilesList.Clear();
                 CountRenamedFiles = String.Format("{0}/{1}", args, files.Count);
                 int percent = args * 100 / files.Count;
                 ProgressRenamedFiles = percent;
                 if (percent == 100)
                 {
                     RefreshMethod();
-                    MessageBox.Show("Done");
+                    MessageBox.Show(resourceDictionary["DoneString"].ToString(), resourceDictionary["InformationString"].ToString());
                 }
             };
 
@@ -145,6 +163,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                     {
                         break;
                     }
+                    renamingFilesList.Add(finalPath);
                     finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
                     i++;
                 }
@@ -304,6 +323,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
         private readonly Options _optionsWindow;
         private string _renameExpression = "(n) - (t)";
         private event EventHandler<int> NewFileRenamed;
+        ResourceDictionary resourceDictionary = new ResourceDictionary();
         #endregion
 
         #region Commands

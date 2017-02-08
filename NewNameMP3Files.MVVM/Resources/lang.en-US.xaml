@@ -16,4 +16,7 @@
     <v:String x:Key="ExitMenu">Exit</v:String>
     <v:String x:Key="SelectAllMenu">Select All</v:String>
     <v:String x:Key="DeSelectAllMenu">Deselect All</v:String>
+    <v:String x:Key="DoneString">Done</v:String>
+    <v:String x:Key="AttentionString">Attention</v:String>
+    <v:String x:Key="InformationString">Information</v:String>
 </ResourceDictionary>
