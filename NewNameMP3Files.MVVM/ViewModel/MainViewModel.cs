@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using NewNameMP3Files.MVVM.Model;
 using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using NewNameMP3Files.MVVM.Skins;
+using Application = System.Windows.Application;
+using DragEventArgs = System.Windows.DragEventArgs;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace NewNameMP3Files.MVVM.ViewModel
 {
@@ -49,9 +52,49 @@ namespace NewNameMP3Files.MVVM.ViewModel
             DeSelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(false));
             EditTagsCommand = new RelayCommand<string>(EditTagsMethod);
             _optionsWindow = new Options();
+            _aboutWindow = new AboutWindow();
         }
 
         #region Methods
+        private void AboutMethod()
+        {
+            _aboutWindow.ShowDialog();
+        }
+
+        private void ExitMethod(Window wnd)
+        {
+            if (wnd != null)
+            {
+                wnd.Close();
+            }
+        }
+
+        private void OpenDirectoryMethod()
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                if (Directory.Exists(fbd.SelectedPath))
+                {
+                    AddDirectoryToList(fbd.SelectedPath);
+                }
+            }
+        }
+
+        private void OpenFilesMethod()
+        {
+            OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
+            var res = ofd.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                var items = ofd.FileNames;
+                foreach (var item in items)
+                {
+                    AddSongToList(item);
+                }
+            }
+        }
+
         private void EditTagsMethod(string obj)
         {
 
@@ -59,10 +102,10 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void RefreshMethod()
         {
-            App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+            Application.Current.Dispatcher.Invoke(delegate
             {
                 AuthorCollection.Clear();
-                foreach (var item in renamingFilesList)
+                foreach (var item in _renamingFilesList)
                 {
                     var file = new FileInfo(item);
                     if (file.Exists) // is it file
@@ -122,7 +165,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
         }
 
-        List<string> renamingFilesList = new List<string>();
+        readonly List<string> _renamingFilesList = new List<string>();
         private void RenameAction()
         {
             List<string> files = GetListCheckedFiles();
@@ -131,7 +174,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 return;
             }
 
-            renamingFilesList.Clear();
+            _renamingFilesList.Clear();
             NewFileRenamed += (send, args) =>
             {
                 CountRenamedFiles = String.Format("{0}/{1}", args, files.Count);
@@ -173,7 +216,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
                 }
 
                 File.Move(file, finalPath);
-                renamingFilesList.Add(finalPath);
+                _renamingFilesList.Add(finalPath);
                 count++;
                 if (NewFileRenamed != null)
                 {
@@ -184,9 +227,9 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         private void DragEnterAuthorsListViewMethod(DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
-                var dragItems = (string[])e.Data.GetData(DataFormats.FileDrop);
+                var dragItems = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
                 foreach (string item in dragItems)
                 {
                     var file = new FileInfo(item);
@@ -255,37 +298,6 @@ namespace NewNameMP3Files.MVVM.ViewModel
             }
         }
 
-        private void AboutMethod()
-        {
-
-        }
-
-        private void ExitMethod(Window wnd)
-        {
-            if (wnd != null)
-            {
-                wnd.Close();
-            }
-        }
-
-        private void OpenDirectoryMethod()
-        {
-
-        }
-
-        private void OpenFilesMethod()
-        {
-            OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
-            var res = ofd.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                var items = ofd.FileNames;
-                foreach (var item in items)
-                {
-                    AddSongToList(item);
-                }
-            }
-        }
         #endregion
 
         #region Public Properties
@@ -325,6 +337,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
         #region Private Properties
         private MenuItem _checkedLanguageLastMenuItem;
         private readonly Options _optionsWindow;
+        private readonly AboutWindow _aboutWindow;
         private string _renameExpression = "(n) - (t)";
         private event EventHandler<int> NewFileRenamed;
         #endregion

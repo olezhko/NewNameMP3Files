@@ -32,6 +32,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<OptionsViewModel>();
+            SimpleIoc.Default.Register<AboutViewModel>();
         }
 
         public MainViewModel Main
@@ -45,6 +46,14 @@ namespace NewNameMP3Files.MVVM.ViewModel
         public OptionsViewModel Options
         {
             get { return ServiceLocator.Current.GetInstance<OptionsViewModel>(); }
+        }
+
+        public AboutViewModel About
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<AboutViewModel>();
+            }
         }
         
         public static void Cleanup()
