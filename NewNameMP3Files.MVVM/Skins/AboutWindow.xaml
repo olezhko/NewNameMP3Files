@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         DataContext="{Binding About, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
-        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner">
+        x:Name="Window" Closing="AboutWindow_OnClosing"
+        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" Height="331" Icon="NewNameMP3Files.ico">
     <Window.Resources>
         <Style x:Key="AboutDialogStyle" TargetType="Window">
             <Setter Property="Height" Value="Auto" />
@@ -12,9 +13,6 @@
             <Setter Property="ResizeMode" Value="NoResize" />
             <Setter Property="WindowStyle" Value="SingleBorderWindow" />
             <Setter Property="SizeToContent" Value="Height" />
-        </Style>
-        <Style x:Key="DisplayAreaStyle" TargetType="{x:Type StackPanel}">
-            <Setter Property="Margin" Value="10,10,10,5" />
         </Style>
         <Style x:Key="BackgroundStyle" TargetType="{x:Type StackPanel}">
             <Setter Property="Background">
@@ -27,9 +25,6 @@
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="Padding" Value="0" />
         </Style>
         <Style x:Key="ParagraphSeparator" TargetType="{x:Type Label}">
             <Setter Property="Padding" Value="0,10,0,0" />
@@ -47,21 +42,21 @@
         </Style>
     </Window.Resources>
     <StackPanel x:Uid="clientArea" Style="{StaticResource BackgroundStyle}">
-        <StackPanel x:Uid="displayArea" Style="{StaticResource DisplayAreaStyle}">
+        <StackPanel x:Uid="displayArea" Margin="10,10,10,5">
             <Label x:Name="ProductName" x:Uid="productName" Content="{Binding Product}" />
             <StackPanel x:Uid="versionArea" Orientation="Horizontal">
-                <Label x:Name="versionLabel" x:Uid="VersionLabel" Content="Version - " />
-                <Label x:Name="version" x:Uid="version" Content="{Binding Version}" />
+                <Label x:Uid="VersionLabel" Content="Version - " />
+                <Label x:Uid="version" Content="{Binding Version}" />
             </StackPanel>
-            <Label x:Name="Copyright" x:Uid="copyright" Content="{Binding Copyright}"  />
-            <Label x:Name="company" x:Uid="company" Content="{Binding Company}" />
-            <Label x:Name="reserved" x:Uid="reserved" Content="All Rights Reserved." />
-            <Label x:Name="info" x:Uid="info" Style="{StaticResource ParagraphSeparator}" Content="Product details:" />
-            <TextBox x:Name="description" x:Uid="description" Text="{Binding Description}" Style="{StaticResource ReadOnlyDescStyle}" />
-            <DockPanel x:Uid="buttonArea">
-                <Button x:Name="okButton" x:Uid="okButton"  Content="OK" Margin="0,5" MinWidth="75" DockPanel.Dock="Right" />
-                <Label x:Name="productLink" x:Uid="productLink" Style="{StaticResource LinkLabelStyle}" >
-                    <Hyperlink x:Name="hyperlink" x:Uid="hyperlink" NavigateUri="{Binding LinkUri}"  Style="{StaticResource LinkLabelStyle}" Hyperlink.RequestNavigate="hyperlink_RequestNavigate">
+            <Label Content="{Binding Copyright}"  />
+            <Label Content="{Binding Company}" />
+            <Label Content="All Rights Reserved." />
+            <Label Style="{StaticResource ParagraphSeparator}" Content="Product details:" />
+            <TextBox Text="{Binding Description}" Style="{StaticResource ReadOnlyDescStyle}" />
+            <DockPanel>
+                <Button Content="OK" Margin="0,5" MinWidth="75" DockPanel.Dock="Right" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=Window}"/>
+                <Label Style="{StaticResource LinkLabelStyle}" >
+                    <Hyperlink NavigateUri="{Binding LinkUri}" Style="{StaticResource LinkLabelStyle}" RequestNavigate="hyperlink_RequestNavigate">
                         <TextBlock Text="{Binding LinkText}" />
                     </Hyperlink>
                 </Label>

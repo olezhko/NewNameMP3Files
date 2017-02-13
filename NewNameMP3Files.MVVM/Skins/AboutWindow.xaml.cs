@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,11 @@ namespace NewNameMP3Files.MVVM.Skins
 
                 e.Handled = true;
             }
+        }
+
+        private void AboutWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }

@@ -34,9 +34,7 @@ namespace NewNameMP3Files.MVVM.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
+        // edit tags
         public MainViewModel()
         {
             _authorCollection = new ObservableCollection<Author>();

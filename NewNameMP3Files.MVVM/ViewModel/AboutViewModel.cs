@@ -5,6 +5,8 @@ using System.Windows.Data;
 using System.Xml;
 using GalaSoft.MvvmLight;
 using System.IO;
+using System.Windows;
+using GalaSoft.MvvmLight.Command;
 
 namespace NewNameMP3Files.MVVM.ViewModel
 {
@@ -23,12 +25,25 @@ namespace NewNameMP3Files.MVVM.ViewModel
 
         public AboutViewModel()
         {
-            Title = "NewNameMp3Files. About";
+            Title = "About";
             Version = "1.0.0.0";
             Description = "";
             Product = "NewNameMp3Files";
             Company = "O.L.A Company";
             Copyright = "Copyright 2017";
+            LinkText = "https://github.com/olezhko/NewNameMP3Files";
+            ExitCommand = new RelayCommand<Window>(ExitMethod);
         }
+
+        private void ExitMethod(Window obj)
+        {
+            if (obj!=null)
+            {
+                obj.Hide();
+            }
+        }
+
+
+        public RelayCommand<Window> ExitCommand { get; private set; }
     }
 }
