@@ -20,7 +20,6 @@ namespace NewNameMP3Files.ViewModel
         private void AcceptMethod(Window wnd)
         {
             wnd.DialogResult = true;
-            wnd.Hide();
         }
 
         private void ExampleTemplateForFiles_TextChangedMethod()

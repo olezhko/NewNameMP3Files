@@ -4,7 +4,7 @@
         DataContext="{Binding About, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
         x:Name="Window" Closing="AboutWindow_OnClosing"
-        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" Height="331" Icon="NewNameMP3Files.ico">
+        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" Height="331" Icon="../NewNameMP3Files.ico">
     <Window.Resources>
         <Style x:Key="AboutDialogStyle" TargetType="Window">
             <Setter Property="Height" Value="Auto" />

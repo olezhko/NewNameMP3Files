@@ -28,6 +28,7 @@ namespace NewNameMP3Files.Skins
         private void Options_OnClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
+            Hide();
         }
     }
 }
