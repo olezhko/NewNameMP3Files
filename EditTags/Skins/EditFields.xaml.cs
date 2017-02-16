@@ -36,8 +36,6 @@ namespace EditTags.Skins
         }
 
 
-
-
         public static readonly DependencyProperty FieldProperty = DependencyProperty.Register(
             "Field", typeof(string), typeof(EditFields), new PropertyMetadata(default(string)));
 

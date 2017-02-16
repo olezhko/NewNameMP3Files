@@ -167,6 +167,12 @@
   <ItemGroup>
     <Resource Include="NewNameMP3Files.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicLibrary\MusicLibrary.csproj">
+      <Project>{87025ece-e0cb-4526-ae60-2ba3308b4ab3}</Project>
+      <Name>MusicLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

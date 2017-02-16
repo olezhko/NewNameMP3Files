@@ -1,5 +1,10 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using EditTags.Properties;
 using EditTags.ViewModel;
+using MusicLibrary;
 
 namespace EditTags
 {
@@ -15,6 +20,23 @@ namespace EditTags
         {
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Settings.Default.Save();
+        }
+
+        private void SongsListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewmodel = (MainViewModel)DataContext;
+            viewmodel.SelectedItems = SongsListView.SelectedItems
+                .Cast<Song>().ToList();
         }
     }
 }

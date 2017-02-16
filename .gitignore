@@ -48,11 +48,13 @@ NewNameMP3Files/obj/
 NewNameMP3Files/bin/
 *.pdb
 *.dll
-NewNameMP3Files.MVVM/bin/
+EditTags/bin/
 *.pdb
 *.dll
-NewNameMP3Files.MVVM/obj/
+EditTags/obj/
 *.resources
 *.tlog
+MusicLibrary/bin/
+MusicLibrary/obj/
 packages/
-UndoMethods/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+packages/

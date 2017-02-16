@@ -10,6 +10,7 @@ using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GalaSoft.MvvmLight;
+using MusicLibrary;
 using NewNameMP3Files.Model;
 using NewNameMP3Files.Skins;
 using Application = System.Windows.Application;
