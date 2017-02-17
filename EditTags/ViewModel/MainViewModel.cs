@@ -45,9 +45,9 @@ namespace EditTags.ViewModel
 
         private void DragEnterAuthorsListViewMethod(DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                var dragItems = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                var dragItems = (string[])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string item in dragItems)
                 {
                     var file = new FileInfo(item);
@@ -86,7 +86,7 @@ namespace EditTags.ViewModel
 
         #region Public Properties
 
-        private ObservableCollection<Song> _songCollection;
+        private readonly ObservableCollection<Song> _songCollection;
         public ObservableCollection<Song> SongsCollection
         {
             get { return _songCollection; }
@@ -107,22 +107,106 @@ namespace EditTags.ViewModel
             private set;
         }
 
-        private List<Song> selectedItems;
+        private List<Song> _selectedItems;
         public List<Song> SelectedItems 
         {
-            get { return selectedItems; }
+            get { return _selectedItems; }
             set
             {
-                selectedItems = value;
+                _selectedItems = value;
+                
                 SelectedItemsTitle = "<Not Change>";
-                if (selectedItems.All(o => o.Title == Enumerable.First(selectedItems).Title))
+                if (_selectedItems.All(o => o.Title == _selectedItems.First().Title))
                 {
-                    SelectedItemsTitle = selectedItems[0].Title;
+                    SelectedItemsTitle = _selectedItems[0].Title;
                 }
-                RaisePropertyChanged(() => SelectedItemsTitle);
+
+                SelectedItemsArtist = "<Not Change>";
+                if (_selectedItems.All(o => o.Artist == _selectedItems.First().Artist))
+                {
+                    SelectedItemsArtist = _selectedItems[0].Artist;
+                }
+
+                SelectedItemsAlbum = "<Not Change>";
+                if (_selectedItems.All(o => o.Album == _selectedItems.First().Album))
+                {
+                    SelectedItemsAlbum = _selectedItems[0].Album;
+                }
+
+                SelectedItemsGenre = "<Not Change>";
+                if (_selectedItems.All(o => o.Genre == _selectedItems.First().Genre))
+                {
+                    SelectedItemsGenre = _selectedItems[0].Genre;
+                }
+
+                SelectedItemsNumber = "<Not Change>";
+                if (_selectedItems.All(o => o.Number == _selectedItems.First().Number))
+                {
+                    SelectedItemsNumber = _selectedItems[0].Number.ToString();
+                }
+
+                SelectedItemsYear = "<Not Change>";
+                if (_selectedItems.All(o => o.Year == _selectedItems.First().Year))
+                {
+                    SelectedItemsYear = _selectedItems[0].Year.ToString();
+                }                           
             }
         }
-        public string SelectedItemsTitle { get; set; }
+
+        private Song _resultSelectedSong = new Song();
+
+        public string SelectedItemsTitle 
+        {
+            get { return _resultSelectedSong.Title; }
+            set { _resultSelectedSong.Title = value; RaisePropertyChanged(() => SelectedItemsTitle); } 
+        }
+        public string SelectedItemsNumber
+        {
+            get { return _resultSelectedSong.Number.ToString(); }
+            set
+            {
+                try
+                {
+                    _resultSelectedSong.Number = Convert.ToUInt32(value);
+                    RaisePropertyChanged(() => SelectedItemsNumber);
+                }
+                catch (Exception)
+                {
+
+                }           
+            }
+        }
+        public string SelectedItemsArtist
+        {
+            get { return _resultSelectedSong.Artist; }
+            set { _resultSelectedSong.Artist = value; RaisePropertyChanged(() => SelectedItemsArtist); }
+        }
+        public string SelectedItemsAlbum
+        {
+            get { return _resultSelectedSong.Album; }
+            set { _resultSelectedSong.Album = value; RaisePropertyChanged(() => SelectedItemsAlbum); }
+        }
+        public string SelectedItemsGenre
+        {
+            get { return _resultSelectedSong.Genre; }
+            set { _resultSelectedSong.Genre = value; RaisePropertyChanged(() => SelectedItemsGenre); }
+        }
+        public string SelectedItemsYear
+        {
+            get { return _resultSelectedSong.Year.ToString(); }
+            set
+            {
+                try
+                {
+                    _resultSelectedSong.Year = Convert.ToUInt32(value);
+                    RaisePropertyChanged(() => SelectedItemsYear);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
         #endregion
 
     }

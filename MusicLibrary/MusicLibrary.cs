@@ -121,5 +121,9 @@ namespace MusicLibrary
             Path = file.Name;
             Name = System.IO.Path.GetFileName(Path);
         }
+
+        public Song()
+        {
+        }
     }
 }

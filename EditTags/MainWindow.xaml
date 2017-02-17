@@ -36,22 +36,35 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBox HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="{Binding SelectedItemsTitle}" VerticalAlignment="Stretch" />
 
             <Label Content="Artist:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
-            <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" Grid.Row="3"/>
+            <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsArtist}" VerticalAlignment="Stretch" Grid.Row="3"/>
+
+            <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4"/>
+            <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsAlbum}" VerticalAlignment="Stretch" Grid.Row="5"/>
+            <Grid  Grid.Row="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Year:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding SelectedItemsYear}" VerticalAlignment="Stretch" />
+
+                <Label Content="Number:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1"/>
+                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsNumber}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1"/>
+
+                <Label Content="Genre:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="2"/>
+                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsGenre}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2"/>
+            </Grid>
         </Grid>
         <ListView Grid.IsSharedSizeScope="True" Grid.Column="2" ItemsSource="{Binding SongsCollection}" SelectionChanged="SongsListView_OnSelectionChanged" AllowDrop="True" Name="SongsListView" 
                   SelectionMode="Extended">
@@ -64,7 +77,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Title" Width="Auto" DisplayMemberBinding="{Binding Path=Title}">
+                    <GridViewColumn Header="Title" Width="Auto"  DisplayMemberBinding="{Binding Path=Title}" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Title}"/>
@@ -75,6 +88,34 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Artist}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Album" Width="Auto" DisplayMemberBinding="{Binding Path=Album}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <skins:EditFields Text="{Binding  XPath=Album}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Year" Width="Auto" DisplayMemberBinding="{Binding Path=Year}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <skins:EditFields Text="{Binding  XPath=Year}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Genre" Width="Auto" DisplayMemberBinding="{Binding Path=Genre}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <skins:EditFields Text="{Binding  XPath=Genre}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Bitrate" Width="Auto" DisplayMemberBinding="{Binding Path=AudioBitrate}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <skins:EditFields Text="{Binding  XPath=AudioBitrate}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
