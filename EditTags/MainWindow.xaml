@@ -36,6 +36,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
@@ -46,7 +48,7 @@
 
             <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4"/>
             <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsAlbum}" VerticalAlignment="Stretch" Grid.Row="5"/>
-            <Grid  Grid.Row="6">
+            <Grid Grid.Row="6">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -70,49 +72,49 @@
                   SelectionMode="Extended">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Number" Width="60" DisplayMemberBinding="{Binding Path=Number}">
+                    <GridViewColumn Header="Number" Width="{Binding NumberGridWidth}" DisplayMemberBinding="{Binding Path=Number}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding XPath=Number}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Title" Width="Auto"  DisplayMemberBinding="{Binding Path=Title}" >
+                    <GridViewColumn Header="Title" Width="{Binding TitleGridWidth}" DisplayMemberBinding="{Binding Path=Title}" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Title}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Author" Width="Auto" DisplayMemberBinding="{Binding Path=Artist}">
+                    <GridViewColumn Header="Author" Width="{Binding ArtistGridWidth}" DisplayMemberBinding="{Binding Path=Artist}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Artist}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Album" Width="Auto" DisplayMemberBinding="{Binding Path=Album}">
+                    <GridViewColumn Header="Album" Width="{Binding AlbumGridWidth}" DisplayMemberBinding="{Binding Path=Album}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Album}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Year" Width="Auto" DisplayMemberBinding="{Binding Path=Year}">
+                    <GridViewColumn Header="Year" Width="{Binding YearGridWidth}" DisplayMemberBinding="{Binding Path=Year}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Year}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Genre" Width="Auto" DisplayMemberBinding="{Binding Path=Genre}">
+                    <GridViewColumn Header="Genre" Width="{Binding GenreGridWidth}" DisplayMemberBinding="{Binding Path=Genre}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Genre}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Bitrate" Width="Auto" DisplayMemberBinding="{Binding Path=AudioBitrate}">
+                    <GridViewColumn Header="Bitrate" Width="{Binding AudioBitrateGridWidth}" DisplayMemberBinding="{Binding Path=AudioBitrate}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=AudioBitrate}"/>

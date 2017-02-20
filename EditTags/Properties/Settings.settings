@@ -5,5 +5,26 @@
     <Setting Name="GridSpliiterWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="NumberGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="TitleGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="ArtistGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="AlbumGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="YearGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="GenreGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="AudioBitrateGridWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

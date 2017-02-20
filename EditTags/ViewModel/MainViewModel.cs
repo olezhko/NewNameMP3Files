@@ -101,6 +101,70 @@ namespace EditTags.ViewModel
             }
         }
 
+        public double NumberGridWidth
+        {
+            get { return Settings.Default.NumberGridWidth; }
+            set
+            {
+                Settings.Default.NumberGridWidth = value;
+            }
+        }
+
+        public double AlbumGridWidth
+        {
+            get { return Settings.Default.AlbumGridWidth; }
+            set
+            {
+                Settings.Default.AlbumGridWidth = value;
+            }
+        }
+
+        public double ArtistGridWidth
+        {
+            get { return Settings.Default.ArtistGridWidth; }
+            set
+            {
+                Settings.Default.ArtistGridWidth = value;
+            }
+        }
+
+        public double YearGridWidth
+        {
+            get { return Settings.Default.YearGridWidth; }
+            set
+            {
+                Settings.Default.YearGridWidth = value;
+            }
+        }
+
+        public double GenreGridWidth
+        {
+            get { return Settings.Default.GenreGridWidth; }
+            set
+            {
+                Settings.Default.GenreGridWidth = value;
+            }
+        }
+
+        public double TitleGridWidth
+        {
+            get { return Settings.Default.TitleGridWidth; }
+            set
+            {
+                Settings.Default.TitleGridWidth = value;
+            }
+        }
+
+        public double AudioBitrateGridWidth
+        {
+            get { return Settings.Default.AudioBitrateGridWidth; }
+            set
+            {
+                Settings.Default.AudioBitrateGridWidth = value;
+            }
+        }
+        
+
         public RelayCommand<DragEventArgs> DragCommand
         {
             get;
@@ -153,7 +217,7 @@ namespace EditTags.ViewModel
             }
         }
 
-        private Song _resultSelectedSong = new Song();
+        private readonly Song _resultSelectedSong = new Song();
 
         public string SelectedItemsTitle 
         {
@@ -172,8 +236,8 @@ namespace EditTags.ViewModel
                 }
                 catch (Exception)
                 {
-
-                }           
+                    // ignored
+                }
             }
         }
         public string SelectedItemsArtist
@@ -203,7 +267,7 @@ namespace EditTags.ViewModel
                 }
                 catch (Exception)
                 {
-
+                    // ignored
                 }
             }
         }

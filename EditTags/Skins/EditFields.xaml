@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="31" Width="220" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
-        <TextBox Visibility="Hidden" Text="{Binding ChangedField}" Background="White" Foreground="Black"/>
-        <Label Content="{Binding Text}" Background="White" Foreground="Black"/>
+        <TextBox Visibility="Hidden" Text="{Binding ChangedField}" Background="White" Foreground="Black" Name="TextBox" LostFocus="TextBox_OnLostFocus"/>
+        <Label Content="{Binding Text}" Background="White" Foreground="Black" Name="Label" MouseDown="Label_OnMouseDown"/>
     </Grid>
 </UserControl>

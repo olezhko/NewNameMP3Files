@@ -35,18 +35,6 @@ namespace EditTags.Skins
             set { SetValue(TextProperty, value); }
         }
 
-
-        public static readonly DependencyProperty FieldProperty = DependencyProperty.Register(
-            "Field", typeof(string), typeof(EditFields), new PropertyMetadata(default(string)));
-
-        public string Field
-        {
-            get { return (string)GetValue(FieldProperty); }
-            set { SetValue(FieldProperty, value); }
-        }
-
-
-
         public static readonly DependencyProperty ChangedFieldProperty = DependencyProperty.Register(
             "ChangedField", typeof(string), typeof(EditFields), new PropertyMetadata(default(string)));
 
@@ -56,6 +44,25 @@ namespace EditTags.Skins
             set { SetValue(ChangedFieldProperty, value); }
         }
         #endregion
-        
+
+        public event EventHandler TextBoxChanged;
+        private void Label_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Label.Visibility = Visibility.Hidden;
+            TextBox.Visibility = Visibility.Visible;
+            TextBox.Text = Label.Content.ToString();
+        }
+
+        private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TextBox.Text != Label.Content.ToString())
+            {
+                ChangedField = TextBox.Text;
+                if (TextBoxChanged != null)
+                {
+                    TextBoxChanged(this, EventArgs.Empty);
+                }
+            }
+        }
     }
 }
