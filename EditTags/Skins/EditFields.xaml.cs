@@ -46,7 +46,7 @@ namespace EditTags.Skins
         #endregion
 
         public event EventHandler TextBoxChanged;
-        private void Label_OnMouseDown(object sender, MouseButtonEventArgs e)
+        public void Label_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             Label.Visibility = Visibility.Hidden;
             TextBox.Visibility = Visibility.Visible;

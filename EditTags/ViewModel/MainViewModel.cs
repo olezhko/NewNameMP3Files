@@ -41,6 +41,28 @@ namespace EditTags.ViewModel
                 }
             }
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
+            SaveCommand = new RelayCommand(SaveMethod);
+        }
+
+        private void SaveMethod()
+        {
+            if (_resultSelectedSong != null && SelectedItems!=null && SelectedItems.Count!=0)
+            {
+                foreach (var selectedItem in SelectedItems)
+                {
+                    selectedItem.Album = SelectedItemsAlbum;
+                    selectedItem.Artist = SelectedItemsArtist;
+                    selectedItem.Genre = SelectedItemsGenre;
+                    selectedItem.Year = Convert.ToUInt32(SelectedItemsYear);
+                    selectedItem.Number = Convert.ToUInt32(SelectedItemsNumber);
+                    selectedItem.Lyric = SelectedItemsLyrics;
+                    selectedItem.Title = SelectedItemsTitle;
+                }
+
+
+
+                //refresh
+            }
         }
 
         private void DragEnterAuthorsListViewMethod(DragEventArgs e)
@@ -163,8 +185,8 @@ namespace EditTags.ViewModel
                 Settings.Default.AudioBitrateGridWidth = value;
             }
         }
-        
 
+        public RelayCommand SaveCommand { get; private set; }
         public RelayCommand<DragEventArgs> DragCommand
         {
             get;
@@ -172,7 +194,7 @@ namespace EditTags.ViewModel
         }
 
         private List<Song> _selectedItems;
-        public List<Song> SelectedItems 
+        public List<Song> SelectedItems
         {
             get { return _selectedItems; }
             set
@@ -213,13 +235,25 @@ namespace EditTags.ViewModel
                 if (_selectedItems.All(o => o.Year == _selectedItems.First().Year))
                 {
                     SelectedItemsYear = _selectedItems[0].Year.ToString();
-                }                           
+                }
+
+                SelectedItemsLyrics = "<Not Change>";
+                if (_selectedItems.All(o => o.Lyric == _selectedItems.First().Lyric))
+                {
+                    SelectedItemsLyrics = _selectedItems[0].Lyric;
+                }
+
+                SelectedItemsPath = "<Not Change>";
+                if (_selectedItems.All(o => Path.GetDirectoryName(o.Path) == Path.GetDirectoryName(_selectedItems.First().Path)))
+                {
+                    SelectedItemsPath = Path.GetDirectoryName(_selectedItems[0].Path);
+                }  
             }
         }
 
         private readonly Song _resultSelectedSong = new Song();
 
-        public string SelectedItemsTitle 
+        public string SelectedItemsTitle
         {
             get { return _resultSelectedSong.Title; }
             set { _resultSelectedSong.Title = value; RaisePropertyChanged(() => SelectedItemsTitle); } 
@@ -264,6 +298,38 @@ namespace EditTags.ViewModel
                 {
                     _resultSelectedSong.Year = Convert.ToUInt32(value);
                     RaisePropertyChanged(() => SelectedItemsYear);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+        public string SelectedItemsPath
+        {
+            get { return _resultSelectedSong.Path; }
+            set
+            {
+                try
+                {
+                    _resultSelectedSong.Path = value;
+                    RaisePropertyChanged(() => SelectedItemsPath);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+        public string SelectedItemsLyrics
+        {
+            get { return _resultSelectedSong.Lyric; }
+            set
+            {
+                try
+                {
+                    _resultSelectedSong.Lyric = value;
+                    RaisePropertyChanged(() => SelectedItemsLyrics);
                 }
                 catch (Exception)
                 {
