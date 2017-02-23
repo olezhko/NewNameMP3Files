@@ -101,14 +101,14 @@
                     <GridViewColumn Header="Author" Width="{Binding ArtistGridWidth}" DisplayMemberBinding="{Binding Path=Artist}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Artist}"/>
+                                <skins:EditFields Text="{Binding XPath=Artist}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Album" Width="{Binding AlbumGridWidth}" DisplayMemberBinding="{Binding Path=Album}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Album}"/>
+                                <skins:EditFields Text="{Binding XPath=Album}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -261,6 +261,10 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddSongToList(string filepath)
         {
+            if (!Song.IsFileSong(filepath))
+            {
+                return;
+            }
             var mp3File = TagLib.File.Create(filepath);
             var album = mp3File.Tag.Year + " - " + mp3File.Tag.Album;
 

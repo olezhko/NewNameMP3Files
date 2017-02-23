@@ -102,7 +102,7 @@ namespace MusicLibrary
         }
         public bool IsCurrentSong { get; set; }
 
-
+        private TagLib.File _file;
         public bool Equals(Song obj)
         {
             return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
@@ -110,10 +110,11 @@ namespace MusicLibrary
 
         public Song(TagLib.File file)
         {
+            _file = file;
             Title = file.Tag.Title;
-            Genre = file.Tag.FirstGenre;
+            Genre = file.Tag.Genres.Length>0?file.Tag.Genres[0]:"";
             Album = file.Tag.Album;
-            Artist = file.Tag.FirstPerformer;
+            Artist = file.Tag.Performers[0];
             Number = file.Tag.Track;
             Year = file.Tag.Year;
             Duration = file.Properties.Duration;
@@ -124,6 +125,25 @@ namespace MusicLibrary
 
         public Song()
         {
+        }
+
+        public void Save()
+        {
+            _file.Tag.Title = Title;
+            _file.Tag.Genres[0] = Genre;
+            _file.Tag.Album = Album;
+            _file.Tag.Performers[0] = Artist;
+            _file.Tag.Track = Number;
+            _file.Tag.Year = Year;
+            _file.Save();
+        }
+
+        private static string[] musicExt = new[] { ".mp3", "ogg","acc" };
+
+        public static bool IsFileSong(string path)
+        {
+            string ext = System.IO.Path.GetExtension(path);
+            return ext == musicExt[0] || ext == musicExt[1] || ext == musicExt[2];
         }
     }
 }

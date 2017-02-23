@@ -50,17 +50,43 @@ namespace EditTags.ViewModel
             {
                 foreach (var selectedItem in SelectedItems)
                 {
-                    selectedItem.Album = SelectedItemsAlbum;
-                    selectedItem.Artist = SelectedItemsArtist;
-                    selectedItem.Genre = SelectedItemsGenre;
-                    selectedItem.Year = Convert.ToUInt32(SelectedItemsYear);
-                    selectedItem.Number = Convert.ToUInt32(SelectedItemsNumber);
-                    selectedItem.Lyric = SelectedItemsLyrics;
-                    selectedItem.Title = SelectedItemsTitle;
+                    if (SelectedItemsAlbum != DefaultValue)
+                    {
+                        selectedItem.Album = SelectedItemsAlbum;
+                    }
+
+                    if (SelectedItemsArtist != DefaultValue)
+                    {
+                        selectedItem.Artist = SelectedItemsArtist;
+                    }
+
+                    if (SelectedItemsGenre != DefaultValue)
+                    {
+                        selectedItem.Genre = SelectedItemsGenre;
+                    }
+
+                    if (SelectedItemsYear != DefaultValue)
+                    {
+                        selectedItem.Year = Convert.ToUInt32(SelectedItemsYear);
+                    }
+
+                    if (SelectedItemsNumber != DefaultValue)
+                    {
+                        selectedItem.Number = Convert.ToUInt32(SelectedItemsNumber);
+                    }
+
+                    if (SelectedItemsLyrics != DefaultValue)
+                    {
+                        selectedItem.Lyric = SelectedItemsLyrics;
+                    }
+
+                    if (SelectedItemsTitle != DefaultValue)
+                    {
+                        selectedItem.Title = SelectedItemsTitle;
+                    }
+
+                    selectedItem.Save();
                 }
-
-
-
                 //refresh
             }
         }
@@ -102,11 +128,18 @@ namespace EditTags.ViewModel
 
         private void AddSongToList(string filepath)
         {
+            if (!Song.IsFileSong(filepath))
+            {
+                return;
+            }
+            File.SetAttributes(filepath, FileAttributes.Normal);
             var mp3File = TagLib.File.Create(filepath);
             SongsCollection.Add(new Song(mp3File));
         }
 
         #region Public Properties
+
+        private const string DefaultValue = "<Not Change>";
 
         private readonly ObservableCollection<Song> _songCollection;
         public ObservableCollection<Song> SongsCollection
@@ -200,50 +233,50 @@ namespace EditTags.ViewModel
             set
             {
                 _selectedItems = value;
-                
-                SelectedItemsTitle = "<Not Change>";
+
+                SelectedItemsTitle = DefaultValue;
                 if (_selectedItems.All(o => o.Title == _selectedItems.First().Title))
                 {
                     SelectedItemsTitle = _selectedItems[0].Title;
                 }
 
-                SelectedItemsArtist = "<Not Change>";
+                SelectedItemsArtist = DefaultValue;
                 if (_selectedItems.All(o => o.Artist == _selectedItems.First().Artist))
                 {
                     SelectedItemsArtist = _selectedItems[0].Artist;
                 }
 
-                SelectedItemsAlbum = "<Not Change>";
+                SelectedItemsAlbum = DefaultValue;
                 if (_selectedItems.All(o => o.Album == _selectedItems.First().Album))
                 {
                     SelectedItemsAlbum = _selectedItems[0].Album;
                 }
 
-                SelectedItemsGenre = "<Not Change>";
+                SelectedItemsGenre = DefaultValue;
                 if (_selectedItems.All(o => o.Genre == _selectedItems.First().Genre))
                 {
                     SelectedItemsGenre = _selectedItems[0].Genre;
                 }
 
-                SelectedItemsNumber = "<Not Change>";
+                SelectedItemsNumber = DefaultValue;
                 if (_selectedItems.All(o => o.Number == _selectedItems.First().Number))
                 {
                     SelectedItemsNumber = _selectedItems[0].Number.ToString();
                 }
 
-                SelectedItemsYear = "<Not Change>";
+                SelectedItemsYear = DefaultValue;
                 if (_selectedItems.All(o => o.Year == _selectedItems.First().Year))
                 {
                     SelectedItemsYear = _selectedItems[0].Year.ToString();
                 }
 
-                SelectedItemsLyrics = "<Not Change>";
+                SelectedItemsLyrics = DefaultValue;
                 if (_selectedItems.All(o => o.Lyric == _selectedItems.First().Lyric))
                 {
                     SelectedItemsLyrics = _selectedItems[0].Lyric;
                 }
 
-                SelectedItemsPath = "<Not Change>";
+                SelectedItemsPath = DefaultValue;
                 if (_selectedItems.All(o => Path.GetDirectoryName(o.Path) == Path.GetDirectoryName(_selectedItems.First().Path)))
                 {
                     SelectedItemsPath = Path.GetDirectoryName(_selectedItems[0].Path);
