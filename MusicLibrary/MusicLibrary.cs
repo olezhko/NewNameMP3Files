@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,50 +82,119 @@ namespace MusicLibrary
 
     public class Song : ViewModelBase
     {
-        public int AudioBitrate { get; set; }
-        public uint Number { get; set; }
+        public int AudioBitrate
+        {
+            get { return _file.Properties.AudioBitrate; }
+        }
+
+        public uint Number
+        {
+            get
+            {
+                return _file.Tag.Track;
+            }
+            set
+            {
+                _file.Tag.Track = value;
+                RaisePropertyChanged(() => Number);
+            }
+        }
         public string Name { get; set; }
-        public string Title { get; set; }
-        public string Artist { get; set; }
-        public string Album { get; set; }
-        public string Genre { get; set; }
-        public uint Year { get; set; }
-        public TimeSpan Duration { get; set; }
-        public string Lyric { get; set; }
-        public string Path { get; set; }
+        public string Title
+        {
+            get
+            {
+                return _file.Tag.Title;
+            }
+            set
+            {
+                _file.Tag.Title = value;
+                RaisePropertyChanged(() => Title);
+            }
+        }
+        public string Artist
+        {
+            get
+            {
+                return _file.Tag.Performers[0];
+            }
+            set
+            {
+                _file.Tag.Performers[0] = value;
+                RaisePropertyChanged(() => Artist);
+            }
+        }
+        public string Album
+        {
+            get
+            {
+                return _file.Tag.Album;
+            }
+            set
+            {
+                _file.Tag.Album = value;
+                RaisePropertyChanged(() => Album);
+            }
+        }
+        public string Genre
+        {
+            get
+            {
+                return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : "";
+            }
+            set
+            {
+                _file.Tag.Genres[0] = value;
+                RaisePropertyChanged(() => Genre);
+            }
+        }
+        public uint Year
+        {
+            get
+            {
+                return _file.Tag.Year;
+            }
+            set
+            {
+                _file.Tag.Year = value;
+                RaisePropertyChanged(() => Year);
+            }
+        }
+
+        public TimeSpan Duration
+        {
+            get { return _file.Properties.Duration; }
+        }
+
+        public string Lyric
+        {
+            get
+            {
+                return _file.Tag.Lyrics;
+            }
+            set
+            {
+                _file.Tag.Lyrics = value;
+                RaisePropertyChanged(() => Lyric);
+            }
+        }
+        public string Path 
+        {
+            get { return _file.Name; } 
+        }
 
         private bool _isSelected;
-
         public bool IsSelected
         {
             get { return _isSelected; }
             set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
         }
-        public bool IsCurrentSong { get; set; }
-
-        private TagLib.File _file;
-        public bool Equals(Song obj)
-        {
-            return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
-        }
-
+ 
+        private readonly TagLib.File _file;
         public Song(TagLib.File file)
         {
             _file = file;
-            Title = file.Tag.Title;
-            Genre = file.Tag.Genres.Length>0?file.Tag.Genres[0]:"";
-            Album = file.Tag.Album;
-            Artist = file.Tag.Performers[0];
-            Number = file.Tag.Track;
-            Year = file.Tag.Year;
-            Duration = file.Properties.Duration;
-            AudioBitrate = file.Properties.AudioBitrate;
-            Path = file.Name;
             Name = System.IO.Path.GetFileName(Path);
-        }
-
-        public Song()
-        {
         }
 
         public void Save()
@@ -138,12 +208,29 @@ namespace MusicLibrary
             _file.Save();
         }
 
-        private static string[] musicExt = new[] { ".mp3", "ogg","acc" };
-
+        private static string[] musicExt = new[] { ".mp3", ".ogg", ".acc",".m4a" };
         public static bool IsFileSong(string path)
         {
             string ext = System.IO.Path.GetExtension(path);
-            return ext == musicExt[0] || ext == musicExt[1] || ext == musicExt[2];
+            return ext == musicExt[0] || ext == musicExt[1] || ext == musicExt[2] || ext == musicExt[3];
+        }
+
+        public bool Equals(Song obj)
+        {
+            return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
+        }
+
+        //public static string NoCoverImage = @"pack://siteoforigin:,,,/nocoverart.jpg";
+        public static Uri NoCoverImage = new Uri("nocoverart.jpg", UriKind.Relative);
+        public static Uri GetCoverPath(string path)
+        {
+            string dirName = System.IO.Path.GetDirectoryName(path);
+            if (dirName != null)
+            {
+                string coverPath = System.IO.Path.Combine(dirName, "cover.jpg");
+                return File.Exists(coverPath) ? new Uri(coverPath) : NoCoverImage;
+            }
+            return NoCoverImage;
         }
     }
 }

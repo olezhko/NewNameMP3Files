@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:skins="clr-namespace:EditTags.Skins"
-        xmlns:Model="clr-namespace:EditTags.Model"
+        xmlns:model="clr-namespace:EditTags.Model"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         x:Class="EditTags.MainWindow"
-        mc:Ignorable="d ignore" Height="600" Width="1200" Title="Tag Editor"
-        Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing">
+        mc:Ignorable="d ignore" Height="617" Width="1200" Title="Tag Editor"
+        Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing" MinWidth="1200" MinHeight="617">
     <Window.Resources>
-        <Model:GridLengthValueConverter x:Key="GridLengthValueConverter"/>
+        <model:GridLengthValueConverter x:Key="GridLengthValueConverter"/>
         <Style TargetType="{x:Type ListViewItem}">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
@@ -26,110 +26,119 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="600*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="160"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            
-            <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <TextBox HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="{Binding SelectedItemsTitle}" VerticalAlignment="Stretch" />
-
-            <Label Content="Artist:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
-            <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsArtist}" VerticalAlignment="Stretch" Grid.Row="3"/>
-
-            <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4"/>
-            <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsAlbum}" VerticalAlignment="Stretch" Grid.Row="5"/>
-            <Grid Grid.Row="6">
+        <Border BorderThickness="2" BorderBrush="Black" VerticalAlignment="Top">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="160"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Year:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding SelectedItemsYear}" VerticalAlignment="Stretch" />
 
-                <Label Content="Number:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1"/>
-                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsNumber}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1"/>
+                <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <TextBox HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="{Binding SelectedItemsTitle}" VerticalAlignment="Stretch" />
 
-                <Label Content="Genre:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="2"/>
-                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsGenre}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2"/>
+                <Label Content="Artist:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
+                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsArtist}" VerticalAlignment="Stretch" Grid.Row="3"/>
+
+                <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4"/>
+                <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsAlbum}" VerticalAlignment="Stretch" Grid.Row="5"/>
+                <Grid Grid.Row="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Year:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Text="{Binding SelectedItemsYear}" VerticalAlignment="Stretch" />
+
+                    <Label Content="Number:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1"/>
+                    <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsNumber}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1"/>
+
+                    <Label Content="Genre:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="2"/>
+                    <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsGenre}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2"/>
+                </Grid>
+
+                <Label Content="Folder:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7"/>
+                <Label HorizontalAlignment="Stretch" Content="{Binding SelectedItemsPath}" VerticalAlignment="Stretch" Grid.Row="8" Height="25"/>
+
+                <Label Content="Lyrics:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="9"/>
+                <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsLyrics}" VerticalAlignment="Stretch" Grid.Row="10" VerticalScrollBarVisibility="Auto"/>
+
+                <Image Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="11" Height="160" Width="160" Source="{Binding SelectedItemsImageSource}" Name="SongImage"/>
+                <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="0,5"  />
             </Grid>
-
-            <Label Content="Folder:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7"/>
-            <Label HorizontalAlignment="Stretch" Content="{Binding SelectedItemsPath}" VerticalAlignment="Stretch" Grid.Row="8" Height="20"/>
-
-            <Label Content="Lyrics:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="9"/>
-            <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsLyrics}" VerticalAlignment="Stretch" Grid.Row="10" VerticalScrollBarVisibility="Auto"/>
-
-            <Image Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="11" Source="{Binding SelectedItemsSource}" Height="160" Width="160"/>
-            <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}"/>
-        </Grid>
+        </Border>
         <ListView Grid.IsSharedSizeScope="True" Grid.Column="2" ItemsSource="{Binding SongsCollection}" SelectionChanged="SongsListView_OnSelectionChanged" AllowDrop="True" Name="SongsListView" 
-                  SelectionMode="Extended">
+                  SelectionMode="Extended" model:GridViewSort.AutoSort="True">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Number" Width="{Binding NumberGridWidth}" DisplayMemberBinding="{Binding Path=Number}">
+                    <GridViewColumn Header="Number" Width="{Binding NumberGridWidth}" DisplayMemberBinding="{Binding Path=Number}" model:GridViewSort.PropertyName="Number">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding XPath=Number}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Title" Width="{Binding TitleGridWidth}" DisplayMemberBinding="{Binding Path=Title}" >
+                    <GridViewColumn Header="Title" Width="{Binding TitleGridWidth}" DisplayMemberBinding="{Binding Path=Title}"  model:GridViewSort.PropertyName="Title">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Title}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Author" Width="{Binding ArtistGridWidth}" DisplayMemberBinding="{Binding Path=Artist}">
+                    <GridViewColumn Header="Author" Width="{Binding ArtistGridWidth}" DisplayMemberBinding="{Binding Path=Artist}" model:GridViewSort.PropertyName="Artist">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding XPath=Artist}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Album" Width="{Binding AlbumGridWidth}" DisplayMemberBinding="{Binding Path=Album}">
+                    <GridViewColumn Header="Album" Width="{Binding AlbumGridWidth}" DisplayMemberBinding="{Binding Path=Album}" model:GridViewSort.PropertyName="Album">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding XPath=Album}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Year" Width="{Binding YearGridWidth}" DisplayMemberBinding="{Binding Path=Year}">
+                    <GridViewColumn Header="Year" Width="{Binding YearGridWidth}" DisplayMemberBinding="{Binding Path=Year}" model:GridViewSort.PropertyName="Year">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Year}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Genre" Width="{Binding GenreGridWidth}" DisplayMemberBinding="{Binding Path=Genre}">
+                    <GridViewColumn Header="Genre" Width="{Binding GenreGridWidth}" DisplayMemberBinding="{Binding Path=Genre}" model:GridViewSort.PropertyName="NumGenreber">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=Genre}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Bitrate" Width="{Binding AudioBitrateGridWidth}" DisplayMemberBinding="{Binding Path=AudioBitrate}">
+                    <GridViewColumn Header="Bitrate" Width="{Binding AudioBitrateGridWidth}" DisplayMemberBinding="{Binding Path=AudioBitrate}" model:GridViewSort.PropertyName="AudioBitrate">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <skins:EditFields Text="{Binding  XPath=AudioBitrate}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Path" Width="{Binding PathGridWidth}" DisplayMemberBinding="{Binding Path=Path}" model:GridViewSort.PropertyName="Path">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <skins:EditFields Text="{Binding  XPath=Path}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

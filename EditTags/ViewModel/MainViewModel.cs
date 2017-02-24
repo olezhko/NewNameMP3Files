@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using EditTags.Properties;
 using GalaSoft.MvvmLight;
 using MusicLibrary;
@@ -42,11 +44,12 @@ namespace EditTags.ViewModel
             }
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             SaveCommand = new RelayCommand(SaveMethod);
+            SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.NoCoverImage);
         }
 
         private void SaveMethod()
         {
-            if (_resultSelectedSong != null && SelectedItems!=null && SelectedItems.Count!=0)
+            if (SelectedItems!=null && SelectedItems.Count!=0)
             {
                 foreach (var selectedItem in SelectedItems)
                 {
@@ -87,7 +90,6 @@ namespace EditTags.ViewModel
 
                     selectedItem.Save();
                 }
-                //refresh
             }
         }
 
@@ -138,9 +140,6 @@ namespace EditTags.ViewModel
         }
 
         #region Public Properties
-
-        private const string DefaultValue = "<Not Change>";
-
         private readonly ObservableCollection<Song> _songCollection;
         public ObservableCollection<Song> SongsCollection
         {
@@ -219,6 +218,15 @@ namespace EditTags.ViewModel
             }
         }
 
+        public double PathGridWidth
+        {
+            get { return Settings.Default.PathGridWidth; }
+            set
+            {
+                Settings.Default.PathGridWidth = value;
+            }
+        }
+
         public RelayCommand SaveCommand { get; private set; }
         public RelayCommand<DragEventArgs> DragCommand
         {
@@ -226,6 +234,9 @@ namespace EditTags.ViewModel
             private set;
         }
 
+
+
+        private const string DefaultValue = "<Not Change>";
         private List<Song> _selectedItems;
         public List<Song> SelectedItems
         {
@@ -280,25 +291,36 @@ namespace EditTags.ViewModel
                 if (_selectedItems.All(o => Path.GetDirectoryName(o.Path) == Path.GetDirectoryName(_selectedItems.First().Path)))
                 {
                     SelectedItemsPath = Path.GetDirectoryName(_selectedItems[0].Path);
-                }  
+                }
+
+                SelectedItemsImageSource = null;
+                if (_selectedItems.All(o => Song.GetCoverPath(o.Path) == Song.GetCoverPath(_selectedItems.First().Path)))
+                {
+                    SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.GetCoverPath(_selectedItems[0].Path));
+                }
+                else
+                {
+                    SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.NoCoverImage);
+                }
             }
         }
 
-        private readonly Song _resultSelectedSong = new Song();
-
+        private string _selectedItemsTitle;
         public string SelectedItemsTitle
         {
-            get { return _resultSelectedSong.Title; }
-            set { _resultSelectedSong.Title = value; RaisePropertyChanged(() => SelectedItemsTitle); } 
+            get { return _selectedItemsTitle; }
+            set { _selectedItemsTitle = value; RaisePropertyChanged(() => SelectedItemsTitle); } 
         }
+        
+        private string _selectedItemsNumber;
         public string SelectedItemsNumber
         {
-            get { return _resultSelectedSong.Number.ToString(); }
+            get { return _selectedItemsNumber; }
             set
             {
                 try
                 {
-                    _resultSelectedSong.Number = Convert.ToUInt32(value);
+                    _selectedItemsNumber = value;
                     RaisePropertyChanged(() => SelectedItemsNumber);
                 }
                 catch (Exception)
@@ -307,29 +329,37 @@ namespace EditTags.ViewModel
                 }
             }
         }
+        
+        private string _selectedItemsArtist;
         public string SelectedItemsArtist
         {
-            get { return _resultSelectedSong.Artist; }
-            set { _resultSelectedSong.Artist = value; RaisePropertyChanged(() => SelectedItemsArtist); }
+            get { return _selectedItemsArtist; }
+            set { _selectedItemsArtist = value; RaisePropertyChanged(() => SelectedItemsArtist); }
         }
+        
+        private string _selectedItemsAlbum;
         public string SelectedItemsAlbum
         {
-            get { return _resultSelectedSong.Album; }
-            set { _resultSelectedSong.Album = value; RaisePropertyChanged(() => SelectedItemsAlbum); }
+            get { return _selectedItemsAlbum; }
+            set { _selectedItemsAlbum = value; RaisePropertyChanged(() => SelectedItemsAlbum); }
         }
+
+        private string _selectedItemsGenre;
         public string SelectedItemsGenre
         {
-            get { return _resultSelectedSong.Genre; }
-            set { _resultSelectedSong.Genre = value; RaisePropertyChanged(() => SelectedItemsGenre); }
+            get { return _selectedItemsGenre; }
+            set { _selectedItemsGenre = value; RaisePropertyChanged(() => SelectedItemsGenre); }
         }
+        
+        private string _selectedItemsYear;
         public string SelectedItemsYear
         {
-            get { return _resultSelectedSong.Year.ToString(); }
+            get { return _selectedItemsYear; }
             set
             {
                 try
                 {
-                    _resultSelectedSong.Year = Convert.ToUInt32(value);
+                    _selectedItemsYear = value;
                     RaisePropertyChanged(() => SelectedItemsYear);
                 }
                 catch (Exception)
@@ -338,14 +368,16 @@ namespace EditTags.ViewModel
                 }
             }
         }
+
+        private string _selectedItemsPath;
         public string SelectedItemsPath
         {
-            get { return _resultSelectedSong.Path; }
+            get { return _selectedItemsPath; }
             set
             {
                 try
                 {
-                    _resultSelectedSong.Path = value;
+                    _selectedItemsPath = value;
                     RaisePropertyChanged(() => SelectedItemsPath);
                 }
                 catch (Exception)
@@ -354,14 +386,16 @@ namespace EditTags.ViewModel
                 }
             }
         }
+
+        private string _selectedItemsLyrics;
         public string SelectedItemsLyrics
         {
-            get { return _resultSelectedSong.Lyric; }
+            get { return _selectedItemsLyrics; }
             set
             {
                 try
                 {
-                    _resultSelectedSong.Lyric = value;
+                    _selectedItemsLyrics = value;
                     RaisePropertyChanged(() => SelectedItemsLyrics);
                 }
                 catch (Exception)
@@ -370,7 +404,21 @@ namespace EditTags.ViewModel
                 }
             }
         }
+        private BitmapImage _selectedItemsImageSource;
+        public BitmapImage SelectedItemsImageSource
+        {
+            get { return _selectedItemsImageSource; }
+            set
+            {
+                _selectedItemsImageSource = value;
+                RaisePropertyChanged(() => SelectedItemsImageSource);
+            }
+        }
         #endregion
 
+        #region Private Properties
+
+
+        #endregion
     }
 }
