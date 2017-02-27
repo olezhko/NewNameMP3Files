@@ -4,18 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:skins="clr-namespace:EditTags.Skins"
         xmlns:model="clr-namespace:EditTags.Model"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        x:Class="EditTags.MainWindow"
+        x:Class="EditTags.MainWindow" x:Name="Window"
         mc:Ignorable="d ignore" Height="617" Width="1200" Title="Tag Editor"
         Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing" MinWidth="1200" MinHeight="617">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="KeyDown">
+            <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.KeyDownCommand, ElementName=Window}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
         <model:GridLengthValueConverter x:Key="GridLengthValueConverter"/>
-        <Style TargetType="{x:Type ListViewItem}">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
     </Window.Resources>
     <Window.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}"/>
@@ -82,74 +83,25 @@
                 <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="0,5"  />
             </Grid>
         </Border>
-        <ListView Grid.IsSharedSizeScope="True" Grid.Column="2" ItemsSource="{Binding SongsCollection}" SelectionChanged="SongsListView_OnSelectionChanged" AllowDrop="True" Name="SongsListView" 
-                  SelectionMode="Extended" model:GridViewSort.AutoSort="True">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Number" Width="{Binding NumberGridWidth}" DisplayMemberBinding="{Binding Path=Number}" model:GridViewSort.PropertyName="Number">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding XPath=Number}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Title" Width="{Binding TitleGridWidth}" DisplayMemberBinding="{Binding Path=Title}"  model:GridViewSort.PropertyName="Title">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Title}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Author" Width="{Binding ArtistGridWidth}" DisplayMemberBinding="{Binding Path=Artist}" model:GridViewSort.PropertyName="Artist">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding XPath=Artist}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Album" Width="{Binding AlbumGridWidth}" DisplayMemberBinding="{Binding Path=Album}" model:GridViewSort.PropertyName="Album">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding XPath=Album}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Year" Width="{Binding YearGridWidth}" DisplayMemberBinding="{Binding Path=Year}" model:GridViewSort.PropertyName="Year">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Year}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Genre" Width="{Binding GenreGridWidth}" DisplayMemberBinding="{Binding Path=Genre}" model:GridViewSort.PropertyName="NumGenreber">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Genre}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Bitrate" Width="{Binding AudioBitrateGridWidth}" DisplayMemberBinding="{Binding Path=AudioBitrate}" model:GridViewSort.PropertyName="AudioBitrate">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=AudioBitrate}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Path" Width="{Binding PathGridWidth}" DisplayMemberBinding="{Binding Path=Path}" model:GridViewSort.PropertyName="Path">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <skins:EditFields Text="{Binding  XPath=Path}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+        <DataGrid AutoGenerateColumns="False" AllowDrop="True" Name="SongsGridView" Grid.Column="2"
+                  ItemsSource="{Binding SongsCollection}" SelectionMode="Extended" SelectionChanged="SongsGridView_OnSelectionChanged" HorizontalGridLinesBrush="White" VerticalGridLinesBrush="White" Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Number" Width="{Binding NumberGridWidth}" Binding="{Binding Path=Number}"/>
+                <DataGridTextColumn Header="Title" Width="{Binding TitleGridWidth}" Binding="{Binding Path=Title}"/>
+                <DataGridTextColumn Header="Author" Width="{Binding ArtistGridWidth}" Binding="{Binding Path=Artist}"/>
+                <DataGridTextColumn Header="Album" Width="{Binding AlbumGridWidth}" Binding="{Binding Path=Album}"/>
+                <DataGridTextColumn Header="Year" Width="{Binding YearGridWidth}" Binding="{Binding Path=Year}"/>
+                <DataGridTextColumn Header="Genre" Width="{Binding GenreGridWidth}" Binding="{Binding Path=Genre}"/>
+                <DataGridTextColumn Header="Bitrate" Width="{Binding AudioBitrateGridWidth}" Binding="{Binding Path=AudioBitrate}"/>
+                <DataGridTextColumn Header="Path" Width="{Binding PathGridWidth}" Binding="{Binding Path=Path}"/>
+                <DataGridTextColumn Header="Duration" Width="{Binding PathGridWidth}" Binding="{Binding Path=Duration}"/>
+            </DataGrid.Columns>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Drop">
-                    <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.DragCommand, ElementName=SongsListView}"/>
+                    <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.DragCommand, ElementName=SongsGridView}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </ListView>
+        </DataGrid>
         <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5"/>
     </Grid>
 </Window>

@@ -1,12 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using EditTags.Properties;
-using EditTags.Skins;
 using EditTags.ViewModel;
 using MusicLibrary;
 
@@ -36,10 +32,10 @@ namespace EditTags
             Settings.Default.Save();
         }
 
-        private void SongsListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SongsGridView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewmodel = (MainViewModel)DataContext;
-            viewmodel.SelectedItems = SongsListView.SelectedItems
+            viewmodel.SelectedItems = SongsGridView.SelectedItems
                 .Cast<Song>().ToList();
         }
     }

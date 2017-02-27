@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using EditTags.Properties;
 using GalaSoft.MvvmLight;
@@ -44,7 +45,16 @@ namespace EditTags.ViewModel
             }
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             SaveCommand = new RelayCommand(SaveMethod);
-            SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.NoCoverImage);
+            SelectedItemsImageSource = new BitmapImage(Song.NoCoverImage);
+            KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDownMethod);
+        }
+
+        private void KeyDownMethod(KeyEventArgs obj)
+        {
+            if (obj.Key==Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                
+            }
         }
 
         private void SaveMethod()
@@ -119,8 +129,7 @@ namespace EditTags.ViewModel
 
         private void AddDirectoryToList(string direcorypath)
         {
-            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories)
-.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a") || s.EndsWith(".ogg"));
+            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a") || s.EndsWith(".ogg"));
 
             foreach (var file in files)
             {
@@ -228,6 +237,7 @@ namespace EditTags.ViewModel
         }
 
         public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand<KeyEventArgs> KeyDownCommand { get; private set; }
         public RelayCommand<DragEventArgs> DragCommand
         {
             get;
@@ -294,14 +304,7 @@ namespace EditTags.ViewModel
                 }
 
                 SelectedItemsImageSource = null;
-                if (_selectedItems.All(o => Song.GetCoverPath(o.Path) == Song.GetCoverPath(_selectedItems.First().Path)))
-                {
-                    SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.GetCoverPath(_selectedItems[0].Path));
-                }
-                else
-                {
-                    SelectedItemsImageSource = new System.Windows.Media.Imaging.BitmapImage(Song.NoCoverImage);
-                }
+                SelectedItemsImageSource = _selectedItems.All(o => Song.GetCoverPath(o.Path) == Song.GetCoverPath(_selectedItems.First().Path)) ? new BitmapImage(Song.GetCoverPath(_selectedItems[0].Path)) : new BitmapImage(Song.NoCoverImage);
             }
         }
 
