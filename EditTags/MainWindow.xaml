@@ -17,6 +17,10 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <model:GridLengthValueConverter x:Key="GridLengthValueConverter"/>
+        <Style x:Key="DataGridStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
     </Window.Resources>
     <Window.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}"/>
@@ -83,7 +87,7 @@
                 <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="0,5"  />
             </Grid>
         </Border>
-        <DataGrid AutoGenerateColumns="False" AllowDrop="True" Name="SongsGridView" Grid.Column="2"
+        <DataGrid AutoGenerateColumns="False" AllowDrop="True" Name="SongsGridView" Grid.Column="2" CellStyle="{StaticResource DataGridStyle}"
                   ItemsSource="{Binding SongsCollection}" SelectionMode="Extended" SelectionChanged="SongsGridView_OnSelectionChanged" HorizontalGridLinesBrush="White" VerticalGridLinesBrush="White" Background="White">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Number" Width="{Binding NumberGridWidth}" Binding="{Binding Path=Number}"/>

@@ -53,8 +53,17 @@ namespace EditTags.ViewModel
         {
             if (obj.Key==Key.S && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                
+                SaveFiles();
             }
+        }
+
+        private void SaveFiles()
+        {
+            foreach (var song in SongsCollection)
+            {
+                song.Save();
+            }
+            MessageBox.Show("Saved");
         }
 
         private void SaveMethod()
@@ -424,4 +433,4 @@ namespace EditTags.ViewModel
 
         #endregion
     }
-}
+};
