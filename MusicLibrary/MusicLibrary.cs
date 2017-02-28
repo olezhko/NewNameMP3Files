@@ -1,14 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
 
 namespace MusicLibrary
 {
+    public class MusicLibrary
+    {
+        public static System.Drawing.Icon GetFileIcon(string name, IconReader.IconSize size,
+                                              bool linkOverlay)
+        {
+            Shell32.SHFILEINFO shfi = new Shell32.SHFILEINFO();
+            uint flags = Shell32.SHGFI_ICON | Shell32.SHGFI_USEFILEATTRIBUTES;
+
+            if (true == linkOverlay) flags += Shell32.SHGFI_LINKOVERLAY;
+
+
+            /* Check the size specified for return. */
+            if (IconReader.IconSize.Small == size)
+            {
+                flags += Shell32.SHGFI_SMALLICON; // include the small icon flag
+            }
+            else
+            {
+                flags += Shell32.SHGFI_LARGEICON;  // include the large icon flag
+            }
+
+            Shell32.SHGetFileInfo(name,
+                Shell32.FILE_ATTRIBUTE_NORMAL,
+                ref shfi,
+                (uint)System.Runtime.InteropServices.Marshal.SizeOf(shfi),
+                flags);
+
+
+            // Copy (clone) the returned icon to a new object, thus allowing us 
+            // to call DestroyIcon immediately
+            System.Drawing.Icon icon = (System.Drawing.Icon)
+                                 System.Drawing.Icon.FromHandle(shfi.hIcon).Clone();
+            User32.DestroyIcon(shfi.hIcon); // Cleanup
+            return icon;
+        }
+    }
+
     public class Author : ViewModelBase
     {
         private bool _isSelected;
@@ -188,6 +226,15 @@ namespace MusicLibrary
         {
             get { return _isSelected; }
             set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+        }
+
+        public BitmapSource Icon
+        {
+            get
+            {
+                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false); 
+                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle,System.Windows.Int32Rect.Empty,BitmapSizeOptions.FromEmptyOptions());
+            }
         }
  
         private readonly TagLib.File _file;
