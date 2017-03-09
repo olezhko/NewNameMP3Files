@@ -31,8 +31,10 @@ namespace NewNameMP3Files.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<MusicLibraryViewModel>();
             SimpleIoc.Default.Register<OptionsViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
+            SimpleIoc.Default.Register<EditTagsViewModel>();
         }
 
         public MainViewModel Main
@@ -48,11 +50,25 @@ namespace NewNameMP3Files.ViewModel
             get { return ServiceLocator.Current.GetInstance<OptionsViewModel>(); }
         }
 
+        public EditTagsViewModel EditTags
+        {
+            get { return ServiceLocator.Current.GetInstance<EditTagsViewModel>(); }
+        }
+
+
         public AboutViewModel About
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<AboutViewModel>();
+            }
+        }
+
+        public MusicLibraryViewModel MusicLibraryModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MusicLibraryViewModel>();
             }
         }
         

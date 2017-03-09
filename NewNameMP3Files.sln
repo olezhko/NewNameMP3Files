@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewNameMP3Files", "NewNameMP3Files\NewNameMP3Files.csproj", "{8E7EF19C-BAE4-484D-A204-A46597E071F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditTags", "EditTags\EditTags.csproj", "{A000F061-66E2-4C68-A0C4-639C96B8317F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicLibrary", "MusicLibrary\MusicLibrary.csproj", "{87025ECE-E0CB-4526-AE60-2BA3308B4AB3}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E7EF19C-BAE4-484D-A204-A46597E071F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A000F061-66E2-4C68-A0C4-639C96B8317F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A000F061-66E2-4C68-A0C4-639C96B8317F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A000F061-66E2-4C68-A0C4-639C96B8317F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A000F061-66E2-4C68-A0C4-639C96B8317F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87025ECE-E0CB-4526-AE60-2BA3308B4AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87025ECE-E0CB-4526-AE60-2BA3308B4AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87025ECE-E0CB-4526-AE60-2BA3308B4AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU

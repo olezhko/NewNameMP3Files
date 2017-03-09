@@ -20,4 +20,5 @@
     <v:String x:Key="AttentionString">Attention</v:String>
     <v:String x:Key="InformationString">Information</v:String>
     <v:String x:Key="EditTagsMenu">Edit Tags</v:String>
+    <v:String x:Key="MusicLibrary">Music Library</v:String>
 </ResourceDictionary>

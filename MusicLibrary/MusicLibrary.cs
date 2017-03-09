@@ -255,11 +255,11 @@ namespace MusicLibrary
             _file.Save();
         }
 
-        private static string[] musicExt = new[] { ".mp3", ".ogg", ".acc",".m4a" };
+        private static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
         public static bool IsFileSong(string path)
         {
-            string ext = System.IO.Path.GetExtension(path);
-            return ext == musicExt[0] || ext == musicExt[1] || ext == musicExt[2] || ext == musicExt[3];
+            var extension = System.IO.Path.GetExtension(path);
+            return extension != null && -1 != Array.IndexOf(musicExt, extension.ToUpperInvariant());
         }
 
         public bool Equals(Song obj)

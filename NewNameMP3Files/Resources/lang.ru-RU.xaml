@@ -20,4 +20,5 @@
     <v:String x:Key="AttentionString">Внимание</v:String>
     <v:String x:Key="InformationString">Информация</v:String>
     <v:String x:Key="EditTagsMenu">Изменить Теги</v:String>
+    <v:String x:Key="MusicLibrary">Музыкальная библиотека</v:String>
 </ResourceDictionary>

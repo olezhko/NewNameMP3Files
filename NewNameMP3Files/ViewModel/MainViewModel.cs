@@ -8,7 +8,6 @@ using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using MusicLibrary;
 using NewNameMP3Files.Model;
@@ -18,6 +17,7 @@ using DragEventArgs = System.Windows.DragEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using System.Windows.Controls;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -49,9 +49,43 @@ namespace NewNameMP3Files.ViewModel
             ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
             SelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(true));
             DeSelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(false));
-            EditTagsCommand = new RelayCommand<string>(EditTagsMethod);
+            EditTagsCommand = new RelayCommand(EditTagsMethod);
             _optionsWindow = new Options();
             _aboutWindow = new AboutWindow();
+            _editTagsWindow = new EditTagsWindow();
+
+            ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
+            ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
+        }
+
+        private void AlbumCheckBoxClickMethod(CheckBox item)
+        {
+            var state = item.IsChecked.Value;
+            var tag = item.Tag as ObservableCollection<Song>;
+            if (tag!=null)
+            {
+                foreach (var song in tag)
+                {
+                    song.IsSelected = state;
+                }
+            }
+        }
+
+        private void AuthorCheckBoxClickMethod(CheckBox item)
+        {
+            var state = item.IsChecked.Value;
+            var tag = item.Tag as ObservableCollection<Album>;
+            if (tag != null)
+            {
+                foreach (var album in tag)
+                {
+                    foreach (var song in album.SongsCollection)
+                    {
+                        song.IsSelected = state;
+                    }
+                }  
+            }
+            
         }
 
         #region Methods
@@ -64,14 +98,17 @@ namespace NewNameMP3Files.ViewModel
         {
             if (wnd != null)
             {
+                _optionsWindow.Close();
+                _aboutWindow.Close();
+                _editTagsWindow.Close();
                 wnd.Close();
             }
         }
 
         private void OpenDirectoryMethod()
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (Directory.Exists(fbd.SelectedPath))
                 {
@@ -94,9 +131,20 @@ namespace NewNameMP3Files.ViewModel
             }
         }
 
-        private void EditTagsMethod(string obj)
+        private void EditTagsMethod()
         {
-
+            List<string> files = GetListCheckedFiles();
+            if (files == null || !files.Any())
+            {
+                return;
+            }
+            var viewModel = (EditTagsViewModel)_editTagsWindow.DataContext;
+            viewModel.SongsCollection.Clear();
+            foreach (var file in files)
+            {
+                viewModel.SongsCollection.Add(new Song(TagLibFile.Create(file)));
+            }
+            _editTagsWindow.ShowDialog();
         }
 
         private void RefreshMethod()
@@ -339,6 +387,7 @@ namespace NewNameMP3Files.ViewModel
 
         #region Private Properties
         private MenuItem _checkedLanguageLastMenuItem;
+        private readonly EditTagsWindow _editTagsWindow;
         private readonly Options _optionsWindow;
         private readonly AboutWindow _aboutWindow;
         private string _renameExpression = "(n) - (t)";
@@ -346,16 +395,13 @@ namespace NewNameMP3Files.ViewModel
         #endregion
 
         #region Commands
-
+        public RelayCommand<CheckBox> ClickAlbumCommand { get; private set; } 
+        public RelayCommand<CheckBox> ClickAuthorCommand { get; private set; }
         public RelayCommand OpenFilesCommand { get; private set; }
         public RelayCommand OpenDirectoryCommand { get; private set; }
         public RelayCommand<Window> ExitCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
-        public RelayCommand<DragEventArgs> DragCommand
-        {
-            get;
-            private set;
-        }
+        public RelayCommand<DragEventArgs> DragCommand{get;private set;}
         public RelayCommand RenameCheckedCommand
         {
             get; private set; }
@@ -364,7 +410,7 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<bool> SelectAllCommand { get; private set; }
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
 
-        public RelayCommand<string> EditTagsCommand { get; private set; } 
+        public RelayCommand EditTagsCommand { get; private set; } 
         #endregion
     }
 }

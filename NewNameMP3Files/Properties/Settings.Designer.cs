@@ -34,5 +34,113 @@ namespace NewNameMP3Files.Properties {
                 this["DefaultLanguage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double GridSpliiterWidth {
+            get {
+                return ((double)(this["GridSpliiterWidth"]));
+            }
+            set {
+                this["GridSpliiterWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double NumberGridWidth {
+            get {
+                return ((double)(this["NumberGridWidth"]));
+            }
+            set {
+                this["NumberGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double TitleGridWidth {
+            get {
+                return ((double)(this["TitleGridWidth"]));
+            }
+            set {
+                this["TitleGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double ArtistGridWidth {
+            get {
+                return ((double)(this["ArtistGridWidth"]));
+            }
+            set {
+                this["ArtistGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double AlbumGridWidth {
+            get {
+                return ((double)(this["AlbumGridWidth"]));
+            }
+            set {
+                this["AlbumGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double YearGridWidth {
+            get {
+                return ((double)(this["YearGridWidth"]));
+            }
+            set {
+                this["YearGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double GenreGridWidth {
+            get {
+                return ((double)(this["GenreGridWidth"]));
+            }
+            set {
+                this["GenreGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double AudioBitrateGridWidth {
+            get {
+                return ((double)(this["AudioBitrateGridWidth"]));
+            }
+            set {
+                this["AudioBitrateGridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double PathGridWidth {
+            get {
+                return ((double)(this["PathGridWidth"]));
+            }
+            set {
+                this["PathGridWidth"] = value;
+            }
+        }
     }
 }

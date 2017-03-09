@@ -90,17 +90,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\MusicLibrary.cs" />
+    <Compile Include="Model\GridLengthConverter.cs" />
     <Compile Include="Model\StaticMethods.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Skins\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Skins\EditTagsWindow.xaml.cs">
+      <DependentUpon>EditTagsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Skins\MusicLibrary.xaml.cs">
+      <DependentUpon>MusicLibrary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Skins\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\EditTagsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MusicLibraryViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
@@ -128,6 +135,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Skins\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\EditTagsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\MusicLibrary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,6 +187,9 @@
       <Project>{87025ece-e0cb-4526-ae60-2ba3308b4ab3}</Project>
       <Name>MusicLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Skins\nocoverart.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -31,6 +31,7 @@
                     <MenuItem Header="{DynamicResource EnglishLanguage}" Tag="en-US" Name="EnglishMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                     <MenuItem Header="{DynamicResource RussianLanguage}" Tag="ru-RU" Name="RussianMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                 </MenuItem>
+                <MenuItem Header="{DynamicResource MusicLibrary}" Name="MusicLibraryMenuItem" Command="{Binding OpenMusicLibraryWindow}"/>
             </MenuItem>
             <MenuItem  Header="{DynamicResource HelpMenu}">
                 <MenuItem Header="{DynamicResource DonateMenu}" Name="DonateMenuItem"/>
@@ -50,12 +51,27 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <CheckBox Content="{Binding AuthorName}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Name="AuthorCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                            <CheckBox Content="{Binding AuthorName}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                                      Name="AuthorCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}" Tag="{Binding AlbumCollection}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.ClickAuthorCommand,Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding ElementName=AuthorCheckBox}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
                             <ListView Name="SongsListView" ItemsSource="{Binding AlbumCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <CheckBox Margin="5,0,0,0" Content="{Binding AlbumName}" FontWeight="Bold" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" FontSize="14" Name="AlbumNameCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                            <CheckBox Margin="5,0,0,0" Content="{Binding AlbumName}" FontWeight="Bold" VerticalContentAlignment="Stretch" Tag="{Binding SongsCollection}"
+                                                      HorizontalContentAlignment="Stretch" FontSize="14" Name="AlbumNameCheckBox" IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.ClickAlbumCommand,Mode=OneWay, Source={StaticResource Locator}}" 
+                                                                                CommandParameter="{Binding ElementName=AlbumNameCheckBox}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </CheckBox>
                                             <ListView ItemsSource="{Binding SongsCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
