@@ -56,6 +56,12 @@ namespace NewNameMP3Files.ViewModel
 
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
+            OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
+        }
+
+        private void OpenMusicLibraryWindowMethod()
+        {
+            
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -409,7 +415,7 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         public RelayCommand<bool> SelectAllCommand { get; private set; }
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
-
+        public RelayCommand OpenMusicLibraryWindow { get; private set; }
         public RelayCommand EditTagsCommand { get; private set; } 
         #endregion
     }

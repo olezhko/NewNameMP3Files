@@ -1,12 +1,10 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using GalaSoft.MvvmLight;
 
 namespace MusicLibrary
 {
@@ -47,7 +45,7 @@ namespace MusicLibrary
         }
     }
 
-    public class Author : ViewModelBase
+    public class AuthorViewModelBase : ViewModelBase
     {
         private bool _isSelected;
         public bool IsSelected
@@ -57,15 +55,15 @@ namespace MusicLibrary
         }
         public string AuthorName { get; set; }
 
-        public ObservableCollection<Album> AlbumCollection { get; set; }
+        public ObservableCollection<AlbumViewModelBase> AlbumCollection { get; set; }
 
-        public Author(string authorName)
+        public AuthorViewModelBase(string authorName)
         {
             AuthorName = authorName;
-            AlbumCollection = new ObservableCollection<Album>();
+            AlbumCollection = new ObservableCollection<AlbumViewModelBase>();
         }
 
-        public void AddAlbum(Album album)
+        public void AddAlbum(AlbumViewModelBase album)
         {
             album.PropertyChanged += album_PropertyChanged;
             AlbumCollection.Add(album);
@@ -77,7 +75,7 @@ namespace MusicLibrary
         }
     }
 
-    public class Album : ViewModelBase
+    public class AlbumViewModelBase : ViewModelBase
     {
         private bool _isSelected;
         public bool IsSelected
@@ -89,7 +87,7 @@ namespace MusicLibrary
         public string AlbumName { get; set; }
 
         public ObservableCollection<Song> SongsCollection { get; set; }
-        public Album(string albumName)
+        public AlbumViewModelBase(string albumName)
         {
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<Song>();
