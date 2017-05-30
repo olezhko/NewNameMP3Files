@@ -57,14 +57,13 @@ namespace NewNameMP3Files.ViewModel
             ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
-<<<<<<< HEAD
-
+            OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
             FindImageMenuCommand = new RelayCommand<string>(FindCoverMethod);
         }
 
         private void FindCoverMethod(string albumName)
         {
-            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}cover&source=lnms&tbm=isch&tbs=isz:l",albumName));
+            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}+cover&source=lnms&tbm=isch&tbs=isz:l",albumName));
         }
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
@@ -73,14 +72,10 @@ namespace NewNameMP3Files.ViewModel
             {
                 AuthorCollection.Clear();
             }
-=======
-            OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
         }
 
         private void OpenMusicLibraryWindowMethod()
         {
-            
->>>>>>> origin/master
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -447,9 +442,7 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<Window> ExitCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
         public RelayCommand<DragEventArgs> DragCommand{get;private set;}
-        public RelayCommand RenameCheckedCommand
-        {
-            get; private set; }
+        public RelayCommand RenameCheckedCommand{get; private set; }
         public RelayCommand OpenTemplateOptionWindow { get; private set; }
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         public RelayCommand<bool> SelectAllCommand { get; private set; }

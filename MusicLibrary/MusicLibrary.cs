@@ -45,7 +45,7 @@ namespace MusicLibrary
         }
     }
 
-    public class AuthorViewModelBase : ViewModelBase
+    public class Author : ViewModelBase
     {
         private bool _isSelected;
         public bool IsSelected
@@ -55,15 +55,15 @@ namespace MusicLibrary
         }
         public string AuthorName { get; set; }
 
-        public ObservableCollection<AlbumViewModelBase> AlbumCollection { get; set; }
+        public ObservableCollection<Album> AlbumCollection { get; set; }
 
-        public AuthorViewModelBase(string authorName)
+        public Author(string authorName)
         {
             AuthorName = authorName;
-            AlbumCollection = new ObservableCollection<AlbumViewModelBase>();
+            AlbumCollection = new ObservableCollection<Album>();
         }
 
-        public void AddAlbum(AlbumViewModelBase album)
+        public void AddAlbum(Album album)
         {
             album.PropertyChanged += album_PropertyChanged;
             AlbumCollection.Add(album);
@@ -75,7 +75,7 @@ namespace MusicLibrary
         }
     }
 
-    public class AlbumViewModelBase : ViewModelBase
+    public class Album : ViewModelBase
     {
         private bool _isSelected;
         public bool IsSelected
@@ -87,19 +87,15 @@ namespace MusicLibrary
         public string AlbumName { get; set; }
 
         public ObservableCollection<Song> SongsCollection { get; set; }
-<<<<<<< HEAD
         public Uri AlbumCover { get; set; }
 
         public Album(string albumName)
-=======
-        public AlbumViewModelBase(string albumName)
->>>>>>> origin/master
         {
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<Song>();
         }
 
-        public Album(string albumName,string albumCover)
+        public Album(string albumName, string albumCover)
         {
             AlbumCover = new Uri(albumCover);
             AlbumName = albumName;
