@@ -17,7 +17,8 @@ using DragEventArgs = System.Windows.DragEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using System.Windows.Controls;
+using CheckBox = System.Windows.Controls.CheckBox;
+using System.Windows.Input;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -53,9 +54,24 @@ namespace NewNameMP3Files.ViewModel
             _optionsWindow = new Options();
             _aboutWindow = new AboutWindow();
             _editTagsWindow = new EditTagsWindow();
-
+            ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
+
+            FindImageMenuCommand = new RelayCommand<string>(FindCoverMethod);
+        }
+
+        private void FindCoverMethod(string albumName)
+        {
+            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}cover&source=lnms&tbm=isch&tbs=isz:l",albumName));
+        }
+
+        private void ListViewKeyDownMethod(KeyEventArgs args)
+        {
+            if (args.Key == Key.Delete)
+            {
+                AuthorCollection.Clear();
+            }
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -149,6 +165,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void RefreshMethod()
         {
+            Console.WriteLine("RefreshMethod");
             Application.Current.Dispatcher.Invoke(delegate
             {
                 AuthorCollection.Clear();
@@ -212,7 +229,12 @@ namespace NewNameMP3Files.ViewModel
             return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection where song.IsSelected select song.Path).ToList();
         }
 
-        readonly List<string> _renamingFilesList = new List<string>();
+        private List<string> GetListAllFiles()
+        {
+            return (from author in AuthorCollection from album in author.AlbumCollection from song in album.SongsCollection select song.Path).ToList();
+        }
+
+        List<string> _renamingFilesList = new List<string>();
         private void RenameAction()
         {
             List<string> files = GetListCheckedFiles();
@@ -221,19 +243,25 @@ namespace NewNameMP3Files.ViewModel
                 return;
             }
 
-            _renamingFilesList.Clear();
-            NewFileRenamed += (send, args) =>
+            _renamingFilesList = GetListAllFiles();
+            if (NewFileRenamed == null)
             {
-                CountRenamedFiles = String.Format("{0}/{1}", args, files.Count);
-                int percent = args * 100 / files.Count;
-                ProgressRenamedFiles = percent;
-                if (percent == 100)
+                NewFileRenamed += (send, args) =>
                 {
-                    RefreshMethod();
-                    MessageBox.Show(App.ResourceDictionary["DoneString"].ToString(), App.ResourceDictionary["InformationString"].ToString());
-                }
-            };
+                    var list = (List<string>)send;
+                    Console.WriteLine(String.Format("Done {0}/{1}", args, list.Count));
+                    CountRenamedFiles = String.Format("{0}/{1}", args, list.Count);
+                    int percent = args * 100 / list.Count;
+                    ProgressRenamedFiles = percent;
+                    if (percent == 100)
+                    {
+                        RefreshMethod();
+                        MessageBox.Show(App.ResourceDictionary["DoneString"].ToString(), App.ResourceDictionary["InformationString"].ToString());
+                    }
+                };
+            }
 
+            Console.WriteLine("Start Rename Task " + files.Count);
             Task.Factory.StartNew(() => RenameActionTask(_renameExpression, files));
         }
 
@@ -263,11 +291,10 @@ namespace NewNameMP3Files.ViewModel
                 }
 
                 File.Move(file, finalPath);
-                _renamingFilesList.Add(finalPath);
                 count++;
                 if (NewFileRenamed != null)
                 {
-                    NewFileRenamed(this, count);
+                    NewFileRenamed(filesPathList, count);
                 }
             }
         }
@@ -335,8 +362,18 @@ namespace NewNameMP3Files.ViewModel
 
                     if (resAlbums == -1)
                     {
-                        author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
+                        string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
+                        if (File.Exists(albumCoverPath))
+                        {
+                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                        }
+                        else
+                        {
+                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, Song.NoCoverImage));
+                        }
+                        
                         author.AlbumCollection.Last().AddSong(mp3File);
+                        
                     }
                 }
             }
@@ -359,7 +396,17 @@ namespace NewNameMP3Files.ViewModel
             get { return _authorCollection; } 
         }
         public MenuItem LanguageMenuItem { get; set; }
-        public string CountRenamedFiles { get; set; }
+
+        public string _countRenamedFiles;
+        public string CountRenamedFiles
+        {
+            get { return _countRenamedFiles; }
+            set
+            {
+                _countRenamedFiles = value;
+                RaisePropertyChanged(() => CountRenamedFiles);
+            }
+        }
 
         private int _progressRenamedFiles;
         public int ProgressRenamedFiles
@@ -371,17 +418,6 @@ namespace NewNameMP3Files.ViewModel
                 RaisePropertyChanged(() => ProgressRenamedFiles);
             }
             
-        }
-
-        private int _countCheckedFiles;
-        public int CountCheckedFiles
-        {
-            get { return _countCheckedFiles; }
-            set
-            {
-                _countCheckedFiles = value;
-                RaisePropertyChanged(() => CountCheckedFiles);
-            }
         }
         #endregion
 
@@ -411,6 +447,8 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
 
         public RelayCommand EditTagsCommand { get; private set; } 
+        public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
+        public RelayCommand<string> FindImageMenuCommand { get; set; }
         #endregion
     }
 }

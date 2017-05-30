@@ -39,10 +39,10 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible">
-            <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+            <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Rename" Command="{Binding RenameCheckedCommand}" />
+                        <MenuItem Header="{DynamicResource RenameString}" Command="{Binding RenameCheckedCommand}" />
                         <MenuItem Header="{DynamicResource SelectAllMenu}" Command="{Binding SelectAllCommand}" />
                         <MenuItem Header="{DynamicResource DeSelectAllMenu}" Command="{Binding DeSelectAllCommand}" />
                         <MenuItem Header="{DynamicResource EditTagsMenu}" Command="{Binding EditTagsCommand}" />
@@ -72,15 +72,27 @@
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                             </CheckBox>
-                                            <ListView ItemsSource="{Binding SongsCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <WrapPanel>
-                                                            <CheckBox Margin="15,0,0,0" Content="{Binding Name}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                                                        </WrapPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
+                                            <DockPanel>
+                                                <Border DockPanel.Dock="Right" BorderBrush="Yellow" BorderThickness="2">
+                                                    <Image Source="{Binding AlbumCover}" Height="100" Width="100">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="MouseDown">
+                                                                <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.FindImageMenuCommand,Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding AlbumName}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Image>
+                                                </Border>
+
+                                                <ListView ItemsSource="{Binding SongsCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <WrapPanel>
+                                                                <CheckBox Margin="15,0,0,0" Content="{Binding Name}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                                            </WrapPanel>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </DockPanel>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -91,6 +103,9 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Drop">
                         <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.DragCommand, ElementName=AuthorsListView}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="KeyDown">
+                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ListViewKeyDownCommand, ElementName=AuthorsListView}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
@@ -114,9 +129,6 @@
             <StatusBarItem Grid.Column="1">
                 <TextBlock Name="CountRenamedFilesStatusStrip" Text="{Binding CountRenamedFiles}" Width="50" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="2">
-                <TextBlock Name="CountCheckedFilesStatusStrip" Text="{Binding CountCheckedFiles}" Width="50" />
-            </StatusBarItem>        
         </StatusBar>
     </Grid>
 </Window>

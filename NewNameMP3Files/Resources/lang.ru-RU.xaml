@@ -21,4 +21,6 @@
     <v:String x:Key="InformationString">Информация</v:String>
     <v:String x:Key="EditTagsMenu">Изменить Теги</v:String>
     <v:String x:Key="MusicLibrary">Музыкальная библиотека</v:String>
+    <v:String x:Key="RenameString">Переименовать</v:String>
+    <v:String x:Key="FindImageMenu">Найти cover</v:String>
 </ResourceDictionary>

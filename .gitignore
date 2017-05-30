@@ -59,3 +59,9 @@ MusicLibrary/obj/
 packages/
 packages/
 NewNameMP3Files.v12.suo
+*.suo
+.vs/config/applicationhost.config
+*.suo
+NewNameMP3Files.v12.suo
+*.suo
+NewNameMP3Files.v12.suo

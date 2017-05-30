@@ -89,11 +89,28 @@ namespace MusicLibrary
         public string AlbumName { get; set; }
 
         public ObservableCollection<Song> SongsCollection { get; set; }
+        public Uri AlbumCover { get; set; }
+
         public Album(string albumName)
         {
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<Song>();
         }
+
+        public Album(string albumName,string albumCover)
+        {
+            AlbumCover = new Uri(albumCover);
+            AlbumName = albumName;
+            SongsCollection = new ObservableCollection<Song>();
+        }
+
+        public Album(string albumName, Uri albumCover)
+        {
+            AlbumCover = albumCover;
+            AlbumName = albumName;
+            SongsCollection = new ObservableCollection<Song>();
+        }
+
         public void AddSong(Song song)
         {
             song.PropertyChanged += song_PropertyChanged;
