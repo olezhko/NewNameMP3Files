@@ -57,6 +57,7 @@ namespace NewNameMP3Files.ViewModel
             ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
+<<<<<<< HEAD
 
             FindImageMenuCommand = new RelayCommand<string>(FindCoverMethod);
         }
@@ -72,6 +73,14 @@ namespace NewNameMP3Files.ViewModel
             {
                 AuthorCollection.Clear();
             }
+=======
+            OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
+        }
+
+        private void OpenMusicLibraryWindowMethod()
+        {
+            
+>>>>>>> origin/master
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -445,7 +454,7 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         public RelayCommand<bool> SelectAllCommand { get; private set; }
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
-
+        public RelayCommand OpenMusicLibraryWindow { get; private set; }
         public RelayCommand EditTagsCommand { get; private set; } 
         public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
         public RelayCommand<string> FindImageMenuCommand { get; set; }
