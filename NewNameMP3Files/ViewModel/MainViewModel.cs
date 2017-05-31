@@ -329,8 +329,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddDirectoryToList(string direcorypath)
         {
-            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories)
-.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a") || s.EndsWith(".ogg"));
+            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a") || s.EndsWith(".ogg"));
 
             foreach (var file in files)
             {
@@ -373,7 +372,7 @@ namespace NewNameMP3Files.ViewModel
                         }
                         else
                         {
-                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, Song.NoCoverImage));
+                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
                         }
                         
                         author.AlbumCollection.Last().AddSong(mp3File);
@@ -385,7 +384,17 @@ namespace NewNameMP3Files.ViewModel
             if (res == -1)
             {
                 AuthorCollection.Add(new Author(mp3File.Tag.FirstPerformer));
-                AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album));
+
+                string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
+                if (File.Exists(albumCoverPath))
+                {
+                    AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                }
+                else
+                {
+                    AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album,new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                }
+
                 AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);
             }
         }
