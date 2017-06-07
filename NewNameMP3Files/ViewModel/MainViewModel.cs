@@ -218,13 +218,10 @@ namespace NewNameMP3Files.ViewModel
         private void OpenTemplateWindowMethod()
         {
             var res = _optionsWindow.ShowDialog();
-            if (res.HasValue && res.Value)
+            var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
+            if (viewModel != null)
             {
-                var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
-                if (viewModel != null)
-                {
-                    _renameExpression = viewModel.TemplateForFiles;
-                }
+                _renameExpression = viewModel.TemplateForFiles;
             }
         }
 
@@ -292,6 +289,13 @@ namespace NewNameMP3Files.ViewModel
                     }
                     finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
                     i++;
+                }
+
+
+                var index = _renamingFilesList.IndexOf(file);
+                if (index!=-1)
+                {
+                    _renamingFilesList[index] = finalPath;
                 }
 
                 File.Move(file, finalPath);
