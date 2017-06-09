@@ -43,7 +43,7 @@ namespace NewNameMP3Files.Skins
         {
             var viewmodel = (EditTagsViewModel)DataContext;
             viewmodel.SelectedItems = SongsGridView.SelectedItems
-                .Cast<Song>().ToList();
+                .Cast<SongViewModel>().ToList();
         }
     }
 }

@@ -81,7 +81,7 @@ namespace NewNameMP3Files.ViewModel
         private void AlbumCheckBoxClickMethod(CheckBox item)
         {
             var state = item.IsChecked.Value;
-            var tag = item.Tag as ObservableCollection<Song>;
+            var tag = item.Tag as ObservableCollection<SongViewModel>;
             if (tag!=null)
             {
                 foreach (var song in tag)
@@ -162,7 +162,7 @@ namespace NewNameMP3Files.ViewModel
             viewModel.SongsCollection.Clear();
             foreach (var file in files)
             {
-                viewModel.SongsCollection.Add(new Song(TagLibFile.Create(file)));
+                viewModel.SongsCollection.Add(new SongViewModel(new Song(TagLibFile.Create(file))));
             }
             _editTagsWindow.ShowDialog();
         }
@@ -300,10 +300,7 @@ namespace NewNameMP3Files.ViewModel
 
                 File.Move(file, finalPath);
                 count++;
-                if (NewFileRenamed != null)
-                {
-                    NewFileRenamed(filesPathList, count);
-                }
+                NewFileRenamed?.Invoke(filesPathList, count);
             }
         }
 

@@ -65,11 +65,11 @@ namespace MusicLibrary
 
         public void AddAlbum(Album album)
         {
-            album.PropertyChanged += album_PropertyChanged;
+            album.PropertyChanged += Album_PropertyChanged;
             AlbumCollection.Add(album);
         }
 
-        void album_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void Album_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             IsSelected = AlbumCollection.All(album => album.IsSelected);
         }
@@ -86,43 +86,43 @@ namespace MusicLibrary
 
         public string AlbumName { get; set; }
 
-        public ObservableCollection<Song> SongsCollection { get; set; }
+        public ObservableCollection<SongViewModel> SongsCollection { get; set; }
         public Uri AlbumCover { get; set; }
 
         public Album(string albumName)
         {
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
         public Album(string albumName, string albumCover)
         {
             AlbumCover = new Uri(albumCover);
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
         public Album(string albumName, Uri albumCover)
         {
             AlbumCover = albumCover;
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
-        public void AddSong(Song song)
+        public void AddSong(SongViewModel song)
         {
-            song.PropertyChanged += song_PropertyChanged;
+            song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
         }
 
         public void AddSong(TagLib.File file)
         {
-            var song = new Song(file);
-            song.PropertyChanged += song_PropertyChanged;
+            var song = new SongViewModel(new Song(file));
+            song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
         }
 
-        void song_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void Song_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             IsSelected = SongsCollection.All(song => song.IsSelected);
         }
@@ -133,35 +133,39 @@ namespace MusicLibrary
         }
     }
 
-    public class Song : ViewModelBase
+    public class SongViewModel: ViewModelBase
     {
+        public string Name
+        {
+            get { return _song.Name; }
+        }
+
         public int AudioBitrate
         {
-            get { return _file.Properties.AudioBitrate; }
+            get { return _song.AudioBitrate; }
         }
 
         public uint Number
         {
             get
             {
-                return _file.Tag.Track;
+                return _song.Number;
             }
             set
             {
-                _file.Tag.Track = value;
+                _song.Number = value;
                 RaisePropertyChanged(() => Number);
             }
         }
-        public string Name { get; set; }
         public string Title
         {
             get
             {
-                return _file.Tag.Title;
+                return _song.Title;
             }
             set
             {
-                _file.Tag.Title = value;
+                _song.Title = value;
                 RaisePropertyChanged(() => Title);
             }
         }
@@ -169,11 +173,11 @@ namespace MusicLibrary
         {
             get
             {
-                return _file.Tag.Performers[0];
+                return _song.Artist;
             }
             set
             {
-                _file.Tag.Performers[0] = value;
+                _song.Artist = value;
                 RaisePropertyChanged(() => Artist);
             }
         }
@@ -181,11 +185,11 @@ namespace MusicLibrary
         {
             get
             {
-                return _file.Tag.Album;
+                return _song.Album;
             }
             set
             {
-                _file.Tag.Album = value;
+                _song.Album = value;
                 RaisePropertyChanged(() => Album);
             }
         }
@@ -193,11 +197,11 @@ namespace MusicLibrary
         {
             get
             {
-                return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : "";
+                return _song.Genre;
             }
             set
             {
-                _file.Tag.Genres[0] = value;
+                _song.Genre = value;
                 RaisePropertyChanged(() => Genre);
             }
         }
@@ -205,35 +209,35 @@ namespace MusicLibrary
         {
             get
             {
-                return _file.Tag.Year;
+                return _song.Year;
             }
             set
             {
-                _file.Tag.Year = value;
+                _song.Year = value;
                 RaisePropertyChanged(() => Year);
             }
         }
 
         public TimeSpan Duration
         {
-            get { return _file.Properties.Duration; }
+            get { return _song.Duration; }
         }
 
         public string Lyric
         {
             get
             {
-                return _file.Tag.Lyrics;
+                return _song.Lyric;
             }
             set
             {
-                _file.Tag.Lyrics = value;
+                _song.Lyric = value;
                 RaisePropertyChanged(() => Lyric);
             }
         }
         public string Path 
         {
-            get { return _file.Name; } 
+            get { return _song.Path; } 
         }
 
         private bool _isSelected;
@@ -251,7 +255,108 @@ namespace MusicLibrary
                 return Imaging.CreateBitmapSourceFromHIcon(icon.Handle,System.Windows.Int32Rect.Empty,BitmapSizeOptions.FromEmptyOptions());
             }
         }
- 
+
+        private Song _song;
+        public SongViewModel(Song song)
+        {
+            _song = song;
+        }
+
+        public void Save()
+        {
+            _song.Save();
+        }
+    }
+
+    public class Song
+    {
+        public int AudioBitrate => _file.Properties.AudioBitrate;
+
+        public uint Number
+        {
+            get => _file.Tag.Track;
+            set => _file.Tag.Track = value;
+        }
+        public string Name { get; set; }
+        public string Title
+        {
+            get => _file.Tag.Title;
+            set => _file.Tag.Title = value;
+        }
+        public string Artist
+        {
+            get
+            {
+                return _file.Tag.Performers[0];
+            }
+            set
+            {
+                _file.Tag.Performers[0] = value;
+            }
+        }
+        public string Album
+        {
+            get
+            {
+                return _file.Tag.Album;
+            }
+            set
+            {
+                _file.Tag.Album = value;
+            }
+        }
+        public string Genre
+        {
+            get
+            {
+                return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : "";
+            }
+            set
+            {
+                _file.Tag.Genres = new [] {value};
+            }
+        }
+        public uint Year
+        {
+            get
+            {
+                return _file.Tag.Year;
+            }
+            set
+            {
+                _file.Tag.Year = value;
+            }
+        }
+
+        public TimeSpan Duration
+        {
+            get { return _file.Properties.Duration; }
+        }
+
+        public string Lyric
+        {
+            get
+            {
+                return _file.Tag.Lyrics;
+            }
+            set
+            {
+                _file.Tag.Lyrics = value;
+            }
+        }
+        public string Path
+        {
+            get { return _file.Name; }
+        }
+        public BitmapSource Icon
+        {
+            get
+            {
+                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false);
+                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+        }
+
         private readonly TagLib.File _file;
         public Song(TagLib.File file)
         {
@@ -262,7 +367,7 @@ namespace MusicLibrary
         public void Save()
         {
             _file.Tag.Title = Title;
-            _file.Tag.Genres[0] = Genre;
+            _file.Tag.Genres = new [] {Genre};
             _file.Tag.Album = Album;
             _file.Tag.Performers[0] = Artist;
             _file.Tag.Track = Number;
@@ -277,7 +382,7 @@ namespace MusicLibrary
             return extension != null && -1 != Array.IndexOf(musicExt, extension.ToUpperInvariant());
         }
 
-        public bool Equals(Song obj)
+        public bool Equals(SongViewModel obj)
         {
             return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
         }

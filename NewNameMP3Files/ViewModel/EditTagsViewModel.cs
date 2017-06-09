@@ -20,7 +20,7 @@ namespace NewNameMP3Files.ViewModel
         /// </summary>
         public EditTagsViewModel()
         {
-            _songCollection = new ObservableCollection<Song>();
+            _songCollection = new ObservableCollection<SongViewModel>();
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             SaveCommand = new RelayCommand(SaveMethod);
             SelectedItemsImageSource = new BitmapImage(Song.NoCoverImage);
@@ -132,12 +132,12 @@ namespace NewNameMP3Files.ViewModel
             }
             File.SetAttributes(filepath, FileAttributes.Normal);
             var mp3File = TagLib.File.Create(filepath);
-            SongsCollection.Add(new Song(mp3File));
+            SongsCollection.Add(new SongViewModel(new Song(mp3File)));
         }
 
         #region Public Properties
-        private readonly ObservableCollection<Song> _songCollection;
-        public ObservableCollection<Song> SongsCollection
+        private readonly ObservableCollection<SongViewModel> _songCollection;
+        public ObservableCollection<SongViewModel> SongsCollection
         {
             get { return _songCollection; }
         }
@@ -234,8 +234,8 @@ namespace NewNameMP3Files.ViewModel
 
 
         private const string DefaultValue = "<Not Change>";
-        private List<Song> _selectedItems;
-        public List<Song> SelectedItems
+        private List<SongViewModel> _selectedItems;
+        public List<SongViewModel> SelectedItems
         {
             get { return _selectedItems; }
             set
