@@ -84,7 +84,7 @@ namespace NewNameMP3Files.ViewModel
                     {
                         selectedItem.Title = SelectedItemsTitle;
                     }
-
+                    selectedItem.ClearBadTags();
                     selectedItem.Save();
                 }
             }
@@ -241,7 +241,10 @@ namespace NewNameMP3Files.ViewModel
             set
             {
                 _selectedItems = value;
-
+                if (_selectedItems.Count == 0)
+                {
+                    return;
+                }
                 SelectedItemsTitle = DefaultValue;
                 if (_selectedItems.All(o => o.Title == _selectedItems.First().Title))
                 {

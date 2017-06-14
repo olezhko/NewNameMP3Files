@@ -11,14 +11,12 @@ namespace MusicLibrary
     public class MusicLibrary
     {
         public static System.Drawing.Icon GetFileIcon(string name, IconReader.IconSize size,
-                                              bool linkOverlay)
+            bool linkOverlay)
         {
             Shell32.SHFILEINFO shfi = new Shell32.SHFILEINFO();
             uint flags = Shell32.SHGFI_ICON | Shell32.SHGFI_USEFILEATTRIBUTES;
 
             if (true == linkOverlay) flags += Shell32.SHGFI_LINKOVERLAY;
-
-
             /* Check the size specified for return. */
             if (IconReader.IconSize.Small == size)
             {
@@ -26,20 +24,20 @@ namespace MusicLibrary
             }
             else
             {
-                flags += Shell32.SHGFI_LARGEICON;  // include the large icon flag
+                flags += Shell32.SHGFI_LARGEICON; // include the large icon flag
             }
 
             Shell32.SHGetFileInfo(name,
                 Shell32.FILE_ATTRIBUTE_NORMAL,
                 ref shfi,
-                (uint)System.Runtime.InteropServices.Marshal.SizeOf(shfi),
+                (uint) System.Runtime.InteropServices.Marshal.SizeOf(shfi),
                 flags);
 
 
             // Copy (clone) the returned icon to a new object, thus allowing us 
             // to call DestroyIcon immediately
             System.Drawing.Icon icon = (System.Drawing.Icon)
-                                 System.Drawing.Icon.FromHandle(shfi.hIcon).Clone();
+                System.Drawing.Icon.FromHandle(shfi.hIcon).Clone();
             User32.DestroyIcon(shfi.hIcon); // Cleanup
             return icon;
         }
@@ -48,22 +46,28 @@ namespace MusicLibrary
     public class Author : ViewModelBase
     {
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
+            }
         }
+
         public string AuthorName { get; set; }
 
-        public ObservableCollection<AlbumViewModel> AlbumCollection { get; set; }
+        public ObservableCollection<Album> AlbumCollection { get; set; }
 
         public Author(string authorName)
         {
             AuthorName = authorName;
-            AlbumCollection = new ObservableCollection<AlbumViewModel>();
+            AlbumCollection = new ObservableCollection<Album>();
         }
 
-        public void AddAlbum(AlbumViewModel album)
+        public void AddAlbum(Album album)
         {
             album.PropertyChanged += Album_PropertyChanged;
             AlbumCollection.Add(album);
@@ -75,86 +79,70 @@ namespace MusicLibrary
         }
     }
 
-    public class AlbumViewModel : ViewModelBase
+    public class Album : ViewModelBase
     {
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
+            }
         }
 
-        public Album _album;
-        public ObservableCollection<SongViewModel> SongsCollectionViewModel;
-        public AlbumViewModel(Album albumName)
-        {
-            SongsCollectionViewModel = new ObservableCollection<SongViewModel>();
-            _album = albumName;
-            _album.SongAdded += _album_SongAdded;
-        }
-
-        public void AddSong(SongViewModel song)
-        {
-            SongsCollectionViewModel.Add(song);
-        }
-
-        private void _album_SongAdded(object sender, EventArgs e)
-        {
-            
-            IsSelected = SongsCollectionViewModel.All(song => song.IsSelected);
-        }
-    }
-
-    public class Album
-    {
         public string AlbumName { get; set; }
 
-        public ObservableCollection<Song> SongsCollection { get; set; }
+        public ObservableCollection<SongViewModel> SongsCollection { get; set; }
         public Uri AlbumCover { get; set; }
-
-        public event EventHandler SongAdded;
 
         public Album(string albumName)
         {
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
         public Album(string albumName, string albumCover)
         {
             AlbumCover = new Uri(albumCover);
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
         public Album(string albumName, Uri albumCover)
         {
             AlbumCover = albumCover;
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<Song>();
+            SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
-        public void AddSong(Song song)
+        public void AddSong(SongViewModel song)
         {
+            song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
-            if (SongAdded != null)
-            {
-                SongAdded(this, EventArgs.Empty);
-            }
         }
 
         public void AddSong(TagLib.File file)
         {
-            var song = new Song(file);
+            var song = new SongViewModel(new Song(file));
+            song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
-            if (SongAdded != null)
-            {
-                SongAdded(this, EventArgs.Empty);
-            }
+        }
+
+        void Song_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            IsSelected = SongsCollection.All(song => song.IsSelected);
+        }
+
+        public void RemoveSong(TagLib.File file)
+        {
+
         }
     }
 
-    public class SongViewModel: ViewModelBase
+    public class SongViewModel : ViewModelBase
     {
         public string Name
         {
@@ -168,70 +156,57 @@ namespace MusicLibrary
 
         public uint Number
         {
-            get
-            {
-                return _song.Number;
-            }
+            get { return _song.Number; }
             set
             {
                 _song.Number = value;
                 RaisePropertyChanged(() => Number);
             }
         }
+
         public string Title
         {
-            get
-            {
-                return _song.Title;
-            }
+            get { return _song.Title; }
             set
             {
                 _song.Title = value;
                 RaisePropertyChanged(() => Title);
             }
         }
+
         public string Artist
         {
-            get
-            {
-                return _song.Artist;
-            }
+            get { return _song.Artist; }
             set
             {
                 _song.Artist = value;
                 RaisePropertyChanged(() => Artist);
             }
         }
+
         public string Album
         {
-            get
-            {
-                return _song.Album;
-            }
+            get { return _song.Album; }
             set
             {
                 _song.Album = value;
                 RaisePropertyChanged(() => Album);
             }
         }
+
         public string Genre
         {
-            get
-            {
-                return _song.Genre;
-            }
+            get { return _song.Genre; }
             set
             {
                 _song.Genre = value;
                 RaisePropertyChanged(() => Genre);
             }
         }
+
         public uint Year
         {
-            get
-            {
-                return _song.Year;
-            }
+            get { return _song.Year; }
             set
             {
                 _song.Year = value;
@@ -246,34 +221,43 @@ namespace MusicLibrary
 
         public string Lyric
         {
-            get
-            {
-                return _song.Lyric;
-            }
+            get { return _song.Lyric; }
             set
             {
                 _song.Lyric = value;
                 RaisePropertyChanged(() => Lyric);
             }
         }
-        public string Path 
+
+        public string Path
         {
-            get { return _song.Path; } 
+            get { return _song.Path; }
         }
 
         private bool _isSelected;
+
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
+            }
         }
 
         public BitmapSource Icon
         {
-            get { return _song.Icon; }
+            get
+            {
+                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false);
+                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            }
         }
 
         private Song _song;
+
         public SongViewModel(Song song)
         {
             _song = song;
@@ -282,6 +266,11 @@ namespace MusicLibrary
         public void Save()
         {
             _song.Save();
+        }
+
+        public void ClearBadTags()
+        {
+            _song.ClearBadTags();
         }
     }
 
@@ -294,55 +283,44 @@ namespace MusicLibrary
             get => _file.Tag.Track;
             set => _file.Tag.Track = value;
         }
+
         public string Name { get; set; }
+
         public string Title
         {
             get => _file.Tag.Title;
             set => _file.Tag.Title = value;
         }
+
         public string Artist
         {
-            get
-            {
-                return _file.Tag.Performers[0];
-            }
+            get { return _file.Tag.FirstPerformer ?? " "; }
             set
             {
-                _file.Tag.Performers[0] = value;
+                if (_file.Tag.FirstPerformer == null)
+                {
+                    _file.Tag.Performers = new[] {" "};
+                }
+                _file.Tag.Performers = new[] { value};
             }
         }
+
         public string Album
         {
-            get
-            {
-                return _file.Tag.Album;
-            }
-            set
-            {
-                _file.Tag.Album = value;
-            }
+            get { return _file.Tag.Album ?? " "; }
+            set { _file.Tag.Album = value; }
         }
+
         public string Genre
         {
-            get
-            {
-                return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : "";
-            }
-            set
-            {
-                _file.Tag.Genres = new [] {value};
-            }
+            get { return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : ""; }
+            set { _file.Tag.Genres = new[] {value}; }
         }
+
         public uint Year
         {
-            get
-            {
-                return _file.Tag.Year;
-            }
-            set
-            {
-                _file.Tag.Year = value;
-            }
+            get { return _file.Tag.Year; }
+            set { _file.Tag.Year = value; }
         }
 
         public TimeSpan Duration
@@ -352,29 +330,27 @@ namespace MusicLibrary
 
         public string Lyric
         {
-            get
-            {
-                return _file.Tag.Lyrics;
-            }
-            set
-            {
-                _file.Tag.Lyrics = value;
-            }
+            get { return _file.Tag.Lyrics; }
+            set { _file.Tag.Lyrics = value; }
         }
+
         public string Path
         {
             get { return _file.Name; }
         }
+
         public BitmapSource Icon
         {
             get
             {
                 var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false);
-                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
             }
         }
 
         private readonly TagLib.File _file;
+
         public Song(TagLib.File file)
         {
             _file = file;
@@ -383,8 +359,9 @@ namespace MusicLibrary
 
         public void Save()
         {
+            File.SetAttributes(_file.Name, FileAttributes.Normal);
             _file.Tag.Title = Title;
-            _file.Tag.Genres = new [] {Genre};
+            _file.Tag.Genres = new[] {Genre};
             _file.Tag.Album = Album;
             _file.Tag.Performers[0] = Artist;
             _file.Tag.Track = Number;
@@ -392,7 +369,8 @@ namespace MusicLibrary
             _file.Save();
         }
 
-        private static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
+        private static string[] musicExt = new[] {".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV"};
+
         public static bool IsFileSong(string path)
         {
             var extension = System.IO.Path.GetExtension(path);
@@ -401,11 +379,13 @@ namespace MusicLibrary
 
         public bool Equals(SongViewModel obj)
         {
-            return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) && (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
+            return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) &&
+                   (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
         }
 
         //public static string NoCoverImage = @"pack://siteoforigin:,,,/nocoverart.jpg";
         public static Uri NoCoverImage = new Uri("nocoverart.jpg", UriKind.Relative);
+
         public static Uri GetCoverPath(string path)
         {
             string dirName = System.IO.Path.GetDirectoryName(path);
@@ -415,6 +395,13 @@ namespace MusicLibrary
                 return File.Exists(coverPath) ? new Uri(coverPath) : NoCoverImage;
             }
             return NoCoverImage;
+        }
+
+        internal void ClearBadTags()
+        {
+            _file.Tag.Comment = "";
+            _file.Tag.AlbumArtists = null;
+            _file.Tag.Pictures = null;
         }
     }
 }

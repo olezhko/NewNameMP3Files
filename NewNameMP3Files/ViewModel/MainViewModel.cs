@@ -94,7 +94,7 @@ namespace NewNameMP3Files.ViewModel
         private void AuthorCheckBoxClickMethod(CheckBox item)
         {
             var state = item.IsChecked.Value;
-            var tag = item.Tag as ObservableCollection<AlbumViewModel>;
+            var tag = item.Tag as ObservableCollection<Album>;
             if (tag != null)
             {
                 foreach (var album in tag)
@@ -345,19 +345,21 @@ namespace NewNameMP3Files.ViewModel
                 return;
             }
             var mp3File = TagLib.File.Create(filepath);
-            var album = mp3File.Tag.Year + " - " + mp3File.Tag.Album;
+            var albumName = mp3File.Tag.Year + " - " + mp3File.Tag.Album;
+            var perfomer = mp3File.Tag.FirstPerformer == null ? " " : mp3File.Tag.FirstPerformer;
+            var album = mp3File.Tag.Album == null ? " " : mp3File.Tag.Album;
 
             int res = -1;
             foreach (Author author in AuthorCollection)
             {
                 var arthist = author;
-                if (arthist.AuthorName.Equals(mp3File.Tag.FirstPerformer))
+                if (arthist.AuthorName.Equals(perfomer))
                 {
                     res = 1;
                     var resAlbums = -1;
                     for (int albumIndex = 0; albumIndex < arthist.AlbumCollection.Count; albumIndex++)
                     {
-                        if (author.AlbumCollection[albumIndex].AlbumName.Equals(album))
+                        if (author.AlbumCollection[albumIndex].AlbumName.Equals(albumName))
                         {
                             resAlbums = 1;
                             author.AlbumCollection[albumIndex].AddSong(mp3File);
@@ -369,31 +371,30 @@ namespace NewNameMP3Files.ViewModel
                         string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                         if (File.Exists(albumCoverPath))
                         {
-                            author.AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                            author.AddAlbum(new Album(albumName, albumCoverPath));
                         }
                         else
                         {
-                            author.AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                            author.AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
                         }
                         
                         author.AlbumCollection.Last().AddSong(mp3File);
-                        
                     }
                 }
             }
 
             if (res == -1)
             {
-                AuthorCollection.Add(new Author(mp3File.Tag.FirstPerformer));
+                AuthorCollection.Add(new Author(perfomer));
 
                 string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                 if (File.Exists(albumCoverPath))
                 {
-                    AuthorCollection.Last().AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                    AuthorCollection.Last().AddAlbum(new Album(albumName, albumCoverPath));
                 }
                 else
                 {
-                    AuthorCollection.Last().AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album,new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                    AuthorCollection.Last().AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
                 }
 
                 AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);
