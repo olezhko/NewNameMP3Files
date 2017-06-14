@@ -94,7 +94,7 @@ namespace NewNameMP3Files.ViewModel
         private void AuthorCheckBoxClickMethod(CheckBox item)
         {
             var state = item.IsChecked.Value;
-            var tag = item.Tag as ObservableCollection<Album>;
+            var tag = item.Tag as ObservableCollection<AlbumViewModel>;
             if (tag != null)
             {
                 foreach (var album in tag)
@@ -369,11 +369,11 @@ namespace NewNameMP3Files.ViewModel
                         string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                         if (File.Exists(albumCoverPath))
                         {
-                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                            author.AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
                         }
                         else
                         {
-                            author.AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                            author.AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
                         }
                         
                         author.AlbumCollection.Last().AddSong(mp3File);
@@ -389,11 +389,11 @@ namespace NewNameMP3Files.ViewModel
                 string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                 if (File.Exists(albumCoverPath))
                 {
-                    AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
+                    AuthorCollection.Last().AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album, albumCoverPath));
                 }
                 else
                 {
-                    AuthorCollection.Last().AddAlbum(new Album(mp3File.Tag.Year + " - " + mp3File.Tag.Album,new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                    AuthorCollection.Last().AddAlbum(new AlbumViewModel(mp3File.Tag.Year + " - " + mp3File.Tag.Album,new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
                 }
 
                 AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);

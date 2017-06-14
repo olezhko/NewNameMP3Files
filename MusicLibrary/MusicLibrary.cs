@@ -55,15 +55,15 @@ namespace MusicLibrary
         }
         public string AuthorName { get; set; }
 
-        public ObservableCollection<Album> AlbumCollection { get; set; }
+        public ObservableCollection<AlbumViewModel> AlbumCollection { get; set; }
 
         public Author(string authorName)
         {
             AuthorName = authorName;
-            AlbumCollection = new ObservableCollection<Album>();
+            AlbumCollection = new ObservableCollection<AlbumViewModel>();
         }
 
-        public void AddAlbum(Album album)
+        public void AddAlbum(AlbumViewModel album)
         {
             album.PropertyChanged += Album_PropertyChanged;
             AlbumCollection.Add(album);
@@ -75,7 +75,7 @@ namespace MusicLibrary
         }
     }
 
-    public class Album : ViewModelBase
+    public class AlbumViewModel : ViewModelBase
     {
         private bool _isSelected;
         public bool IsSelected
@@ -84,52 +84,73 @@ namespace MusicLibrary
             set { _isSelected = value; RaisePropertyChanged(() => IsSelected); }
         }
 
+        public Album _album;
+        public ObservableCollection<SongViewModel> SongsCollectionViewModel;
+        public AlbumViewModel(Album albumName)
+        {
+            SongsCollectionViewModel = new ObservableCollection<SongViewModel>();
+            _album = albumName;
+            _album.SongAdded += _album_SongAdded;
+        }
+
+        public void AddSong(SongViewModel song)
+        {
+            SongsCollectionViewModel.Add(song);
+        }
+
+        private void _album_SongAdded(object sender, EventArgs e)
+        {
+            
+            IsSelected = SongsCollectionViewModel.All(song => song.IsSelected);
+        }
+    }
+
+    public class Album
+    {
         public string AlbumName { get; set; }
 
-        public ObservableCollection<SongViewModel> SongsCollection { get; set; }
+        public ObservableCollection<Song> SongsCollection { get; set; }
         public Uri AlbumCover { get; set; }
+
+        public event EventHandler SongAdded;
 
         public Album(string albumName)
         {
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<SongViewModel>();
+            SongsCollection = new ObservableCollection<Song>();
         }
 
         public Album(string albumName, string albumCover)
         {
             AlbumCover = new Uri(albumCover);
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<SongViewModel>();
+            SongsCollection = new ObservableCollection<Song>();
         }
 
         public Album(string albumName, Uri albumCover)
         {
             AlbumCover = albumCover;
             AlbumName = albumName;
-            SongsCollection = new ObservableCollection<SongViewModel>();
+            SongsCollection = new ObservableCollection<Song>();
         }
 
-        public void AddSong(SongViewModel song)
+        public void AddSong(Song song)
         {
-            song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
+            if (SongAdded != null)
+            {
+                SongAdded(this, EventArgs.Empty);
+            }
         }
 
         public void AddSong(TagLib.File file)
         {
-            var song = new SongViewModel(new Song(file));
-            song.PropertyChanged += Song_PropertyChanged;
+            var song = new Song(file);
             SongsCollection.Add(song);
-        }
-
-        void Song_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            IsSelected = SongsCollection.All(song => song.IsSelected);
-        }
-
-        public void RemoveSong(TagLib.File file)
-        {
-
+            if (SongAdded != null)
+            {
+                SongAdded(this, EventArgs.Empty);
+            }
         }
     }
 
@@ -249,11 +270,7 @@ namespace MusicLibrary
 
         public BitmapSource Icon
         {
-            get
-            {
-                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false); 
-                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle,System.Windows.Int32Rect.Empty,BitmapSizeOptions.FromEmptyOptions());
-            }
+            get { return _song.Icon; }
         }
 
         private Song _song;
