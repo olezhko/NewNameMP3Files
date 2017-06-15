@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:skins="clr-namespace:NewNameMP3Files.Skins"
         mc:Ignorable="d ignore"
         x:Name="Window"
         Height="471.642"
@@ -19,7 +20,12 @@
             <RowDefinition Height="151*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Menu HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <Menu HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top" Grid.ColumnSpan="3" Panel.ZIndex="1">
             <MenuItem Header="{DynamicResource FileMenu}">
                 <MenuItem Header="{DynamicResource OpenFilesMenu}" Name="OpenFilesMenuItem" Command="{Binding OpenFilesCommand}"/>
                 <MenuItem Header="{DynamicResource OpenDirectoryMenu}" Name="OpenDirectoryMenuItem" Command="{Binding OpenDirectoryCommand}"/>
@@ -38,7 +44,9 @@
                 <MenuItem Header="{DynamicResource AboutMenu}" Name="AboutMenuItem" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
-        <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible">
+        <skins:MusicLibraryView x:Name="MusicLibraryView" Grid.Row="0" Grid.Column="0"/>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Grid.Row="0"/>
+        <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Grid.Column="2">
             <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <ListView.ContextMenu>
                     <ContextMenu>
@@ -109,8 +117,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
-        </ScrollViewer>         
-        <StatusBar Name="StatusBar" Grid.Row="2">
+        </ScrollViewer>
+        <StatusBar x:Name="StatusBar" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>

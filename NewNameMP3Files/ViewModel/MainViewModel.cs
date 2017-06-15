@@ -54,6 +54,7 @@ namespace NewNameMP3Files.ViewModel
             _optionsWindow = new Options();
             _aboutWindow = new AboutWindow();
             _editTagsWindow = new EditTagsWindow();
+            _musicLibraryView = new MusicLibraryView();
             ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
@@ -76,6 +77,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void OpenMusicLibraryWindowMethod()
         {
+            
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -438,6 +440,7 @@ namespace NewNameMP3Files.ViewModel
 
         #region Private Properties
         private MenuItem _checkedLanguageLastMenuItem;
+        private readonly MusicLibraryView _musicLibraryView;
         private readonly EditTagsWindow _editTagsWindow;
         private readonly Options _optionsWindow;
         private readonly AboutWindow _aboutWindow;

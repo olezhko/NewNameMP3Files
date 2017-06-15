@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using NewNameMP3Files.Properties;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -11,10 +14,23 @@ namespace NewNameMP3Files.ViewModel
             AcceptCommand = new RelayCommand<Window>(AcceptMethod);
             ExampleTemplateForFilesTextChangedCommand = new RelayCommand(ExampleTemplateForFiles_TextChangedMethod);
             ExampleTemplateForDirectoryTextChangedCommand = new RelayCommand(ExampleTemplateForDirectory_TextChangedMethod);
+            BrowseMusicLibraryPathCommand = new RelayCommand(BrowseMusicLibraryPathMethod);
             ExampleTemplateForFiles = "Example: 07 - Satan's Children";
             ExampleTemplateForDirectory = "Example: ../Ancient/2001 Proxima Centauri/07 - Satan's Children";
             TemplateForFiles = "(n) - (t)";
             TemplateForDirectory = @"\(p)\(y) (a)\(n) - (t)";
+        }
+
+        private void BrowseMusicLibraryPathMethod()
+        {
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (Directory.Exists(fbd.SelectedPath))
+                {
+                    MusicLibraryPath = fbd.SelectedPath;
+                }
+            }
         }
 
         private void AcceptMethod(Window wnd)
@@ -66,8 +82,18 @@ namespace NewNameMP3Files.ViewModel
         public string ExampleTemplateForFiles { get; set; }
         public string ExampleTemplateForDirectory { get; set; }
 
+        public string MusicLibraryPath
+        {
+            get { return Settings.Default.MusicLibraryPath; }
+            set
+            {
+                Settings.Default.MusicLibraryPath = value;
+                RaisePropertyChanged(()=> MusicLibraryPath);
+            }
+        }
         public RelayCommand<Window> AcceptCommand { get; private set; }
         public RelayCommand ExampleTemplateForFilesTextChangedCommand { get; private set; }
         public RelayCommand ExampleTemplateForDirectoryTextChangedCommand { get; private set; }
+        public RelayCommand BrowseMusicLibraryPathCommand { get; private set; }
     }
 }

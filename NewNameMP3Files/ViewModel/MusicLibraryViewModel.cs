@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight;
 using MusicLibrary;
 using GalaSoft.MvvmLight.Command;
 using System.Windows.Input;
+using NewNameMP3Files.Properties;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -36,12 +37,12 @@ namespace NewNameMP3Files.ViewModel
                 }
 
             });
-            LoadLibrary(@"D:\Music");
+            LoadLibrary(Settings.Default.MusicLibraryPath);
         }
 
         private void LoadLibrary(string librarypath)
         {
-            //MusicLibraryList.Add(new Artist("Deathstars", @"D:\Download\!Music\Anaal Nathrakh [Industrial Black Metal - Grindcore]\1314_logo.png", albums));
+            
         }
 
         public ObservableCollection<Author> MusicLibraryList { get; set; }

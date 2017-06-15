@@ -98,8 +98,8 @@
     <Compile Include="Skins\EditTagsWindow.xaml.cs">
       <DependentUpon>EditTagsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Skins\MusicLibrary.xaml.cs">
-      <DependentUpon>MusicLibrary.xaml</DependentUpon>
+    <Compile Include="Skins\MusicLibraryView.xaml.cs">
+      <DependentUpon>MusicLibraryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Skins\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
@@ -142,7 +142,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Skins\MusicLibrary.xaml">
+    <Page Include="Skins\MusicLibraryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

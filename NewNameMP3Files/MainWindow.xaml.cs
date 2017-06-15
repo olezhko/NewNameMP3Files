@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using NewNameMP3Files.Properties;
 using NewNameMP3Files.ViewModel;
 
 namespace NewNameMP3Files
@@ -14,7 +15,11 @@ namespace NewNameMP3Files
         public MainWindow()
         {
             InitializeComponent();
-            Closing += (s, e) => ViewModelLocator.Cleanup();
+            Closing += (s, e) => 
+            {
+                Settings.Default.Save();
+                ViewModelLocator.Cleanup();
+            };
         }
     }
 }

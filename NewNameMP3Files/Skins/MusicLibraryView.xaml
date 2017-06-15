@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="NewNameMP3Files.Skins.MusicLibrary"
+﻿<UserControl x:Class="NewNameMP3Files.Skins.MusicLibraryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,7 +21,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Image>
-                                <TextBlock Name="ArtistTextBlock" Text="{Binding ArtistName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
+                                <TextBlock Name="ArtistTextBlock" Text="{Binding AuthorName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseUp">
                                                 <command:EventToCommand Command="{Binding MusicLibraryModel.MouseRightButtonUpCommand, Mode=OneWay, Source={StaticResource Locator}}" PassEventArgsToCommand="True"/>
@@ -38,7 +38,7 @@
                                         <TreeViewItem.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="{Binding AlbumPhotoSource}" Width="30" Height="30" />
-                                                <TextBlock Text="{Binding AlbumName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                                                <TextBlock Text="{Binding AuthorName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
                                             </StackPanel>
                                         </TreeViewItem.Header>
                                         <ListView ItemsSource="{Binding Songs}" BorderBrush="White">

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace NewNameMP3Files.Skins
 {
     /// <summary>
-    /// Interaction logic for MusicLibrary.xaml
+    /// Interaction logic for MusicLibraryView.xaml
     /// </summary>
-    public partial class MusicLibrary : UserControl
+    public partial class MusicLibraryView : UserControl
     {
-        public MusicLibrary()
+        public MusicLibraryView()
         {
             InitializeComponent();
         }
