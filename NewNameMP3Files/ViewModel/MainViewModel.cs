@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -59,12 +60,12 @@ namespace NewNameMP3Files.ViewModel
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
             OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
-            FindImageMenuCommand = new RelayCommand<string>(FindCoverMethod);
+            FindImageMenuCommand = new RelayCommand<Image>(FindCoverMethod);
         }
 
-        private void FindCoverMethod(string albumName)
+        private void FindCoverMethod(Image albumName)
         {
-            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}&source=lnms&tbm=isch&tbs=isz:l",albumName));
+            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}+{1}&source=lnms&tbm=isch&tbs=isz:l",albumName.Tag,albumName.Uid));
         }
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
@@ -464,7 +465,7 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand OpenMusicLibraryWindow { get; private set; }
         public RelayCommand EditTagsCommand { get; private set; } 
         public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
-        public RelayCommand<string> FindImageMenuCommand { get; set; }
+        public RelayCommand<Image> FindImageMenuCommand { get; set; }
         #endregion
     }
 }

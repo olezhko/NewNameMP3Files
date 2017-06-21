@@ -370,12 +370,15 @@ namespace MusicLibrary
                 _file.Tag.Title = Title;
                 _file.Tag.Genres = new[] { Genre };
                 _file.Tag.Album = Album;
-                _file.Tag.Performers[0] = Artist;
+                if (_file.Tag.FirstPerformer == null)
+                {
+                    _file.Tag.Performers = new[] { " " };
+                }
+                _file.Tag.Performers = new[] { Artist };
                 _file.Tag.Track = Number;
                 _file.Tag.Year = Year;
                 _file.Save();
                 return true;
-
             }
             catch (Exception e)
             {
