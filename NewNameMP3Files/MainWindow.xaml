@@ -44,7 +44,7 @@
                 <MenuItem Header="{DynamicResource AboutMenu}" Name="AboutMenuItem" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
-        <skins:MusicLibraryView x:Name="MusicLibraryView" Grid.Row="0" Grid.Column="0"/>
+        <skins:MusicLibraryView x:Name="MusicLibraryView" Grid.Row="1" Grid.Column="0" Width="Auto" Height="Auto"/>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Grid.Row="0"/>
         <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Grid.Column="2">
             <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
@@ -85,7 +85,14 @@
                                                     <Image Source="{Binding AlbumCover}" Height="100" Width="100">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="MouseDown">
-                                                                <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.FindImageMenuCommand,Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding AlbumName}"/>
+                                                                <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.FindImageMenuCommand,Mode=OneWay, Source={StaticResource Locator}}">
+                                                                    <command:EventToCommand.CommandParameter>
+                                                                        <MultiBinding StringFormat=" {0} - {1}">
+                                                                            <Binding Path="{Binding AlbumName}"/>
+                                                                            <Binding Path="{Binding AuthorName}"/>
+                                                                        </MultiBinding>
+                                                                    </command:EventToCommand.CommandParameter>
+                                                                </command:EventToCommand>
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
                                                     </Image>

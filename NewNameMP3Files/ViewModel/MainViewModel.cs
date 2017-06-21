@@ -1,24 +1,24 @@
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using MusicLibrary;
+using NewNameMP3Files.Model;
+using NewNameMP3Files.Skins;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using GalaSoft.MvvmLight.Command;
-using TagLibFile = TagLib.File;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using MusicLibrary;
-using NewNameMP3Files.Model;
-using NewNameMP3Files.Skins;
+using System.Windows;
+using System.Windows.Input;
 using Application = System.Windows.Application;
+using CheckBox = System.Windows.Controls.CheckBox;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using CheckBox = System.Windows.Controls.CheckBox;
-using System.Windows.Input;
+using TagLibFile = TagLib.File;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -64,7 +64,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void FindCoverMethod(string albumName)
         {
-            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}+cover&source=lnms&tbm=isch&tbs=isz:l",albumName));
+            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}&source=lnms&tbm=isch&tbs=isz:l",albumName));
         }
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
@@ -373,11 +373,11 @@ namespace NewNameMP3Files.ViewModel
                         string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                         if (File.Exists(albumCoverPath))
                         {
-                            author.AddAlbum(new Album(albumName, albumCoverPath));
+                            author.AddAlbum(new Album(albumName, albumCoverPath, author.AuthorName));
                         }
                         else
                         {
-                            author.AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                            author.AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),author.AuthorName));
                         }
                         
                         author.AlbumCollection.Last().AddSong(mp3File);
@@ -392,11 +392,11 @@ namespace NewNameMP3Files.ViewModel
                 string albumCoverPath = Path.Combine(Path.GetDirectoryName(filepath), "cover.jpg");
                 if (File.Exists(albumCoverPath))
                 {
-                    AuthorCollection.Last().AddAlbum(new Album(albumName, albumCoverPath));
+                    AuthorCollection.Last().AddAlbum(new Album(albumName, albumCoverPath, AuthorCollection.Last().AuthorName));
                 }
                 else
                 {
-                    AuthorCollection.Last().AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative)));
+                    AuthorCollection.Last().AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative), AuthorCollection.Last().AuthorName));
                 }
 
                 AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);

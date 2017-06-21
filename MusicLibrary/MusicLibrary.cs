@@ -94,25 +94,30 @@ namespace MusicLibrary
         }
 
         public string AlbumName { get; set; }
-
+        public string AuthorName { get; set; }
         public ObservableCollection<SongViewModel> SongsCollection { get; set; }
         public Uri AlbumCover { get; set; }
 
-        public Album(string albumName)
+
+
+        public Album(string albumName, string authorName)
         {
+            AuthorName = authorName;
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
-        public Album(string albumName, string albumCover)
+        public Album(string albumName, string albumCover, string authorName)
         {
+            AuthorName = authorName;
             AlbumCover = new Uri(albumCover);
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
-        public Album(string albumName, Uri albumCover)
+        public Album(string albumName, Uri albumCover, string authorName)
         {
+            AuthorName = authorName;
             AlbumCover = albumCover;
             AlbumName = albumName;
             SongsCollection = new ObservableCollection<SongViewModel>();
@@ -263,9 +268,9 @@ namespace MusicLibrary
             _song = song;
         }
 
-        public void Save()
+        public bool Save()
         {
-            _song.Save();
+            return _song.Save();
         }
 
         public void ClearBadTags()
@@ -357,16 +362,26 @@ namespace MusicLibrary
             Name = System.IO.Path.GetFileName(Path);
         }
 
-        public void Save()
+        public bool Save()
         {
-            File.SetAttributes(_file.Name, FileAttributes.Normal);
-            _file.Tag.Title = Title;
-            _file.Tag.Genres = new[] {Genre};
-            _file.Tag.Album = Album;
-            _file.Tag.Performers[0] = Artist;
-            _file.Tag.Track = Number;
-            _file.Tag.Year = Year;
-            _file.Save();
+            try
+            {
+                File.SetAttributes(_file.Name, FileAttributes.Normal);
+                _file.Tag.Title = Title;
+                _file.Tag.Genres = new[] { Genre };
+                _file.Tag.Album = Album;
+                _file.Tag.Performers[0] = Artist;
+                _file.Tag.Track = Number;
+                _file.Tag.Year = Year;
+                _file.Save();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
 
         private static string[] musicExt = new[] {".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV"};
