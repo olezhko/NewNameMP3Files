@@ -23,4 +23,6 @@
     <v:String x:Key="MusicLibrary">Музыкальная библиотека</v:String>
     <v:String x:Key="RenameString">Переименовать</v:String>
     <v:String x:Key="FindImageMenu">Найти cover</v:String>
+    <v:String x:Key="ClearMusicLibrary">Очистить</v:String>
+    <v:String x:Key="ReInitMusicLibraryLibrary">Переинициализировать</v:String>
 </ResourceDictionary>

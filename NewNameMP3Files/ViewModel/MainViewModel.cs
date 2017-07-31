@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using NewNameMP3Files.Properties;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
 using DragEventArgs = System.Windows.DragEventArgs;
@@ -59,8 +60,20 @@ namespace NewNameMP3Files.ViewModel
             ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
-            OpenMusicLibraryWindow = new RelayCommand(OpenMusicLibraryWindowMethod);
             FindImageMenuCommand = new RelayCommand<Image>(FindCoverMethod);
+            ClearMusicLibraryCommand = new RelayCommand<MusicLibraryViewModel>(ClearMusicLibraryMethod);
+            ReInitMusicLibraryCommand = new RelayCommand<MusicLibraryViewModel>(ReInitMusicLibraryMethod);
+        }
+
+        private void ReInitMusicLibraryMethod(MusicLibraryViewModel vm)
+        {
+            ClearMusicLibraryMethod(vm);
+            vm.LoadLibrary(Settings.Default.MusicLibraryPath);
+        }
+
+        private void ClearMusicLibraryMethod(MusicLibraryViewModel vm)
+        {
+            vm.ClearMusicLibrary();
         }
 
         private void FindCoverMethod(Image albumName)
@@ -74,11 +87,6 @@ namespace NewNameMP3Files.ViewModel
             {
                 AuthorCollection.Clear();
             }
-        }
-
-        private void OpenMusicLibraryWindowMethod()
-        {
-            
         }
 
         private void AlbumCheckBoxClickMethod(CheckBox item)
@@ -165,7 +173,9 @@ namespace NewNameMP3Files.ViewModel
             viewModel.SongsCollection.Clear();
             foreach (var file in files)
             {
-                viewModel.SongsCollection.Add(new SongViewModel(new Song(TagLibFile.Create(file))));
+                var song = new Song();
+                song.LoadTags(file);
+                viewModel.SongsCollection.Add(new SongViewModel(song));
             }
             _editTagsWindow.ShowDialog();
         }
@@ -343,14 +353,15 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddSongToList(string filepath)
         {
-            if (!Song.IsFileSong(filepath))
+            if (!SongExtension.IsFileSong(filepath))
             {
                 return;
             }
-            var mp3File = TagLib.File.Create(filepath);
-            var albumName = mp3File.Tag.Year + " - " + mp3File.Tag.Album;
-            var perfomer = mp3File.Tag.FirstPerformer == null ? " " : mp3File.Tag.FirstPerformer;
-            var album = mp3File.Tag.Album == null ? " " : mp3File.Tag.Album;
+            Song _song = new Song();
+            _song.LoadTags(filepath);
+
+            var albumName = _song.Year + " - " + _song.Album;
+            var perfomer = _song.Artist == null ? " " : _song.Artist;
 
             int res = -1;
             foreach (Author author in AuthorCollection)
@@ -365,7 +376,7 @@ namespace NewNameMP3Files.ViewModel
                         if (author.AlbumCollection[albumIndex].AlbumName.Equals(albumName))
                         {
                             resAlbums = 1;
-                            author.AlbumCollection[albumIndex].AddSong(mp3File);
+                            author.AlbumCollection[albumIndex].AddSong(_song);
                         }
                     }
 
@@ -381,7 +392,7 @@ namespace NewNameMP3Files.ViewModel
                             author.AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),author.AuthorName));
                         }
                         
-                        author.AlbumCollection.Last().AddSong(mp3File);
+                        author.AlbumCollection.Last().AddSong(_song);
                     }
                 }
             }
@@ -400,7 +411,7 @@ namespace NewNameMP3Files.ViewModel
                     AuthorCollection.Last().AddAlbum(new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative), AuthorCollection.Last().AuthorName));
                 }
 
-                AuthorCollection.Last().AlbumCollection.Last().AddSong(mp3File);
+                AuthorCollection.Last().AlbumCollection.Last().AddSong(_song);
             }
         }
 
@@ -415,7 +426,7 @@ namespace NewNameMP3Files.ViewModel
         }
         public MenuItem LanguageMenuItem { get; set; }
 
-        public string _countRenamedFiles;
+        private string _countRenamedFiles;
         public string CountRenamedFiles
         {
             get { return _countRenamedFiles; }
@@ -462,10 +473,12 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<MenuItem> ChangeLanguageCommand { get; private set; }
         public RelayCommand<bool> SelectAllCommand { get; private set; }
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
-        public RelayCommand OpenMusicLibraryWindow { get; private set; }
         public RelayCommand EditTagsCommand { get; private set; } 
         public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
         public RelayCommand<Image> FindImageMenuCommand { get; set; }
+
+        public RelayCommand<MusicLibraryViewModel> ClearMusicLibraryCommand { get; private set; }
+        public RelayCommand<MusicLibraryViewModel> ReInitMusicLibraryCommand { get; private set; }
         #endregion
     }
 }

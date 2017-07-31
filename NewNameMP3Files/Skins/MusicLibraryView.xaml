@@ -7,21 +7,32 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" Height="384" Width="419"
              DataContext="{Binding Path=MusicLibraryModel, Source={StaticResource Locator}}">
-    <Grid>
-        <TreeView ItemsSource="{Binding MusicLibraryList}" AllowDrop="True">
+    <Grid >
+        <TreeView ItemsSource="{Binding MusicLibraryList}" AllowDrop="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                 Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                                 Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                 Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                 Color="Black" />
+                <!--<Style TargetType="TreeViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="TreeViewItem.IsSelected" Value="True">
+                            <Setter Property="TreeViewItem.BorderThickness" Value="0.5"></Setter>
+                            <Setter Property="TreeViewItem.BorderBrush" Value="Gray"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>-->
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <DataTemplate>
-                    <TreeViewItem Padding="0" Margin="-15,0,0,0" >
+                    <TreeViewItem>
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding ArtistPhotoSource}" Width="100" Height="100">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseUp">
-                                            <command:EventToCommand Command="{Binding MusicLibraryModel.MouseRightButtonUpCommand, Mode=OneWay, Source={StaticResource Locator}}" PassEventArgsToCommand="True"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Image>
-                                <TextBlock Name="ArtistTextBlock" Text="{Binding AuthorName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold">
+                                <TextBlock Name="ArtistTextBlock" Text="{Binding AuthorName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" >
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseUp">
                                                 <command:EventToCommand Command="{Binding MusicLibraryModel.MouseRightButtonUpCommand, Mode=OneWay, Source={StaticResource Locator}}" PassEventArgsToCommand="True"/>
@@ -31,20 +42,20 @@
                             </StackPanel>
                         </TreeViewItem.Header>
 
-                        <TreeView ItemsSource="{Binding Albums}" BorderBrush="White" Padding="0" Margin="-30,-15,0,0">
+                        <TreeView ItemsSource="{Binding AlbumCollection}" Margin="-40,0,0,0" BorderThickness="0">
                             <TreeView.ItemTemplate>
                                 <DataTemplate>
                                     <TreeViewItem>
                                         <TreeViewItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="{Binding AlbumPhotoSource}" Width="30" Height="30" />
-                                                <TextBlock Text="{Binding AuthorName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                                                <Image Source="{Binding AlbumCover}" Width="30" Height="30" />
+                                                <TextBlock Text="{Binding AlbumName}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
                                             </StackPanel>
                                         </TreeViewItem.Header>
-                                        <ListView ItemsSource="{Binding Songs}" BorderBrush="White">
+                                        <ListView ItemsSource="{Binding SongsCollection}" BorderBrush="White" >
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" />
+                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>

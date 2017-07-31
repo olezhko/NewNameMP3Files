@@ -123,15 +123,9 @@ namespace MusicLibrary
             SongsCollection = new ObservableCollection<SongViewModel>();
         }
 
-        public void AddSong(SongViewModel song)
+        public void AddSong(Song _song)
         {
-            song.PropertyChanged += Song_PropertyChanged;
-            SongsCollection.Add(song);
-        }
-
-        public void AddSong(TagLib.File file)
-        {
-            var song = new SongViewModel(new Song(file));
+            var song = new SongViewModel(_song);
             song.PropertyChanged += Song_PropertyChanged;
             SongsCollection.Add(song);
         }
@@ -159,7 +153,7 @@ namespace MusicLibrary
             get { return _song.AudioBitrate; }
         }
 
-        public uint Number
+        public int Number
         {
             get { return _song.Number; }
             set
@@ -209,7 +203,7 @@ namespace MusicLibrary
             }
         }
 
-        public uint Year
+        public int Year
         {
             get { return _song.Year; }
             set
@@ -240,7 +234,6 @@ namespace MusicLibrary
         }
 
         private bool _isSelected;
-
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -253,12 +246,7 @@ namespace MusicLibrary
 
         public BitmapSource Icon
         {
-            get
-            {
-                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false);
-                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-            }
+            get { return _song.GetIcon(); }
         }
 
         private Song _song;
@@ -270,140 +258,66 @@ namespace MusicLibrary
 
         public bool Save()
         {
-            return _song.Save();
-        }
-
-        public void ClearBadTags()
-        {
-            _song.ClearBadTags();
+            return _song.SaveSong(_song.Path);
         }
     }
 
     public class Song
     {
-        public int AudioBitrate => _file.Properties.AudioBitrate;
+        public int Id { get; set; }
 
-        public uint Number
-        {
-            get => _file.Tag.Track;
-            set => _file.Tag.Track = value;
-        }
+        public int AudioBitrate { get; set; }
+
+        public int Number { get; set; }
 
         public string Name { get; set; }
 
-        public string Title
-        {
-            get => _file.Tag.Title;
-            set => _file.Tag.Title = value;
-        }
+        public string Title { get; set; }
 
-        public string Artist
-        {
-            get { return _file.Tag.FirstPerformer ?? " "; }
-            set
-            {
-                if (_file.Tag.FirstPerformer == null)
-                {
-                    _file.Tag.Performers = new[] {" "};
-                }
-                _file.Tag.Performers = new[] { value};
-            }
-        }
+        public string Artist { get; set; }
 
-        public string Album
-        {
-            get { return _file.Tag.Album ?? " "; }
-            set { _file.Tag.Album = value; }
-        }
+        public string Album { get; set; }
 
-        public string Genre
-        {
-            get { return _file.Tag.Genres.Length > 0 ? _file.Tag.Genres[0] : ""; }
-            set { _file.Tag.Genres = new[] {value}; }
-        }
+        public string Genre { get; set; }
 
-        public uint Year
-        {
-            get { return _file.Tag.Year; }
-            set { _file.Tag.Year = value; }
-        }
+        public int Year { get; set; }
 
-        public TimeSpan Duration
-        {
-            get { return _file.Properties.Duration; }
-        }
+        public TimeSpan Duration { get; set; }
 
-        public string Lyric
-        {
-            get { return _file.Tag.Lyrics; }
-            set { _file.Tag.Lyrics = value; }
-        }
+        public string Lyric { get; set; }
 
-        public string Path
-        {
-            get { return _file.Name; }
-        }
+        public string Path { get; set; }
 
-        public BitmapSource Icon
+        public Song()
         {
-            get
-            {
-                var icon = MusicLibrary.GetFileIcon(Path, IconReader.IconSize.Small, false);
-                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-            }
-        }
-
-        private readonly TagLib.File _file;
-
-        public Song(TagLib.File file)
-        {
-            _file = file;
             Name = System.IO.Path.GetFileName(Path);
         }
 
-        public bool Save()
-        {
-            try
-            {
-                File.SetAttributes(_file.Name, FileAttributes.Normal);
-                _file.Tag.Title = Title;
-                _file.Tag.Genres = new[] { Genre };
-                _file.Tag.Album = Album;
-                if (_file.Tag.FirstPerformer == null)
-                {
-                    _file.Tag.Performers = new[] { " " };
-                }
-                _file.Tag.Performers = new[] { Artist };
-                _file.Tag.Track = Number;
-                _file.Tag.Year = Year;
-                _file.Save();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
-            }
-        }
-
-        private static string[] musicExt = new[] {".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV"};
-
-        public static bool IsFileSong(string path)
-        {
-            var extension = System.IO.Path.GetExtension(path);
-            return extension != null && -1 != Array.IndexOf(musicExt, extension.ToUpperInvariant());
-        }
-
-        public bool Equals(SongViewModel obj)
+        public bool Equals(Song obj)
         {
             return (Title == obj.Title) && (AudioBitrate == obj.AudioBitrate) && (Artist == obj.Artist) &&
                    (Album == obj.Album) && (Number == obj.Number) && (Year == obj.Year);
         }
 
-        //public static string NoCoverImage = @"pack://siteoforigin:,,,/nocoverart.jpg";
-        public static Uri NoCoverImage = new Uri("nocoverart.jpg", UriKind.Relative);
+        public void CopyTo(Song dest)
+        {
+            dest.Album = Album;
+            dest.Artist = Artist;
+            dest.AudioBitrate = AudioBitrate;
+            dest.Title = Title;
+            dest.Year = Year;
+            dest.Number = Number;
+            dest.Genre = Genre;
+            dest.Lyric = Lyric;
+            dest.Duration = Duration;
+            dest.Name = Name;
+        }
+    }
 
+
+    public static class SongExtension
+    {
+        public static Uri NoCoverImage = new Uri("nocoverart.jpg", UriKind.Relative);
         public static Uri GetCoverPath(string path)
         {
             string dirName = System.IO.Path.GetDirectoryName(path);
@@ -415,11 +329,61 @@ namespace MusicLibrary
             return NoCoverImage;
         }
 
-        internal void ClearBadTags()
+        private static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
+
+        public static bool IsFileSong(string path)
         {
-            _file.Tag.Comment = "";
-            _file.Tag.AlbumArtists = null;
-            _file.Tag.Pictures = null;
+            var extension = System.IO.Path.GetExtension(path);
+            return extension != null && -1 != Array.IndexOf(musicExt, extension.ToUpperInvariant());
+        }
+
+        public static bool SaveSong(this Song songitem,string path)
+        {
+            try
+            {
+                var tagLibFile = TagLib.File.Create(path);
+                File.SetAttributes(tagLibFile.Name, FileAttributes.Normal);
+                tagLibFile.Tag.Title = songitem.Title;
+                tagLibFile.Tag.Genres = new[] { songitem.Genre };
+                tagLibFile.Tag.Album = songitem.Album;
+                if (tagLibFile.Tag.FirstPerformer == null)
+                {
+                    tagLibFile.Tag.Performers = new[] { " " };
+                }
+                tagLibFile.Tag.Performers = new[] { songitem.Artist };
+                tagLibFile.Tag.Track = (uint)songitem.Number;
+                tagLibFile.Tag.Year = (uint)songitem.Year;
+                tagLibFile.Save();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+
+        public static BitmapSource GetIcon(this Song song)
+        {
+            var icon = MusicLibrary.GetFileIcon(song.Path, IconReader.IconSize.Small, false);
+            return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        public static void LoadTags(this Song songitem, string path)
+        {
+            var tagLibFile = TagLib.File.Create(path);
+            songitem.Album = tagLibFile.Tag.Album;
+            songitem.Path = path;
+            songitem.Artist = tagLibFile.Tag.Performers.Length>0? tagLibFile.Tag.Performers[0]:null;
+            songitem.AudioBitrate = tagLibFile.Properties.AudioBitrate;
+            songitem.Duration = tagLibFile.Properties.Duration;
+            songitem.Genre = tagLibFile.Tag.Genres.Length > 0 ? tagLibFile.Tag.Genres[0] : null;
+            songitem.Lyric = tagLibFile.Tag.Lyrics;
+            songitem.Year = (int)tagLibFile.Tag.Year;
+            songitem.Title = tagLibFile.Tag.Title;
+            songitem.Number = (int)tagLibFile.Tag.Track;
+            songitem.Name = Path.GetFileName(path);
         }
     }
 }

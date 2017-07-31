@@ -23,7 +23,7 @@ namespace NewNameMP3Files.ViewModel
             _songCollection = new ObservableCollection<SongViewModel>();
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
             SaveCommand = new RelayCommand(SaveMethod);
-            SelectedItemsImageSource = new BitmapImage(Song.NoCoverImage);
+            SelectedItemsImageSource = new BitmapImage(SongExtension.NoCoverImage);
             KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDownMethod);
         }
 
@@ -67,12 +67,12 @@ namespace NewNameMP3Files.ViewModel
 
                     if (SelectedItemsYear != DefaultValue)
                     {
-                        selectedItem.Year = Convert.ToUInt32(SelectedItemsYear);
+                        selectedItem.Year = Convert.ToInt32(SelectedItemsYear);
                     }
 
                     if (SelectedItemsNumber != DefaultValue)
                     {
-                        selectedItem.Number = Convert.ToUInt32(SelectedItemsNumber);
+                        selectedItem.Number = Convert.ToInt32(SelectedItemsNumber);
                     }
 
                     if (SelectedItemsLyrics != DefaultValue)
@@ -84,7 +84,6 @@ namespace NewNameMP3Files.ViewModel
                     {
                         selectedItem.Title = SelectedItemsTitle;
                     }
-                    selectedItem.ClearBadTags();
                     selectedItem.Save();
                 }
             }
@@ -116,7 +115,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddDirectoryToList(string direcorypath)
         {
-            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(Song.IsFileSong);
+            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(SongExtension.IsFileSong);
 
             foreach (var file in files)
             {
@@ -126,13 +125,14 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddSongToList(string filepath)
         {
-            if (!Song.IsFileSong(filepath))
+            if (!SongExtension.IsFileSong(filepath))
             {
                 return;
             }
             File.SetAttributes(filepath, FileAttributes.Normal);
-            var mp3File = TagLib.File.Create(filepath);
-            SongsCollection.Add(new SongViewModel(new Song(mp3File)));
+            var song = new Song();
+            song.LoadTags(filepath);
+            SongsCollection.Add(new SongViewModel(song));
         }
 
         #region Public Properties
@@ -294,7 +294,8 @@ namespace NewNameMP3Files.ViewModel
                 }
 
                 SelectedItemsImageSource = null;
-                SelectedItemsImageSource = _selectedItems.All(o => Song.GetCoverPath(o.Path) == Song.GetCoverPath(_selectedItems.First().Path)) ? new BitmapImage(Song.GetCoverPath(_selectedItems[0].Path)) : new BitmapImage(Song.NoCoverImage);
+                SelectedItemsImageSource = _selectedItems.All(o => SongExtension.GetCoverPath(o.Path) == SongExtension.GetCoverPath(_selectedItems.First().Path)) ? 
+                    new BitmapImage(SongExtension.GetCoverPath(_selectedItems[0].Path)) : new BitmapImage(SongExtension.NoCoverImage);
             }
         }
 

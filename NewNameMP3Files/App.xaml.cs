@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Threading;
+using NewNameMP3Files.Model;
 
 namespace NewNameMP3Files
 {
