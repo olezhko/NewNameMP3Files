@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        Title="Options" Height="222.981" Width="749.885"
+        Title="Options" Height="250.76" Width="749.885"
         x:Name="Window" Closing="Options_OnClosing" Icon="../NewNameMP3Files.ico"
         DataContext="{Binding Options, Source={StaticResource Locator}}">
     <Grid>
@@ -96,6 +96,7 @@
         <Label Content="Music Library Path" HorizontalAlignment="Left" Margin="10,7,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Button Content="Browse" HorizontalAlignment="Left" Margin="117,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="67" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding BrowseMusicLibraryPathCommand}"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="125,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding MusicLibraryPath}" VerticalAlignment="Top" Width="365" Grid.ColumnSpan="2" />
+        <CheckBox Content="{DynamicResource CheckMusicLibraryOnStartProgram}" HorizontalAlignment="Left" Margin="10,41,0,0" Grid.Row="1" VerticalAlignment="Top" IsChecked="{Binding CheckMusicLibraryOnStartProgram}"/>
 
     </Grid>
 </Window>

@@ -82,6 +82,18 @@ namespace NewNameMP3Files.ViewModel
         public string ExampleTemplateForFiles { get; set; }
         public string ExampleTemplateForDirectory { get; set; }
 
+        public bool? CheckMusicLibraryOnStartProgram
+        {
+            get
+            {
+                return Settings.Default.CheckMusicLibraryOnStartProgram;
+            }
+            set
+            {
+                Settings.Default.CheckMusicLibraryOnStartProgram = value.Value;
+                RaisePropertyChanged(() => CheckMusicLibraryOnStartProgram);
+            }
+        }
         public string MusicLibraryPath
         {
             get { return Settings.Default.MusicLibraryPath; }

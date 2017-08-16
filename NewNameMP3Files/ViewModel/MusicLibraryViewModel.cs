@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using GalaSoft.MvvmLight;
 using MusicLibrary;
 using GalaSoft.MvvmLight.Command;
 using System.Windows.Input;
+using System.Windows.Threading;
 using NewNameMP3Files.Model;
 using NewNameMP3Files.Properties;
 
@@ -21,7 +23,9 @@ namespace NewNameMP3Files.ViewModel
         public MusicLibraryViewModel()
         {
             MusicLibraryList = new ObservableCollection<Author>();
-
+            SynchroMusicLibraryCommand = new RelayCommand(SynchroMusicLibraryMethod);
+            ClearMusicLibraryCommand = new RelayCommand(ClearMusicLibraryMethod);
+            ReInitMusicLibraryCommand = new RelayCommand(ReInitMusicLibraryMethod);
             MouseRightButtonUpCommand = new RelayCommand<MouseEventArgs>(e =>
             {
                 var element = e.Source;
@@ -40,6 +44,22 @@ namespace NewNameMP3Files.ViewModel
             LoadLibrary(Settings.Default.MusicLibraryPath);
         }
 
+        private void ReInitMusicLibraryMethod()
+        {
+            ClearMusicLibraryMethod();
+            LoadLibrary(Settings.Default.MusicLibraryPath);
+        }
+
+        private void ClearMusicLibraryMethod()
+        {
+            ClearMusicLibrary();
+        }
+
+        private void SynchroMusicLibraryMethod()
+        {
+            UpdateDb(Settings.Default.MusicLibraryPath);
+        }
+
         internal void LoadLibrary(string librarypath)
         {
             // 1 - load from db
@@ -55,17 +75,29 @@ namespace NewNameMP3Files.ViewModel
                 MusicLibraryList = tempMusicList;
             }
             // 2 - check library for modifications
-            UpdateDb(librarypath);
+            if (Settings.Default.CheckMusicLibraryOnStartProgram)
+            {
+                UpdateDb(librarypath);
+            }
         }
 
         private void UpdateDb(string sDir) 
         {
-            Task.Run(() =>
+            var task = Task.Run(() =>
             {
-                var resSongs = UpdateTask(sDir);
+                countOfFiles = 0;
+                foreach (var s in SongExtension.musicExt)
+                {
+                    countOfFiles += Directory.GetFiles(sDir, $"*{s}", SearchOption.AllDirectories).Length;
+                }
+                Console.WriteLine("Count of files in {0}", countOfFiles);
+
+                musicDirCollection.Clear();
+                UpdateTask(sDir);
                 using (var db = new MusicLibraryContext())
                 {
-                    CheckSongsWithBase(resSongs, db);
+                    CheckSongsWithBase(musicDirCollection, db);
+                    musicDirCollection.Clear();
                     db.SaveChanges();
                     var songs = db.Songs.ToList();
                     var tempMusicList = new ObservableCollection<Author>();
@@ -73,9 +105,30 @@ namespace NewNameMP3Files.ViewModel
                     {
                         AddSongToList(tempMusicList, song);
                     }
-                    MusicLibraryList = tempMusicList;
+                    return tempMusicList; 
                 }
             });
+
+            task.ContinueWith((res) =>
+            {
+                MusicLibraryList = res.Result;
+            });
+        }
+
+        private bool save;
+        //saving only for window closed
+        public void Save()
+        {
+            save = true;
+            using (var db = new MusicLibraryContext())
+            {
+                if (musicDirCollection.Count>0)
+                {
+                    CheckSongsWithBase(musicDirCollection, db);
+                    musicDirCollection.Clear();
+                    db.SaveChanges();
+                }  
+            }
         }
 
         private void CheckSongsWithBase(ObservableCollection<Song> resSongs, MusicLibraryContext db)
@@ -117,11 +170,10 @@ namespace NewNameMP3Files.ViewModel
             }
         }
 
-        private ObservableCollection<Song> UpdateTask(string sDir)
+        int countOfFiles = 0;
+        ObservableCollection<Song> musicDirCollection = new ObservableCollection<Song>();
+        private void UpdateTask(string sDir)
         {
-            int fCount = Directory.GetFiles(sDir, "*", SearchOption.AllDirectories).Length;
-            Console.WriteLine("Count of files in {0}",fCount);
-            var songs = new ObservableCollection<Song>();
             Console.WriteLine("Finding folder {0}", sDir);
 
             var dirs = Directory.GetDirectories(sDir);
@@ -131,23 +183,31 @@ namespace NewNameMP3Files.ViewModel
             {
                 if (SongExtension.IsFileSong(f))
                 {
-                    var song = new Song();
-                    song.LoadTags(f);
-                    songs.Add(song);
+                    try
+                    {
+                        var song = new Song();
+                        song.LoadTags(f);
+                        musicDirCollection.Add(song);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
             }
-
+            UpdateLibraryPercent = Math.Round((double)musicDirCollection.Count / countOfFiles*100) + "%";
+            if (save)
+            {
+                return;
+            }
             foreach (string d in dirs)
             {
-                var res = UpdateTask(d);
-                foreach (var song in res)
+                if (save)
                 {
-                    songs.Add(song);
+                    return;
                 }
+                UpdateTask(d);
             }
-
-            Console.WriteLine("Find songs in library folder count {0}", songs.Count);
-            return songs;
         }
 
         private void AddSongToList(ObservableCollection<Author> collection,Song songItem)
@@ -201,13 +261,19 @@ namespace NewNameMP3Files.ViewModel
         }
 
 
-        public ObservableCollection<Author> MusicLibraryList { get; set; }
 
+
+
+
+        public ObservableCollection<Author> MusicLibraryList { get; set; }
         public RelayCommand<MouseEventArgs> MouseRightButtonUpCommand
         {
             get;
             private set;
         }
+        public RelayCommand ClearMusicLibraryCommand { get; private set; }
+        public RelayCommand ReInitMusicLibraryCommand { get; private set; }
+        public RelayCommand SynchroMusicLibraryCommand { get; private set; }
 
         private string _updateLibraryPercent;
         public string UpdateLibraryPercent
@@ -219,6 +285,7 @@ namespace NewNameMP3Files.ViewModel
                 RaisePropertyChanged(()=>UpdateLibraryPercent);
             }
         }
+
 
     }
 }

@@ -24,5 +24,7 @@
     <v:String x:Key="RenameString">Rename</v:String>
     <v:String x:Key="FindImageMenu">Find Cover</v:String>
     <v:String x:Key="ClearMusicLibrary">Clear</v:String>
-    <v:String x:Key="ReInitMusicLibraryLibrary">ReInit</v:String>
+    <v:String x:Key="ReInitMusicLibrary">ReInit</v:String>
+    <v:String x:Key="SynchroMusicLibrary">Synchro Music Library</v:String>
+    <v:String x:Key="CheckMusicLibraryOnStartProgram">Check Music Library On Start Program</v:String>
 </ResourceDictionary>

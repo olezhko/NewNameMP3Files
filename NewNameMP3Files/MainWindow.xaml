@@ -14,6 +14,11 @@
         Title="NewNameMp3Files"
         Icon="NewNameMP3Files.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.MainWindowClosing,Mode=OneWay, Source={StaticResource Locator}}"  CommandParameter="{Binding ElementName=MusicLibraryView,Path=DataContext}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -38,8 +43,9 @@
                     <MenuItem Header="{DynamicResource RussianLanguage}" Tag="ru-RU" Name="RussianMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource MusicLibrary}" Name="MusicLibraryMenuItem">
-                    <MenuItem Header="{DynamicResource ClearMusicLibrary}" Command="{Binding ClearMusicLibraryCommand}" CommandParameter="{Binding DataContext, ElementName=MusicLibraryView}"/>
-                    <MenuItem Header="{DynamicResource ReInitMusicLibraryLibrary}" Command="{Binding ReInitMusicLibraryCommand}" CommandParameter="{Binding DataContext, ElementName=MusicLibraryView}"/>
+                    <MenuItem Header="{DynamicResource ClearMusicLibrary}" Command="{Binding  DataContext.ClearMusicLibraryCommand, ElementName=MusicLibraryView}"/>
+                    <MenuItem Header="{DynamicResource ReInitMusicLibrary}" Command="{Binding  DataContext.ReInitMusicLibraryCommand, ElementName=MusicLibraryView}"/>
+                    <MenuItem Header="{DynamicResource SynchroMusicLibrary}" Command="{Binding DataContext.SynchroMusicLibraryCommand, ElementName=MusicLibraryView}"/>
                 </MenuItem>
             </MenuItem>
             <MenuItem  Header="{DynamicResource HelpMenu}">
@@ -85,11 +91,10 @@
                                             </CheckBox>
                                             <DockPanel>
                                                 <Border DockPanel.Dock="Right" BorderBrush="Yellow" BorderThickness="2">
-                                                    <Image Source="{Binding AlbumCover}" Height="100" Width="100" x:Name="CoverImage" Tag="{Binding AuthorName}" Uid="{Binding AlbumName}">
+                                                    <Image Source="{Binding AlbumCover}" Height="100" Width="100" >
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="MouseDown">
-                                                                <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.FindImageMenuCommand,Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding ElementName=CoverImage}">
-                                                                </command:EventToCommand>
+                                                                <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.FindImageMenuCommand,Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding }"/>
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
                                                     </Image>

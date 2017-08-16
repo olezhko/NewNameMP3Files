@@ -131,7 +131,16 @@ namespace NewNameMP3Files.ViewModel
             }
             File.SetAttributes(filepath, FileAttributes.Normal);
             var song = new Song();
-            song.LoadTags(filepath);
+            try
+            {
+                song.LoadTags(filepath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
+
             SongsCollection.Add(new SongViewModel(song));
         }
 

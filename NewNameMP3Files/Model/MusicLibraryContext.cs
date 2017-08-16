@@ -37,10 +37,10 @@ namespace NewNameMP3Files.Model
             Songs.RemoveRange(dbSong);
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            Database.SetInitializer<MusicLibraryContext>(new DropCreateDatabaseIfModelChanges<MusicLibraryContext>());
-            base.OnModelCreating(modelBuilder);
-        }
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    Database.SetInitializer<MusicLibraryContext>(new DropCreateDatabaseIfModelChanges<MusicLibraryContext>());
+        //    base.OnModelCreating(modelBuilder);
+        //}
     }
 }

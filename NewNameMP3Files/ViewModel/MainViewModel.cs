@@ -60,25 +60,18 @@ namespace NewNameMP3Files.ViewModel
             ListViewKeyDownCommand = new RelayCommand<KeyEventArgs>(ListViewKeyDownMethod);
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
-            FindImageMenuCommand = new RelayCommand<Image>(FindCoverMethod);
-            ClearMusicLibraryCommand = new RelayCommand<MusicLibraryViewModel>(ClearMusicLibraryMethod);
-            ReInitMusicLibraryCommand = new RelayCommand<MusicLibraryViewModel>(ReInitMusicLibraryMethod);
+            FindImageMenuCommand = new RelayCommand<Album>(FindCoverMethod);
+            MainWindowClosing = new RelayCommand<MusicLibraryViewModel>(MainWindowClosingMethod);
         }
 
-        private void ReInitMusicLibraryMethod(MusicLibraryViewModel vm)
+        private void MainWindowClosingMethod(MusicLibraryViewModel vm)
         {
-            ClearMusicLibraryMethod(vm);
-            vm.LoadLibrary(Settings.Default.MusicLibraryPath);
+            vm.Save();
         }
 
-        private void ClearMusicLibraryMethod(MusicLibraryViewModel vm)
+        private void FindCoverMethod(Album album)
         {
-            vm.ClearMusicLibrary();
-        }
-
-        private void FindCoverMethod(Image albumName)
-        {
-            System.Diagnostics.Process.Start(String.Format("https://www.google.by/search?q={0}+{1}&source=lnms&tbm=isch&tbs=isz:l",albumName.Tag,albumName.Uid));
+            System.Diagnostics.Process.Start(String.Format("https://www.google.com/search?q={0}+{1}&source=lnms&tbm=isch&tbs=isz:l", album.AlbumName, album.AuthorName));
         }
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
@@ -173,9 +166,16 @@ namespace NewNameMP3Files.ViewModel
             viewModel.SongsCollection.Clear();
             foreach (var file in files)
             {
-                var song = new Song();
-                song.LoadTags(file);
-                viewModel.SongsCollection.Add(new SongViewModel(song));
+                try
+                {
+                    var song = new Song();
+                    song.LoadTags(file);
+                    viewModel.SongsCollection.Add(new SongViewModel(song));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
             _editTagsWindow.ShowDialog();
         }
@@ -262,7 +262,7 @@ namespace NewNameMP3Files.ViewModel
             {
                 NewFileRenamed += (send, args) =>
                 {
-                    var list = (List<string>)send;
+                    var list = send as List<string>;
                     Console.WriteLine(String.Format("Done {0}/{1}", args, list.Count));
                     CountRenamedFiles = String.Format("{0}/{1}", args, list.Count);
                     int percent = args * 100 / list.Count;
@@ -294,24 +294,25 @@ namespace NewNameMP3Files.ViewModel
                 var finalPath = String.Format("{0}\\{1}{2}", folder, tempName, Path.GetExtension(file));
 
                 var i = 1;
-                while (File.Exists(finalPath))
+                while (true)// исключаем создание одинаковых имен
                 {
-                    if (finalPath.Equals(file, StringComparison.Ordinal))
+                    try
                     {
+                        File.Move(file, finalPath);
                         break;
                     }
-                    finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
-                    i++;
+                    catch
+                    {
+                        finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
+                        i++;
+                    }                    
                 }
 
-
                 var index = _renamingFilesList.IndexOf(file);
-                if (index!=-1)
+                if (index != -1)
                 {
                     _renamingFilesList[index] = finalPath;
                 }
-
-                File.Move(file, finalPath);
                 count++;
                 NewFileRenamed?.Invoke(filesPathList, count);
             }
@@ -358,7 +359,16 @@ namespace NewNameMP3Files.ViewModel
                 return;
             }
             Song _song = new Song();
-            _song.LoadTags(filepath);
+
+            try
+            {
+                _song.LoadTags(filepath);
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+
 
             var albumName = _song.Year + " - " + _song.Album;
             var perfomer = _song.Artist == null ? " " : _song.Artist;
@@ -475,10 +485,9 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand<bool> DeSelectAllCommand { get; private set; }
         public RelayCommand EditTagsCommand { get; private set; } 
         public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
-        public RelayCommand<Image> FindImageMenuCommand { get; set; }
+        public RelayCommand<Album> FindImageMenuCommand { get; set; }
 
-        public RelayCommand<MusicLibraryViewModel> ClearMusicLibraryCommand { get; private set; }
-        public RelayCommand<MusicLibraryViewModel> ReInitMusicLibraryCommand { get; private set; }
+        public RelayCommand<MusicLibraryViewModel> MainWindowClosing { get; private set; }
         #endregion
     }
 }

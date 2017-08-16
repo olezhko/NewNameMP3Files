@@ -329,7 +329,7 @@ namespace MusicLibrary
             return NoCoverImage;
         }
 
-        private static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
+        public static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
 
         public static bool IsFileSong(string path)
         {
@@ -372,18 +372,27 @@ namespace MusicLibrary
 
         public static void LoadTags(this Song songitem, string path)
         {
-            var tagLibFile = TagLib.File.Create(path);
-            songitem.Album = tagLibFile.Tag.Album;
-            songitem.Path = path;
-            songitem.Artist = tagLibFile.Tag.Performers.Length>0? tagLibFile.Tag.Performers[0]:null;
-            songitem.AudioBitrate = tagLibFile.Properties.AudioBitrate;
-            songitem.Duration = tagLibFile.Properties.Duration;
-            songitem.Genre = tagLibFile.Tag.Genres.Length > 0 ? tagLibFile.Tag.Genres[0] : null;
-            songitem.Lyric = tagLibFile.Tag.Lyrics;
-            songitem.Year = (int)tagLibFile.Tag.Year;
-            songitem.Title = tagLibFile.Tag.Title;
-            songitem.Number = (int)tagLibFile.Tag.Track;
-            songitem.Name = Path.GetFileName(path);
+            try
+            {
+                var tagLibFile = TagLib.File.Create(path);
+                songitem.Album = tagLibFile.Tag.Album;
+                songitem.Path = path;
+                songitem.Artist = tagLibFile.Tag.Performers.Length > 0 ? tagLibFile.Tag.Performers[0] : null;
+                songitem.AudioBitrate = tagLibFile.Properties.AudioBitrate;
+                songitem.Duration = tagLibFile.Properties.Duration;
+                songitem.Genre = tagLibFile.Tag.Genres.Length > 0 ? String.Join("/", tagLibFile.Tag.Genres) : null;
+                songitem.Lyric = tagLibFile.Tag.Lyrics;
+                songitem.Year = (int)tagLibFile.Tag.Year;
+                songitem.Title = tagLibFile.Tag.Title;
+                songitem.Number = (int)tagLibFile.Tag.Track;
+                songitem.Name = Path.GetFileName(path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("Tags Not Loaded");
+            }
+
         }
     }
 }

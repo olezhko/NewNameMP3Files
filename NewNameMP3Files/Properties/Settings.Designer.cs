@@ -154,5 +154,17 @@ namespace NewNameMP3Files.Properties {
                 this["MusicLibraryPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CheckMusicLibraryOnStartProgram {
+            get {
+                return ((bool)(this["CheckMusicLibraryOnStartProgram"]));
+            }
+            set {
+                this["CheckMusicLibraryOnStartProgram"] = value;
+            }
+        }
     }
 }
