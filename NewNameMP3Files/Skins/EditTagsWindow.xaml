@@ -84,7 +84,7 @@
                 <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsLyrics}" VerticalAlignment="Stretch" Grid.Row="10" VerticalScrollBarVisibility="Auto"/>
 
                 <Image Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="11" Height="160" Width="160" Source="{Binding SelectedItemsImageSource}" Name="SongImage"/>
-                <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="0,5"  />
+                <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="10"  />
             </Grid>
         </Border>
         <DataGrid AutoGenerateColumns="False" AllowDrop="True" Name="SongsGridView" Grid.Column="2" CellStyle="{StaticResource DataGridStyle}" HeadersVisibility="Column"

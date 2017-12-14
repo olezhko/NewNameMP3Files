@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,11 +21,12 @@ namespace NewNameMP3Files.ViewModel
 {
     public class MusicLibraryViewModel : ViewModelBase
     {
+        public Dispatcher dispatcher;
         public MusicLibraryViewModel()
         {
             MusicLibraryList = new ObservableCollection<Author>();
             SynchroMusicLibraryCommand = new RelayCommand(SynchroMusicLibraryMethod);
-            ClearMusicLibraryCommand = new RelayCommand(ClearMusicLibraryMethod);
+            ClearMusicLibraryCommand = new RelayCommand(ClearMusicLibrary);
             ReInitMusicLibraryCommand = new RelayCommand(ReInitMusicLibraryMethod);
             MouseRightButtonUpCommand = new RelayCommand<MouseEventArgs>(e =>
             {
@@ -41,31 +43,37 @@ namespace NewNameMP3Files.ViewModel
                     treeview.IsExpanded = !treeview.IsExpanded;
                 }
             });
-            LoadLibrary(Settings.Default.MusicLibraryPath);
         }
 
+        /// <summary>
+        /// Переинициализация, очистка + загрузка заново из базы
+        /// </summary>
         private void ReInitMusicLibraryMethod()
         {
-            ClearMusicLibraryMethod();
+            ClearMusicLibrary();
             LoadLibrary(Settings.Default.MusicLibraryPath);
         }
-
-        private void ClearMusicLibraryMethod()
+        /// <summary>
+        /// Очистка базы и очистка ItemSource контрола
+        /// </summary>
+        private void ClearMusicLibrary()
         {
-            ClearMusicLibrary();
-        }
-
-        private void SynchroMusicLibraryMethod()
-        {
-            UpdateDb(Settings.Default.MusicLibraryPath);
-        }
-
-        internal void LoadLibrary(string librarypath)
-        {
-            // 1 - load from db
             using (var db = new MusicLibraryContext())
             {
-                Console.WriteLine("Count songs in databse = {0}", db.Songs.Count());
+                db.ClearAllSongs();
+                MusicLibraryList.Clear();
+            }
+        }
+        /// <summary>
+        /// загрузка из базы данных + проверка на модификации
+        /// </summary>
+        /// <param name="librarypath">Путь к папке с музыкой</param>
+        internal void LoadLibrary(string librarypath)
+        {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            using (var db = new MusicLibraryContext())            // 1 - load from db
+            {
                 var songs = db.Songs.ToList();
                 var tempMusicList = new ObservableCollection<Author>();
                 foreach (var song in songs)
@@ -73,198 +81,176 @@ namespace NewNameMP3Files.ViewModel
                     AddSongToList(tempMusicList, song);
                 }
                 MusicLibraryList = tempMusicList;
+                RaisePropertyChanged(()=>MusicLibraryList);
             }
             // 2 - check library for modifications
             if (Settings.Default.CheckMusicLibraryOnStartProgram)
             {
-                UpdateDb(librarypath);
+                SynchroLibrary(librarypath);
             }
+            Console.WriteLine(watch.ElapsedMilliseconds);
         }
-
-        private void UpdateDb(string sDir) 
+        /// <summary>
+        /// 
+        /// </summary>
+        private void SynchroMusicLibraryMethod()
         {
-            var task = Task.Run(() =>
+            SynchroLibrary(Settings.Default.MusicLibraryPath);
+        }
+        /// <summary>
+        /// Добавление песни к коллекции на GUI
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="songItem"></param>
+        private void AddSongToList(ObservableCollection<Author> collection, Song songItem)
+        {
+            dispatcher.BeginInvoke(new Action(() =>
             {
-                countOfFiles = 0;
-                foreach (var s in SongExtension.musicExt)
-                {
-                    countOfFiles += Directory.GetFiles(sDir, $"*{s}", SearchOption.AllDirectories).Length;
-                }
-                Console.WriteLine("Count of files in {0}", countOfFiles);
+                var albumName = songItem.Year + " - " + songItem.Album;
+                var perfomer = songItem.Artist;
 
-                musicDirCollection.Clear();
-                UpdateTask(sDir);
-                using (var db = new MusicLibraryContext())
+                int res = -1;
+                foreach (Author author in collection)
                 {
-                    CheckSongsWithBase(musicDirCollection, db);
-                    musicDirCollection.Clear();
-                    db.SaveChanges();
-                    var songs = db.Songs.ToList();
-                    var tempMusicList = new ObservableCollection<Author>();
-                    foreach (var song in songs)
+                    var arthist = author;
+                    if (arthist.AuthorName.Equals(perfomer))
                     {
-                        AddSongToList(tempMusicList, song);
-                    }
-                    return tempMusicList; 
-                }
-            });
+                        res = 1;
+                        var resAlbums = -1;
+                        for (int albumIndex = 0; albumIndex < arthist.AlbumCollection.Count; albumIndex++)
+                        {
+                            if (author.AlbumCollection[albumIndex].AlbumName.Equals(albumName))
+                            {
+                                resAlbums = 1;
+                                author.AlbumCollection[albumIndex].AddSong(songItem);
+                            }
+                        }
 
-            task.ContinueWith((res) =>
-            {
-                MusicLibraryList = res.Result;
-            });
+                        if (resAlbums == -1)
+                        {
+                            string albumCoverPath = Path.Combine(Path.GetDirectoryName(songItem.Path), "cover.jpg");
+                            author.AddAlbum(File.Exists(albumCoverPath)
+                                ? new Album(albumName, albumCoverPath, author.AuthorName)
+                                : new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),
+                                    author.AuthorName));
+
+                            author.AlbumCollection.Last().AddSong(songItem);
+                        }
+                    }
+                }
+
+                if (res == -1)
+                {
+                    collection.Add(new Author(perfomer));
+
+                    string albumCoverPath = Path.Combine(Path.GetDirectoryName(songItem.Path), "cover.jpg");
+                    collection.Last()
+                        .AddAlbum(File.Exists(albumCoverPath)
+                            ? new Album(albumName, albumCoverPath, collection.Last().AuthorName)
+                            : new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),
+                                collection.Last().AuthorName));
+
+                    collection.Last().AlbumCollection.Last().AddSong(songItem);
+                }
+            }));        
         }
 
-        private bool save;
-        //saving only for window closed
-        public void Save()
+
+        private async void SynchroLibrary(string sDir)
         {
-            save = true;
+            var res = await StartTaskGetLibraryFolderSongs(sDir);
             using (var db = new MusicLibraryContext())
             {
-                if (musicDirCollection.Count>0)
-                {
-                    CheckSongsWithBase(musicDirCollection, db);
-                    musicDirCollection.Clear();
-                    db.SaveChanges();
-                }  
+                SynchroLibraryWithSongs(res,db.Songs.ToList());
             }
+
         }
 
-        private void CheckSongsWithBase(ObservableCollection<Song> resSongs, MusicLibraryContext db)
+        private void SynchroLibraryWithSongs(ObservableCollection<string> songs, List<Song> dbSongs)
         {
-            var dbSongs = db.Songs.ToList();// get songs from base
-            for (int i = 0; i < resSongs.Count; i++)
+            Task.Run(() =>
             {
-                var song = resSongs[i];
-                var path = song.Path;
-                var selSongs = dbSongs.FirstOrDefault(a => a.Path == path);
-                if (selSongs!=null)
+                foreach (var song in songs)
                 {
-                    if (!song.Equals(selSongs))
-                    {
-                        song.CopyTo(selSongs);
-                        db.SaveChanges();
-                    }
-                    dbSongs.Remove(selSongs); // delete song because checking with music lib folder
+                    CheckSong(song,dbSongs);
                 }
-                else
-                {
-                    db.AddSong(song);
-                    Console.WriteLine("Add Song to db {0}", song.Path);
-                }
-            }
-
-            if (dbSongs.Count>0)
-            {
-                db.RemoveSongs(dbSongs);
-            }
+            });
         }
 
-        internal void ClearMusicLibrary()
+        private void CheckSong(string songPath,List<Song> dbSongs)
         {
-            using (var db = new MusicLibraryContext())
-            {
-                db.ClearAll();
-                MusicLibraryList.Clear();
-            }
-        }
-
-        int countOfFiles = 0;
-        ObservableCollection<Song> musicDirCollection = new ObservableCollection<Song>();
-        private void UpdateTask(string sDir)
-        {
-            Console.WriteLine("Finding folder {0}", sDir);
-
-            var dirs = Directory.GetDirectories(sDir);
-            var files = Directory.GetFiles(sDir);
-
-            foreach (string f in files)
-            {
-                if (SongExtension.IsFileSong(f))
-                {
-                    try
-                    {
-                        var song = new Song();
-                        song.LoadTags(f);
-                        musicDirCollection.Add(song);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
-            }
-            UpdateLibraryPercent = Math.Round((double)musicDirCollection.Count / countOfFiles*100) + "%";
-            if (save)
+            if (!SongExtension.IsFileSong(songPath))
             {
                 return;
             }
+            Song song = new Song();
+            song.LoadTags(songPath);
+
+            if (dbSongs.Count == 0)
+            {
+                AddSongToList(MusicLibraryList, song);
+                //db.AddSong(song);
+                Console.WriteLine("Add Song to db {0}", song.Path);
+            }
+            else
+            {
+                var selSongs = dbSongs.First(a => a.Path == songPath);
+                if (selSongs != null) // если такая песня есть в базе
+                {
+                    if (!song.Equals(selSongs)) // сравниваем теги
+                    {
+                        song.CopyTo(selSongs);// если разные, то обновляем базу данныъ
+                        //db.SaveChanges();
+                    }
+                    dbSongs.Remove(selSongs);
+                }
+                else
+                {
+                    AddSongToList(MusicLibraryList, song);
+                    //db.AddSong(song);
+                    Console.WriteLine("Add Song to db {0}", song.Path);
+                }
+            }
+        }
+
+        private Task<ObservableCollection<string>> StartTaskGetLibraryFolderSongs(string sDir)
+        {
+            return Task.Run(() =>
+            {
+                return GetLibraryFolderSongs(sDir);
+            });
+        }
+
+        private ObservableCollection<string> GetLibraryFolderSongs(string sDir)
+        {
+            var collection = new ObservableCollection<string>();
+
+            var dirs = Directory.GetDirectories(sDir);
+            var realFolderSongs = Directory.GetFiles(sDir).ToList();
+
+            foreach (var realFolderSong in realFolderSongs)
+            {
+                collection.Add(realFolderSong);
+            }
+
             foreach (string d in dirs)
             {
-                if (save)
+                var dirCollection = GetLibraryFolderSongs(d);
+                foreach (var songpath in dirCollection)
                 {
-                    return;
+                    collection.Add(songpath);
                 }
-                UpdateTask(d);
             }
+
+            return collection;
         }
 
-        private void AddSongToList(ObservableCollection<Author> collection,Song songItem)
+        public void Save()
         {
-            var albumName = songItem.Year + " - " + songItem.Album;
-            var perfomer = songItem.Artist;
-
-            int res = -1;
-            foreach (Author author in collection)
-            {
-                var arthist = author;
-                if (arthist.AuthorName.Equals(perfomer))
-                {
-                    res = 1;
-                    var resAlbums = -1;
-                    for (int albumIndex = 0; albumIndex < arthist.AlbumCollection.Count; albumIndex++)
-                    {
-                        if (author.AlbumCollection[albumIndex].AlbumName.Equals(albumName))
-                        {
-                            resAlbums = 1;
-                            author.AlbumCollection[albumIndex].AddSong(songItem);
-                        }
-                    }
-
-                    if (resAlbums == -1)
-                    {
-                        string albumCoverPath = Path.Combine(Path.GetDirectoryName(songItem.Path), "cover.jpg");
-                        author.AddAlbum(File.Exists(albumCoverPath)
-                            ? new Album(albumName, albumCoverPath, author.AuthorName)
-                            : new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),
-                                author.AuthorName));
-
-                        author.AlbumCollection.Last().AddSong(songItem);
-                    }
-                }
-            }
-
-            if (res == -1)
-            {
-                collection.Add(new Author(perfomer));
-
-                string albumCoverPath = Path.Combine(Path.GetDirectoryName(songItem.Path), "cover.jpg");
-                collection.Last()
-                    .AddAlbum(File.Exists(albumCoverPath)
-                        ? new Album(albumName, albumCoverPath, collection.Last().AuthorName)
-                        : new Album(albumName, new Uri("/Skins/nocoverart.jpg", UriKind.Relative),
-                            collection.Last().AuthorName));
-
-                collection.Last().AlbumCollection.Last().AddSong(songItem);
-            }
+            
         }
-
-
-
-
-
-
+        #region Properties
+        
         public ObservableCollection<Author> MusicLibraryList { get; set; }
         public RelayCommand<MouseEventArgs> MouseRightButtonUpCommand
         {
@@ -274,7 +260,6 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand ClearMusicLibraryCommand { get; private set; }
         public RelayCommand ReInitMusicLibraryCommand { get; private set; }
         public RelayCommand SynchroMusicLibraryCommand { get; private set; }
-
         private string _updateLibraryPercent;
         public string UpdateLibraryPercent
         {
@@ -282,10 +267,11 @@ namespace NewNameMP3Files.ViewModel
             set
             {
                 _updateLibraryPercent = value;
-                RaisePropertyChanged(()=>UpdateLibraryPercent);
+                RaisePropertyChanged(() => UpdateLibraryPercent);
             }
         }
 
 
+        #endregion
     }
 }

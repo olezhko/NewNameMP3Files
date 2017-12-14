@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using NewNameMP3Files.ViewModel;
 
 namespace NewNameMP3Files.Skins
 {
@@ -23,6 +25,8 @@ namespace NewNameMP3Files.Skins
         public MusicLibraryView()
         {
             InitializeComponent();
+            var vm = DataContext as MusicLibraryViewModel;
+            vm.dispatcher = Dispatcher.CurrentDispatcher;
         }
     }
 }

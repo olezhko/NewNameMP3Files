@@ -16,7 +16,10 @@
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.MainWindowClosing,Mode=OneWay, Source={StaticResource Locator}}"  CommandParameter="{Binding ElementName=MusicLibraryView,Path=DataContext}"/>
+            <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.MainWindowClosingCommand,Mode=OneWay, Source={StaticResource Locator}}"  CommandParameter="{Binding ElementName=MusicLibraryView,Path=DataContext}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding Main.MainWindowLoadedCommand,Mode=OneWay, Source={StaticResource Locator}}"  CommandParameter="{Binding ElementName=MusicLibraryView,Path=DataContext}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
@@ -55,7 +58,7 @@
         </Menu>
         <skins:MusicLibraryView x:Name="MusicLibraryView" Grid.Row="1" Grid.Column="0" Width="Auto" Height="Auto"/>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Grid.Row="0"/>
-        <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Grid.Column="2">
+        <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" Grid.Column="2">
             <ListView Name="AuthorsListView" ItemsSource="{Binding AuthorCollection}" AllowDrop="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <ListView.ContextMenu>
                     <ContextMenu>

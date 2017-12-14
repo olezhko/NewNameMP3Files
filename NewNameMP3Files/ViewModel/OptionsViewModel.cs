@@ -41,11 +41,13 @@ namespace NewNameMP3Files.ViewModel
         private void ExampleTemplateForFiles_TextChangedMethod()
         {
             ExampleTemplateForFiles = "Example: " + UserNameSettings(TemplateForFiles);
+            RaisePropertyChanged(nameof(ExampleTemplateForFiles));
         }
 
         private void ExampleTemplateForDirectory_TextChangedMethod()
         {
             ExampleTemplateForDirectory = "Example: " + UserNameSettings(TemplateForDirectory);
+            RaisePropertyChanged(nameof(ExampleTemplateForDirectory));
         }
 
         private string UserNameSettings(string name)

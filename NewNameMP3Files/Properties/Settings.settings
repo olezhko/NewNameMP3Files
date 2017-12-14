@@ -38,5 +38,8 @@
     <Setting Name="CheckMusicLibraryOnStartProgram" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="RenameExpression" Type="System.String" Scope="User">
+      <Value Profile="(Default)">(n) - (t)</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

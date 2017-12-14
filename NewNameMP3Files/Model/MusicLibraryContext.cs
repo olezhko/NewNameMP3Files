@@ -14,9 +14,9 @@ namespace NewNameMP3Files.Model
         { }
 
         public DbSet<Song> Songs { get; set; }
+        public DbSet<FolderItem> Folders { get; set; }
 
-
-        public void ClearAll()
+        public void ClearAllSongs()
         {
             Songs.RemoveRange(Songs);
             SaveChanges();
@@ -37,10 +37,42 @@ namespace NewNameMP3Files.Model
             Songs.RemoveRange(dbSong);
         }
 
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-        //    Database.SetInitializer<MusicLibraryContext>(new DropCreateDatabaseIfModelChanges<MusicLibraryContext>());
-        //    base.OnModelCreating(modelBuilder);
-        //}
+
+        public void AddFolder(FolderItem item)
+        {
+            Folders.Add(item);
+        }
+
+        internal void RemoveSong(FolderItem item)
+        {
+            Folders.Remove(item);
+        }
+
+        internal void RemoveSongs(IEnumerable<FolderItem> items)
+        {
+            Folders.RemoveRange(items);
+        }
+
+        public void ClearAllFolders()
+        {
+            Folders.RemoveRange(Folders);
+            SaveChanges();
+        }
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<MusicLibraryContext>(new DropCreateDatabaseIfModelChanges<MusicLibraryContext>());
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+
+
+    public class FolderItem
+    {
+        public int Id { get; set; }
+
+        public string Name;
+        public DateTime LastModified;
     }
 }

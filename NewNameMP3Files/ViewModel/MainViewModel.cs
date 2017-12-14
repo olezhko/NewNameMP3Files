@@ -24,21 +24,8 @@ using TagLibFile = TagLib.File;
 
 namespace NewNameMP3Files.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        // edit tags
         public MainViewModel()
         {
             _authorCollection = new ObservableCollection<Author>();
@@ -48,7 +35,7 @@ namespace NewNameMP3Files.ViewModel
             ExitCommand = new RelayCommand<Window>(ExitMethod);
             AboutCommand = new RelayCommand(AboutMethod);
             DragCommand = new RelayCommand<DragEventArgs>(DragEnterAuthorsListViewMethod);
-            OpenTemplateOptionWindow = new RelayCommand(OpenTemplateWindowMethod);
+            OpenTemplateOptionWindow = new RelayCommand(OpenOptionsWindow);
             ChangeLanguageCommand = new RelayCommand<MenuItem>(ChangeLanguageMethod);
             SelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(true));
             DeSelectAllCommand = new RelayCommand<bool>(b => SelectAllMethod(false));
@@ -61,14 +48,24 @@ namespace NewNameMP3Files.ViewModel
             ClickAuthorCommand = new RelayCommand<CheckBox>(AuthorCheckBoxClickMethod);
             ClickAlbumCommand = new RelayCommand<CheckBox>(AlbumCheckBoxClickMethod);
             FindImageMenuCommand = new RelayCommand<Album>(FindCoverMethod);
-            MainWindowClosing = new RelayCommand<MusicLibraryViewModel>(MainWindowClosingMethod);
+            MainWindowClosingCommand = new RelayCommand<MusicLibraryViewModel>(MainWindowClosing);
+            MainWindowLoadedCommand = new RelayCommand<MusicLibraryViewModel>(MainWindowLoaded);
         }
 
-        private void MainWindowClosingMethod(MusicLibraryViewModel vm)
+        private void MainWindowLoaded(MusicLibraryViewModel obj)
         {
+            obj.LoadLibrary(Settings.Default.MusicLibraryPath);
+        }
+
+        private void MainWindowClosing(MusicLibraryViewModel vm)
+        {
+            Settings.Default.Save();
             vm.Save();
         }
-
+        /// <summary>
+        /// Find cover of album by AlbumName + ArtistName
+        /// </summary>
+        /// <param name="album"></param>
         private void FindCoverMethod(Album album)
         {
             System.Diagnostics.Process.Start(String.Format("https://www.google.com/search?q={0}+{1}&source=lnms&tbm=isch&tbs=isz:l", album.AlbumName, album.AuthorName));
@@ -76,9 +73,44 @@ namespace NewNameMP3Files.ViewModel
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
         {
+            List<SongViewModel> itemsToRemove = new List<SongViewModel>();
             if (args.Key == Key.Delete)
             {
-                AuthorCollection.Clear();
+                for (int i = 0; i < AuthorCollection.Count; )
+                {
+                    for (int j = 0; j < AuthorCollection[i].AlbumCollection.Count;)
+                    {
+                        for (int k = 0; k < AuthorCollection[i].AlbumCollection[j].SongsCollection.Count; )
+                        {
+                            if (AuthorCollection[i].AlbumCollection[j].SongsCollection[k].IsSelected)
+                            {
+                                _renamingFilesList.Remove(
+                                    AuthorCollection[i].AlbumCollection[j].SongsCollection[k].Path);
+                                AuthorCollection[i].AlbumCollection[j].SongsCollection.RemoveAt(k);
+                            }
+                            else
+                            {
+                                k++;
+                            }
+                        }
+                        if (AuthorCollection[i].AlbumCollection[j].SongsCollection.Count == 0)
+                        {
+                            AuthorCollection[i].AlbumCollection.RemoveAt(j);
+                        }
+                        else
+                        {
+                            j++;
+                        }
+                    }
+                    if (AuthorCollection[i].AlbumCollection.Count == 0)
+                    {
+                        AuthorCollection.RemoveAt(i);
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
             }
         }
 
@@ -180,9 +212,9 @@ namespace NewNameMP3Files.ViewModel
             _editTagsWindow.ShowDialog();
         }
 
-        private void RefreshMethod()
+        private void RefreshCollection()
         {
-            Console.WriteLine("RefreshMethod");
+            Console.WriteLine("RefreshCollection");
             Application.Current.Dispatcher.Invoke(delegate
             {
                 AuthorCollection.Clear();
@@ -228,14 +260,15 @@ namespace NewNameMP3Files.ViewModel
             }
         }
 
-        private void OpenTemplateWindowMethod()
+        private void OpenOptionsWindow()
         {
             var res = _optionsWindow.ShowDialog();
             var viewModel = (OptionsViewModel)_optionsWindow.DataContext;
             if (viewModel != null)
             {
-                _renameExpression = viewModel.TemplateForFiles;
+                Settings.Default.RenameExpression = viewModel.TemplateForFiles;
             }
+            Settings.Default.Save();
         }
 
         private List<string> GetListCheckedFiles()
@@ -263,59 +296,75 @@ namespace NewNameMP3Files.ViewModel
                 NewFileRenamed += (send, args) =>
                 {
                     var list = send as List<string>;
-                    Console.WriteLine(String.Format("Done {0}/{1}", args, list.Count));
-                    CountRenamedFiles = String.Format("{0}/{1}", args, list.Count);
-                    int percent = args * 100 / list.Count;
+                    CountRenamedFiles = String.Format("{0}/{1}", args.CountFilesRenamed, list.Count);
+                    int percent = args.CountFiles * 100 / list.Count;
                     ProgressRenamedFiles = percent;
                     if (percent == 100)
                     {
-                        RefreshMethod();
-                        MessageBox.Show(App.ResourceDictionary["DoneString"].ToString(), App.ResourceDictionary["InformationString"].ToString());
+                        RefreshCollection();
+                        MessageBox.Show(App.ResourceDictionary["DoneString"].ToString() + " " +String.Format("{0}/{1}", args.CountFilesRenamed, list.Count), App.ResourceDictionary["InformationString"].ToString());
                     }
                 };
             }
 
             Console.WriteLine("Start Rename Task " + files.Count);
-            Task.Factory.StartNew(() => RenameActionTask(_renameExpression, files));
+            Task.Factory.StartNew(() => RenameActionTask(files));
         }
 
-        private void RenameActionTask(string expression, List<string> filesPathList)
+        private void RenameActionTask(List<string> filesPathList)
         {
+            int all = 0;
             int count = 0;
             foreach (var file in filesPathList)
             {
                 File.SetAttributes(file, FileAttributes.Normal);
-                var mp3File = TagLib.File.Create(file);
-                StaticMethods.TagsToUpper(mp3File);
-                var tempName = StaticMethods.GetNewNameByTemplate(expression, mp3File.Tag);
-                tempName = StaticMethods.DeleteBannedSymbols(tempName);
+                if (!StaticMethods.IsFileLocked(new FileInfo(file)))
+                {
+                    var res = FileMoveAsync(file, Settings.Default.RenameExpression);
+                    if (!String.IsNullOrEmpty(res.Result))
+                    {
+                        var index = _renamingFilesList.IndexOf(file);
+                        if (index != -1)
+                        {
+                            _renamingFilesList[index] = res.Result;
+                        }
+                        count++;
+                        
+                    }
+                }
+                all++;
+                NewFileRenamed?.Invoke(filesPathList, new FileTryingRenamedEventArgs(count,all));
+            }
+        }
 
-                var folder = Path.GetDirectoryName(file);
-                var finalPath = String.Format("{0}\\{1}{2}", folder, tempName, Path.GetExtension(file));
+        private static Task<string> FileMoveAsync(string file,string expression)
+        {
+            var mp3File = TagLib.File.Create(file);
+            StaticMethods.TagsToUpper(mp3File);
+            var tempName = StaticMethods.GetNewNameByTemplate(expression, mp3File.Tag);
+            tempName = StaticMethods.DeleteBannedSymbols(tempName);
 
+            var folder = Path.GetDirectoryName(file);
+            var finalPath = String.Format("{0}\\{1}{2}", folder, tempName, Path.GetExtension(file));
+
+            return Task<string>.Run(() =>
+            {
                 var i = 1;
                 while (true)// исключаем создание одинаковых имен
                 {
                     try
                     {
                         File.Move(file, finalPath);
-                        break;
+                        return finalPath;
                     }
                     catch
                     {
                         finalPath = String.Format("{0}\\{1}({2}){3}", folder, tempName, i, Path.GetExtension(file));
                         i++;
-                    }                    
+                    }
                 }
-
-                var index = _renamingFilesList.IndexOf(file);
-                if (index != -1)
-                {
-                    _renamingFilesList[index] = finalPath;
-                }
-                count++;
-                NewFileRenamed?.Invoke(filesPathList, count);
-            }
+            });
+            
         }
 
         private void DragEnterAuthorsListViewMethod(DragEventArgs e)
@@ -358,17 +407,7 @@ namespace NewNameMP3Files.ViewModel
             {
                 return;
             }
-            Song _song = new Song();
-
-            try
-            {
-                _song.LoadTags(filepath);
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-
+            Song _song = new Song(filepath);
 
             var albumName = _song.Year + " - " + _song.Album;
             var perfomer = _song.Artist == null ? " " : _song.Artist;
@@ -434,7 +473,7 @@ namespace NewNameMP3Files.ViewModel
         {
             get { return _authorCollection; } 
         }
-        public MenuItem LanguageMenuItem { get; set; }
+
 
         private string _countRenamedFiles;
         public string CountRenamedFiles
@@ -466,8 +505,7 @@ namespace NewNameMP3Files.ViewModel
         private readonly EditTagsWindow _editTagsWindow;
         private readonly Options _optionsWindow;
         private readonly AboutWindow _aboutWindow;
-        private string _renameExpression = "(n) - (t)";
-        private event EventHandler<int> NewFileRenamed;
+        private event EventHandler<FileTryingRenamedEventArgs> NewFileRenamed;
         #endregion
 
         #region Commands
@@ -486,8 +524,20 @@ namespace NewNameMP3Files.ViewModel
         public RelayCommand EditTagsCommand { get; private set; } 
         public RelayCommand<KeyEventArgs> ListViewKeyDownCommand { get; private set; }
         public RelayCommand<Album> FindImageMenuCommand { get; set; }
-
-        public RelayCommand<MusicLibraryViewModel> MainWindowClosing { get; private set; }
+        public RelayCommand<MusicLibraryViewModel> MainWindowLoadedCommand { get; set; }
+        public RelayCommand<MusicLibraryViewModel> MainWindowClosingCommand { get; private set; }
         #endregion
+    }
+
+
+    public class FileTryingRenamedEventArgs:EventArgs
+    {
+        public int CountFilesRenamed;
+        public int CountFiles;
+        public FileTryingRenamedEventArgs(int countRenamed, int countAll)
+        {
+            CountFilesRenamed = countRenamed;
+            CountFiles = countAll;
+        }
     }
 }

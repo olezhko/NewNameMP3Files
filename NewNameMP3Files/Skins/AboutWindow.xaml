@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         DataContext="{Binding About, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
-        x:Name="Window" Closing="AboutWindow_OnClosing"
-        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" Height="331" Icon="../NewNameMP3Files.ico">
+        x:Name="Window" Closing="AboutWindow_OnClosing" ResizeMode="NoResize"
+        Style="{DynamicResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" Height="267" Icon="../NewNameMP3Files.ico">
     <Window.Resources>
         <Style x:Key="AboutDialogStyle" TargetType="Window">
             <Setter Property="Height" Value="Auto" />

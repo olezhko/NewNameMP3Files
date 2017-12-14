@@ -290,7 +290,12 @@ namespace MusicLibrary
 
         public Song()
         {
-            Name = System.IO.Path.GetFileName(Path);
+            //Name = System.IO.Path.GetFileName(Path);
+        }
+
+        public Song(string filepath)
+        {
+            this.LoadTags(filepath);
         }
 
         public bool Equals(Song obj)
@@ -329,12 +334,12 @@ namespace MusicLibrary
             return NoCoverImage;
         }
 
-        public static string[] musicExt = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
+        public static string[] AvailableMusicExtensions = new[] { ".MP3", ".OGG", ".ACC", ".M4A", ".WMA", ".WMV" };
 
         public static bool IsFileSong(string path)
         {
             var extension = System.IO.Path.GetExtension(path);
-            return extension != null && -1 != Array.IndexOf(musicExt, extension.ToUpperInvariant());
+            return extension != null && -1 != Array.IndexOf(AvailableMusicExtensions, extension.ToUpperInvariant());
         }
 
         public static bool SaveSong(this Song songitem,string path)
@@ -370,7 +375,7 @@ namespace MusicLibrary
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        public static void LoadTags(this Song songitem, string path)
+        public static bool LoadTags(this Song songitem, string path)
         {
             try
             {
@@ -386,13 +391,13 @@ namespace MusicLibrary
                 songitem.Title = tagLibFile.Tag.Title;
                 songitem.Number = (int)tagLibFile.Tag.Track;
                 songitem.Name = Path.GetFileName(path);
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw new Exception("Tags Not Loaded");
+                return false;
             }
-
         }
     }
 }

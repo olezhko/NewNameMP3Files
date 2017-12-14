@@ -42,6 +42,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.nn3h
+.vs/
 NewNameMP3Files/obj/
 *.resources
 *.tlog
@@ -65,3 +66,4 @@ NewNameMP3Files.v12.suo
 NewNameMP3Files.v12.suo
 *.suo
 NewNameMP3Files.v12.suo
+.vs/NewNameMP3Files/v15/sqlite3/storage.ide
