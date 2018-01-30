@@ -9,8 +9,8 @@
         xmlns:skins="clr-namespace:NewNameMP3Files.Skins"
         mc:Ignorable="d ignore"
         x:Name="Window"
-        Height="471.642"
-        Width="734.328"
+        Height="600"
+        Width="1000"
         Title="NewNameMp3Files"
         Icon="NewNameMP3Files.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
