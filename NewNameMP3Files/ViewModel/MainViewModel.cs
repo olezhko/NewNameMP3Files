@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using NewNameMP3Files.Properties;
 using Application = System.Windows.Application;
@@ -20,7 +19,6 @@ using DragEventArgs = System.Windows.DragEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using TagLibFile = TagLib.File;
 
 namespace NewNameMP3Files.ViewModel
 {
@@ -68,12 +66,11 @@ namespace NewNameMP3Files.ViewModel
         /// <param name="album"></param>
         private void FindCoverMethod(Album album)
         {
-            System.Diagnostics.Process.Start(String.Format("https://www.google.com/search?q={0}+{1}&source=lnms&tbm=isch&tbs=isz:l", album.AlbumName, album.AuthorName));
+            System.Diagnostics.Process.Start($"https://www.google.com/search?q={album.AlbumName}+{album.AuthorName}&source=lnms&tbm=isch&tbs=isz:l");
         }
 
         private void ListViewKeyDownMethod(KeyEventArgs args)
         {
-            List<SongViewModel> itemsToRemove = new List<SongViewModel>();
             if (args.Key == Key.Delete)
             {
                 for (int i = 0; i < AuthorCollection.Count; )
@@ -84,8 +81,7 @@ namespace NewNameMP3Files.ViewModel
                         {
                             if (AuthorCollection[i].AlbumCollection[j].SongsCollection[k].IsSelected)
                             {
-                                _renamingFilesList.Remove(
-                                    AuthorCollection[i].AlbumCollection[j].SongsCollection[k].Path);
+                                _renamingFilesList.Remove(AuthorCollection[i].AlbumCollection[j].SongsCollection[k].Path);
                                 AuthorCollection[i].AlbumCollection[j].SongsCollection.RemoveAt(k);
                             }
                             else
@@ -141,7 +137,6 @@ namespace NewNameMP3Files.ViewModel
                     }
                 }  
             }
-            
         }
 
         #region Methods

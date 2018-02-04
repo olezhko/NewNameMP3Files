@@ -70,6 +70,10 @@ namespace NewNameMP3Files.ViewModel
         /// <param name="librarypath">Путь к папке с музыкой</param>
         internal void LoadLibrary(string librarypath)
         {
+            if (String.IsNullOrEmpty(librarypath) || !Directory.Exists(librarypath))
+            {
+                return;
+            }
             Stopwatch watch = new Stopwatch();
             watch.Start();
             using (var db = new MusicLibraryContext())            // 1 - load from db

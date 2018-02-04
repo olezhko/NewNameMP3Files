@@ -46,8 +46,8 @@
                     <MenuItem Header="{DynamicResource RussianLanguage}" Tag="ru-RU" Name="RussianMenuItem" Command="{Binding ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource MusicLibrary}" Name="MusicLibraryMenuItem">
-                    <MenuItem Header="{DynamicResource ClearMusicLibrary}" Command="{Binding  DataContext.ClearMusicLibraryCommand, ElementName=MusicLibraryView}"/>
-                    <MenuItem Header="{DynamicResource ReInitMusicLibrary}" Command="{Binding  DataContext.ReInitMusicLibraryCommand, ElementName=MusicLibraryView}"/>
+                    <MenuItem Header="{DynamicResource ClearMusicLibrary}" Command="{Binding DataContext.ClearMusicLibraryCommand, ElementName=MusicLibraryView}"/>
+                    <MenuItem Header="{DynamicResource ReInitMusicLibrary}" Command="{Binding DataContext.ReInitMusicLibraryCommand, ElementName=MusicLibraryView}"/>
                     <MenuItem Header="{DynamicResource SynchroMusicLibrary}" Command="{Binding DataContext.SynchroMusicLibraryCommand, ElementName=MusicLibraryView}"/>
                 </MenuItem>
             </MenuItem>
@@ -79,7 +79,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <ListView Name="SongsListView" ItemsSource="{Binding AlbumCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+                            <ListView Name="SongsListView" ItemsSource="{Binding AlbumCollection}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" AlternationCount="2" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
@@ -93,7 +93,7 @@
                                                 </i:Interaction.Triggers>
                                             </CheckBox>
                                             <DockPanel>
-                                                <Border DockPanel.Dock="Right" BorderBrush="Yellow" BorderThickness="2">
+                                                <Border DockPanel.Dock="Right" BorderBrush="Yellow" BorderThickness="2" Height="100" Width="100">
                                                     <Image Source="{Binding AlbumCover}" Height="100" Width="100" >
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="MouseDown">

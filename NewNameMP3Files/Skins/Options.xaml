@@ -4,8 +4,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         Title="Options" SizeToContent="Height"
-        x:Name="Window" Closing="Options_OnClosing" Icon="../NewNameMP3Files.ico"
-        DataContext="{Binding Options, Source={StaticResource Locator}}" Height="333.817" >
+        x:Name="Window" Closing="Options_OnClosing" Icon="../NewNameMP3Files.ico" ResizeMode="NoResize"
+        DataContext="{Binding Options, Source={StaticResource Locator}}" Height="362.533" Width="811.971" >
     <Window.Resources>
         <Style TargetType="GroupBox">
             <Setter Property="BorderThickness" Value="2"/>
@@ -16,8 +16,13 @@
             <Setter Property="BorderBrush" Value="Gold"/>
         </Style>
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        <GroupBox Header="Rename Template">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Rename Template" Grid.Row="0" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="378*"/>
@@ -35,7 +40,7 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <Label Content="Template For Files" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="1" TextWrapping="Wrap" Text="{Binding TemplateForFiles}" VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Name="TemplateForFilesTextBox">
+                    <TextBox HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="{Binding TemplateForFiles}" VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Name="TemplateForFilesTextBox">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.ExampleTemplateForFilesTextChangedCommand, ElementName=TemplateForFilesTextBox}"/>
@@ -45,7 +50,7 @@
                     <Label Content="{Binding ExampleTemplateForFiles}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Margin="10,0,0,0"/>
                     <Line Fill="Black" Grid.Row="3" StrokeThickness="2" Stroke="Black" X2="373"/>
                     <Label Content="Template For Directory (Use only &quot;Perfomer&quot;, &quot;Album&quot;, &quot;Year&quot;)" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Grid.Row="5" TextWrapping="Wrap" Text="{Binding TemplateForDirectory}" VerticalAlignment="Top" Width="150" Name="TemplateForDirectoryTextBox"
+                    <TextBox HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="{Binding TemplateForDirectory}" VerticalAlignment="Top" Width="150" Name="TemplateForDirectoryTextBox"
                      Margin="10,0,0,0" ToolTip="In this field you enter a path from working directory.\nThis display how will be organized you working directory.">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
@@ -102,14 +107,14 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Music Library">
+        <GroupBox Header="Music Library" Grid.Row="1" >
             <Grid>
                 <Label Content="Music Library Path" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
                 <Button Content="Browse" HorizontalAlignment="Left" Margin="517,7,0,0" VerticalAlignment="Top" Padding="5" Command="{Binding BrowseMusicLibraryPathCommand}"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="125,10,0,0" TextWrapping="Wrap" Text="{Binding MusicLibraryPath}" VerticalAlignment="Top" Width="365" Grid.ColumnSpan="2" />
+                <TextBox HorizontalAlignment="Left" Margin="125,10,0,0" TextWrapping="Wrap" Text="{Binding MusicLibraryPath}" VerticalAlignment="Top" Width="365" Grid.ColumnSpan="2" />
                 <CheckBox Content="{DynamicResource CheckMusicLibraryOnStartProgram}" HorizontalAlignment="Left" Margin="10,41,0,5" IsChecked="{Binding CheckMusicLibraryOnStartProgram}"/>
             </Grid>
         </GroupBox>
-        <Button x:Name="AcceptButton" Content="Accept" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Bottom" Padding="5" Command="{Binding AcceptCommand}" CommandParameter="{Binding ElementName=Window}"/>
-    </StackPanel>
+        <Button Grid.Row="2" x:Name="AcceptButton" Content="Accept" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Bottom" Padding="5" Command="{Binding AcceptCommand}" CommandParameter="{Binding ElementName=Window}"/>
+    </Grid>
 </Window>

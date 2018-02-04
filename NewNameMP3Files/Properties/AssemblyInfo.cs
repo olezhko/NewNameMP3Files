@@ -11,8 +11,8 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("NewNameMP3Files")]
-[assembly: AssemblyCompany("O.L.A")]
-[assembly: AssemblyCopyright("Copyright © O.L.A")]
+[assembly: AssemblyCompany("O.L.A SoftClub")]
+[assembly: AssemblyCopyright("Copyright © O.L.A SoftClub")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,6 +51,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
+[assembly: AssemblyVersion("1.1.0.2")]
+[assembly: AssemblyFileVersion("1.1.0.2")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

@@ -8,8 +8,9 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:model="clr-namespace:NewNameMP3Files.Model" Icon="../NewNameMP3Files.ico"
         x:Class="NewNameMP3Files.Skins.EditTagsWindow" x:Name="Window"
-        mc:Ignorable="d ignore" Height="617" Width="1200" Title="Tag Editor"
-        Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing" MinWidth="1200" MinHeight="617">
+        mc:Ignorable="d ignore" MinHeight="639" Width="1200" Title="Tag Editor"
+        Loaded="MainWindow_OnLoaded" Closing="MainWindow_OnClosing" Height="652"
+        DataContext="{Binding Path=EditTags, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
             <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding DataContext.KeyDownCommand, ElementName=Window}"/>
@@ -22,16 +23,13 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </Window.Resources>
-    <Window.DataContext>
-        <Binding Path="EditTags" Source="{StaticResource Locator}"/>
-    </Window.DataContext>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding GridSplitterPosition, Converter={StaticResource GridLengthValueConverter}, Mode=TwoWay}" MinWidth="300"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="600*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="2" BorderBrush="Black" VerticalAlignment="Top">
+        <Border BorderThickness="2" BorderBrush="Black">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -49,13 +47,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Label Content="Title:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold"/>
                 <TextBox HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="{Binding SelectedItemsTitle}" VerticalAlignment="Stretch" />
 
-                <Label Content="Artist:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
+                <Label Content="Artist:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" FontWeight="Bold"/>
                 <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsArtist}" VerticalAlignment="Stretch" Grid.Row="3"/>
 
-                <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4"/>
+                <Label Content="Album:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" FontWeight="Bold"/>
                 <TextBox HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectedItemsAlbum}" VerticalAlignment="Stretch" Grid.Row="5"/>
                 <Grid Grid.Row="6">
                     <Grid.RowDefinitions>
@@ -67,23 +65,23 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Year:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Label Content="Year:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold"/>
                     <TextBox HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Text="{Binding SelectedItemsYear}" VerticalAlignment="Stretch" />
 
-                    <Label Content="Number:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1"/>
+                    <Label Content="Number:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" FontWeight="Bold"/>
                     <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsNumber}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1"/>
 
-                    <Label Content="Genre:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="2"/>
+                    <Label Content="Genre:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="2" FontWeight="Bold"/>
                     <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsGenre}" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2"/>
                 </Grid>
 
-                <Label Content="Folder:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7"/>
+                <Label Content="Folder:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="7" FontWeight="Bold"/>
                 <Label HorizontalAlignment="Stretch" Content="{Binding SelectedItemsPath}" VerticalAlignment="Stretch" Grid.Row="8" Height="25"/>
 
-                <Label Content="Lyrics:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="9"/>
+                <Label Content="Lyrics:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="9" FontWeight="Bold"/>
                 <TextBox HorizontalAlignment="Stretch" Text="{Binding SelectedItemsLyrics}" VerticalAlignment="Stretch" Grid.Row="10" VerticalScrollBarVisibility="Auto"/>
 
-                <Image Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="11" Height="160" Width="160" Source="{Binding SelectedItemsImageSource}" Name="SongImage"/>
+                <Image Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="11" Height="160" Width="160" Source="{Binding SelectedItemsImageSource}" Name="SongImage"/>
                 <Button Content="Save" HorizontalAlignment="Right" Grid.Row="12" Padding="15,0,15,0" Command="{Binding SaveCommand}" VerticalAlignment="Bottom" Margin="10"  />
             </Grid>
         </Border>
