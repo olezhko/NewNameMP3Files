@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using TagLib;
+using File = System.IO.File;
 
 namespace MusicLibrary
 {
@@ -145,7 +147,10 @@ namespace MusicLibrary
     {
         public string Name
         {
-            get { return _song.Name; }
+            get
+            {
+                return _song.Name;
+            }
         }
 
         public int AudioBitrate
@@ -380,6 +385,7 @@ namespace MusicLibrary
             try
             {
                 var tagLibFile = TagLib.File.Create(path);
+
                 songitem.Album = tagLibFile.Tag.Album;
                 songitem.Path = path;
                 songitem.Artist = tagLibFile.Tag.Performers.Length > 0 ? tagLibFile.Tag.Performers[0] : null;

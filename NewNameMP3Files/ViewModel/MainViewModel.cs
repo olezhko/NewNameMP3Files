@@ -388,7 +388,7 @@ namespace NewNameMP3Files.ViewModel
 
         private void AddDirectoryToList(string direcorypath)
         {
-            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a") || s.EndsWith(".ogg"));
+            var files = Directory.EnumerateFiles(direcorypath, "*.*", SearchOption.AllDirectories).Where(SongExtension.IsFileSong);
 
             foreach (var file in files)
             {

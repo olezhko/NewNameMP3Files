@@ -94,22 +94,23 @@ namespace NewNameMP3Files.ViewModel
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var dragItems = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string item in dragItems)
-                {
-                    var file = new FileInfo(item);
-                    if (file.Exists) // is it file
+                if (dragItems != null)
+                    foreach (string item in dragItems)
                     {
-                        AddSongToList(item);
-                    }
-                    else
-                    {
-                        var dir = new DirectoryInfo(item);
-                        if (dir.Exists)
+                        var file = new FileInfo(item);
+                        if (file.Exists) // is it file
                         {
-                            AddDirectoryToList(item);
+                            AddSongToList(item);
+                        }
+                        else
+                        {
+                            var dir = new DirectoryInfo(item);
+                            if (dir.Exists)
+                            {
+                                AddDirectoryToList(item);
+                            }
                         }
                     }
-                }
             }
         }
 
