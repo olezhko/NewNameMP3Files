@@ -136,11 +136,6 @@ namespace MusicLibrary
         {
             IsSelected = SongsCollection.All(song => song.IsSelected);
         }
-
-        public void RemoveSong(TagLib.File file)
-        {
-
-        }
     }
 
     public class SongViewModel : ViewModelBase
@@ -364,6 +359,9 @@ namespace MusicLibrary
                 tagLibFile.Tag.Track = (uint)songitem.Number;
                 tagLibFile.Tag.Year = (uint)songitem.Year;
                 tagLibFile.Save();
+
+                FreeFile(tagLibFile);
+
                 return true;
             }
             catch (Exception e)
@@ -378,6 +376,12 @@ namespace MusicLibrary
             var icon = MusicLibrary.GetFileIcon(song.Path, IconReader.IconSize.Small, false);
             return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        private static void FreeFile(TagLib.File tagLibFile)
+        {
+            tagLibFile.Dispose();
+            tagLibFile = null;
         }
 
         public static bool LoadTags(this Song songitem, string path)
@@ -397,6 +401,8 @@ namespace MusicLibrary
                 songitem.Title = tagLibFile.Tag.Title;
                 songitem.Number = (int)tagLibFile.Tag.Track;
                 songitem.Name = Path.GetFileName(path);
+
+                FreeFile(tagLibFile);
                 return true;
             }
             catch (Exception e)
